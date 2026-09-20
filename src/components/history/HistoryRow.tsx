@@ -7,7 +7,11 @@ export function HistoryRow({ entry, onOpen, onDelete }: { entry: HistoryEntry; o
   return (
     <div className={styles.row}>
       <button type="button" className={styles.main} onClick={onOpen}>
-        {entry.faviconUrl ? <img src={entry.faviconUrl} alt="" className={styles.favicon} /> : <div className={styles.faviconPlaceholder} />}
+        {entry.faviconUrl ? (
+          <img src={entry.faviconUrl} alt="" className={styles.favicon} />
+        ) : (
+          <img src="/plourx-logo.png" alt="" className={styles.faviconPlaceholder} />
+        )}
         <div className={styles.text}>
           <span className={styles.title}>{entry.title}</span>
           <span className={styles.url}>{getDisplayHost(entry.url)}</span>

@@ -10,7 +10,7 @@ export function BookmarkRow({ bookmark, onOpen, onDelete }: { bookmark: Bookmark
         {bookmark.faviconUrl ? (
           <img src={bookmark.faviconUrl} alt="" className={styles.favicon} />
         ) : (
-          <div className={styles.faviconPlaceholder} />
+          <img src="/plourx-logo.png" alt="" className={styles.faviconPlaceholder} />
         )}
         <div className={styles.text}>
           <span className={styles.title}>{bookmark.title}</span>

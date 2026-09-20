@@ -31,7 +31,8 @@
   width: 22px;
   height: 22px;
   border-radius: 6px;
-  background: var(--px-tap-active);
+  background: var(--px-surface);
+  object-fit: contain;
   flex-shrink: 0;
 }
 

@@ -6,6 +6,8 @@
   border: 2px solid var(--px-border);
   overflow: hidden;
   text-align: left;
+  margin-bottom: auto;
+  padding-bottom: 5px;
   transition: border-color var(--px-dur-fast) var(--px-ease), transform var(--px-dur-fast) var(--px-ease);
 }
 
@@ -35,7 +37,8 @@
   width: 16px;
   height: 16px;
   border-radius: 3px;
-  background: var(--px-tap-active);
+  background: var(--px-surface);
+  object-fit: contain;
   flex-shrink: 0;
 }
 

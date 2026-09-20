@@ -44,7 +44,7 @@ export function DesktopTabStrip() {
             {tab.faviconUrl ? (
               <img src={tab.faviconUrl} alt="" className={styles.favicon} />
             ) : (
-              <div className={styles.faviconPlaceholder} />
+              <img src="/plourx-logo.png" alt="" className={styles.faviconPlaceholder} />
             )}
             <span className={styles.title}>{tab.url ? tab.title || getDisplayHost(tab.url) : 'New Tab'}</span>
             <span

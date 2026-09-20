@@ -47,7 +47,8 @@
   width: 16px;
   height: 16px;
   border-radius: 4px;
-  background: var(--px-tap-active);
+  background: var(--px-surface);
+  object-fit: contain;
   flex-shrink: 0;
 }
 
