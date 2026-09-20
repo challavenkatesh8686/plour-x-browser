@@ -228,6 +228,39 @@ textarea {
 }
 
 /*
+ * Google's Website Translate widget (see TranslateButton) injects its own
+ * top banner iframe and pushes `body { top: 40px }` via an inline style.
+ * Suppress both so the app keeps its native-feeling chrome -- the
+ * `!important` here is required to win over that inline style per the CSS
+ * cascade (an !important external rule beats a plain inline declaration).
+ */
+.goog-te-banner-frame.skiptranslate,
+.goog-te-gadget-icon,
+#goog-gt-tt,
+.goog-tooltip,
+.goog-tooltip:hover,
+/* Google reuses this exact obfuscated class for the banner wrapper as of
+   the current widget build; it isn't a stable name, hence the attribute
+   selectors below as a future-proof catch-all for whatever it renames to. */
+.VIpgJd-ZVi9od-ORHb,
+iframe.skiptranslate,
+iframe[src*='translate.google'],
+body > .skiptranslate:not(#google_translate_element) {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/*
  * Respect the user's reduced-motion preference everywhere: collapse
  * transitions/animations to near-instant instead of removing feedback
  * entirely (a 1ms transition still fires end events reliably).
