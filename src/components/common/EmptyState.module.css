@@ -1,0 +1,29 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 56px 32px;
+  text-align: center;
+  animation: px-fade-in var(--px-dur-base) var(--px-ease);
+}
+
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--px-radius-lg);
+  background: var(--px-accent-bg);
+  color: var(--px-accent);
+}
+
+.message {
+  margin: 0;
+  font-size: 13px;
+  color: var(--px-text-faint);
+  max-width: 260px;
+  line-height: 1.5;
+}

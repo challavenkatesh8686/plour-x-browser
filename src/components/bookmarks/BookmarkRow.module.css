@@ -1,0 +1,76 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--px-radius-md);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: var(--px-radius-md);
+  text-align: left;
+  transition: background var(--px-dur-fast) var(--px-ease);
+}
+
+.main:active {
+  background: var(--px-tap);
+}
+
+.favicon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.faviconPlaceholder {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--px-tap-active);
+  flex-shrink: 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.url {
+  font-size: 12px;
+  color: var(--px-text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--px-radius-pill);
+  color: var(--px-text-faint);
+  flex-shrink: 0;
+}
+
+.delete:active {
+  background: var(--px-tap);
+  color: var(--px-danger);
+}

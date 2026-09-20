@@ -1,0 +1,35 @@
+.wrap {
+  flex-shrink: 0;
+  padding: calc(var(--px-safe-top) + 10px) 10px 8px;
+  background: var(--px-surface-glass);
+  backdrop-filter: var(--px-blur);
+  -webkit-backdrop-filter: var(--px-blur);
+  border-bottom: 1px solid var(--px-border);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bookmarked {
+  color: var(--px-accent);
+}
+
+.menuAnchor {
+  position: relative;
+}
+
+.progressTrack {
+  height: 2px;
+  margin-top: 8px;
+  background: transparent;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--px-accent);
+  transition: width var(--px-dur-base) var(--px-ease);
+}

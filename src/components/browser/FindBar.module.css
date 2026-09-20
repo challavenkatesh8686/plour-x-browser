@@ -1,0 +1,33 @@
+.bar {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: var(--px-radius-pill);
+  box-shadow: var(--px-shadow-lg);
+  animation: px-fade-in var(--px-dur-fast) var(--px-ease);
+}
+
+.input {
+  width: 200px;
+  height: 32px;
+  padding: 0 10px;
+  border: none;
+  outline: none;
+  background: var(--px-tap);
+  border-radius: var(--px-radius-pill);
+  font-size: 13px;
+  color: var(--px-text);
+}
+
+.count {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--px-text-faint);
+  min-width: 36px;
+  text-align: center;
+}

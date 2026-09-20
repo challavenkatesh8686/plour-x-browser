@@ -1,0 +1,4 @@
+.checkIcon {
+  color: var(--px-accent);
+  flex-shrink: 0;
+}

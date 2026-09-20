@@ -1,0 +1,43 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--px-radius-pill);
+  color: var(--px-text);
+  flex-shrink: 0;
+  transition:
+    transform var(--px-dur-fast) var(--px-ease),
+    background var(--px-dur-fast) var(--px-ease);
+}
+
+.button:active {
+  transform: scale(0.92);
+}
+
+.button:disabled {
+  opacity: 0.35;
+}
+
+.sm {
+  width: 32px;
+  height: 32px;
+}
+
+.md {
+  width: 40px;
+  height: 40px;
+}
+
+.lg {
+  width: 56px;
+  height: 56px;
+}
+
+.glass {
+  background: var(--px-surface-raised);
+  border: 1px solid var(--px-border);
+}
+
+.plain {
+  background: transparent;
+}

@@ -1,0 +1,36 @@
+.host {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px;
+  text-align: center;
+}
+
+.placeholderIcon {
+  color: var(--px-accent);
+  margin-bottom: 8px;
+}
+
+.placeholderTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  max-width: 320px;
+}
+
+.placeholderText {
+  margin: 0;
+  font-size: 13px;
+  color: var(--px-text-dim);
+  max-width: 340px;
+  line-height: 1.5;
+}

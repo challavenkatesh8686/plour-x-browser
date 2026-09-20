@@ -1,0 +1,66 @@
+.nav {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  gap: 4px;
+  flex-shrink: 0;
+  margin: 0 12px calc(10px + var(--px-safe-bottom));
+  padding: 6px;
+  border-radius: var(--px-radius-lg);
+  background: var(--px-surface-glass);
+  backdrop-filter: var(--px-blur);
+  -webkit-backdrop-filter: var(--px-blur);
+  border: 1px solid var(--px-border);
+  box-shadow: var(--px-shadow-md);
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  padding: 8px 4px;
+  border-radius: var(--px-radius-md);
+  color: var(--px-text-faint);
+  transition:
+    color var(--px-dur-fast) var(--px-ease),
+    background var(--px-dur-fast) var(--px-ease);
+}
+
+.tab.active {
+  color: var(--px-accent);
+  background: var(--px-accent-bg);
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: -0.1px;
+}
+
+.tab.active .label {
+  font-weight: 700;
+}
+
+.tabsIconWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.tabsCount {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: var(--px-radius-pill);
+  background: currentColor;
+  color: var(--px-surface);
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 15px;
+  text-align: center;
+}

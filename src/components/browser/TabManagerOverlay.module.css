@@ -1,0 +1,52 @@
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  background: var(--px-bg);
+  animation: px-fade-in var(--px-dur-base) var(--px-ease);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--px-safe-top) + 14px) 16px 10px;
+}
+
+.count {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 4px 16px 16px;
+}
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.newTabButton {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 16px calc(16px + var(--px-safe-bottom));
+  padding: 14px;
+  border-radius: var(--px-radius-lg);
+  background: var(--px-accent);
+  color: var(--px-white);
+  font-size: 14px;
+  font-weight: 700;
+}

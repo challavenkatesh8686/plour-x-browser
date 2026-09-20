@@ -1,0 +1,13 @@
+.button {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border-radius: var(--px-radius-pill);
+  background: var(--px-accent-bg);
+  color: var(--px-accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.button:disabled {
+  opacity: 0.5;
+}

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      Addresses Electron's "Insecure Content-Security-Policy" dev warning
+      (the chrome window had none set at all). Deliberately not maximally
+      strict -- 'unsafe-inline' is kept for script/style because Vite's dev
+      client and HMR overlay need it, and tightening further needs separate
+      dev/prod CSPs (Vite doesn't template index.html by default). This is
+      still a real improvement over no policy: it blocks arbitrary
+      <object>/<embed> plugin content and frame embedding, and constrains
+      script/style/connect origins to this app's own origin plus https.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https: wss: ws:; object-src 'none'; frame-src 'none';"
+    />
+    <link rel="icon" type="image/png" href="/plourx-logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>PlourX Browser</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

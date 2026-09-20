@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PlourX Browser</string>
+    <string name="title_activity_main">PlourX Browser</string>
+    <string name="package_name">com.plourx.browser</string>
+    <string name="custom_url_scheme">com.plourx.browser</string>
+</resources>

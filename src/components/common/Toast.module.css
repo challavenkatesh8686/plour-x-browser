@@ -1,0 +1,32 @@
+.wrap {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(84px + var(--px-safe-bottom));
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--px-radius-md);
+  background: var(--px-surface-glass);
+  backdrop-filter: var(--px-blur);
+  -webkit-backdrop-filter: var(--px-blur);
+  border: 1px solid var(--px-border);
+  box-shadow: var(--px-shadow-lg);
+  animation: px-fade-in var(--px-dur-base) var(--px-ease);
+}
+
+.message {
+  font-size: 13px;
+  color: var(--px-text);
+  line-height: 1.4;
+}
+
+.action {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--px-accent);
+}

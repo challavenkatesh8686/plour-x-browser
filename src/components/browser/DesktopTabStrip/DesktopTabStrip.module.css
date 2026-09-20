@@ -1,0 +1,121 @@
+.strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 8px 0;
+  flex-shrink: 0;
+}
+
+.scroller {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  max-width: 220px;
+  min-width: 120px;
+  height: 36px;
+  padding: 0 8px 0 10px;
+  border-radius: var(--px-radius-md) var(--px-radius-md) 0 0;
+  background: var(--px-tap);
+  color: var(--px-text-faint);
+  transition: background var(--px-dur-fast) var(--px-ease), color var(--px-dur-fast) var(--px-ease);
+}
+
+.tab.active {
+  background: var(--px-surface-raised);
+  color: var(--px-text);
+  box-shadow: var(--px-shadow-sm);
+}
+
+.favicon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.faviconPlaceholder {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: var(--px-tap-active);
+  flex-shrink: 0;
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--px-radius-pill);
+  flex-shrink: 0;
+}
+
+.close:hover {
+  background: var(--px-tap-active);
+}
+
+.newTab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--px-radius-pill);
+  color: var(--px-text-faint);
+  flex-shrink: 0;
+}
+
+.newTab:hover {
+  background: var(--px-tap);
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 4px;
+  padding-left: 8px;
+  border-left: 1px solid var(--px-border);
+  flex-shrink: 0;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--px-radius-pill);
+  color: var(--px-text-faint);
+}
+
+.navLink:hover {
+  background: var(--px-tap);
+}
+
+.navLinkActive {
+  color: var(--px-accent);
+  background: var(--px-accent-bg);
+}

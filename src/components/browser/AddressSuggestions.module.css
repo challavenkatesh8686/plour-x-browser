@@ -1,0 +1,64 @@
+.list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  border-radius: var(--px-radius-lg);
+  box-shadow: var(--px-shadow-lg);
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--px-radius-md);
+  text-align: left;
+  transition: background var(--px-dur-fast) var(--px-ease);
+}
+
+.row:active {
+  background: var(--px-tap);
+}
+
+.icon {
+  color: var(--px-text-faint);
+  flex-shrink: 0;
+}
+
+.bookmarkIcon {
+  color: var(--px-accent);
+  flex-shrink: 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.url {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--px-text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
