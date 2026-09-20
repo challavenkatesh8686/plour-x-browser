@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { Search, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../services/auth/AuthContext';
 import { useTabs } from '../../services/tabs/TabsContext';
-import { AuthSheet } from '../auth/AuthSheet';
 import { ShortcutGrid } from './ShortcutGrid';
 import styles from './NewTabHome.module.css';
 
 export function NewTabHome() {
   const { navigateActiveTab } = useTabs();
-  const { isAuthenticated, user, signOut } = useAuth();
+  const { isAuthenticated, user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
   const [query, setQuery] = useState('');
-  const [showAuth, setShowAuth] = useState(false);
 
   return (
     <div className={styles.wrap}>
@@ -34,12 +34,14 @@ export function NewTabHome() {
 
       <ShortcutGrid />
 
-      <button type="button" className={styles.accountRow} onClick={() => (isAuthenticated ? void signOut() : setShowAuth(true))}>
+      <button
+        type="button"
+        className={styles.accountRow}
+        onClick={() => (isAuthenticated ? void signOut() : navigate('/login', { state: { from: '/' } }))}
+      >
         <User size={14} />
-        {isAuthenticated ? `Signed in as ${user?.email} · Sign out` : 'Sign in to sync your PlourX account'}
+        {isAuthenticated ? `Signed in as ${profile?.name || user?.email} · Sign out` : 'Sign in to sync your PlourX account'}
       </button>
-
-      {showAuth && <AuthSheet onClose={() => setShowAuth(false)} />}
     </div>
   );
 }

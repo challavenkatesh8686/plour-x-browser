@@ -1,0 +1,42 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--px-text-dim);
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--px-text-faint);
+}
+
+.input {
+  height: 46px;
+  padding: 0 14px;
+  border-radius: var(--px-radius-md);
+  background: var(--px-tap);
+  border: 1px solid transparent;
+  font-size: 14px;
+  color: var(--px-text);
+  transition: border-color var(--px-dur-fast) var(--px-ease), background var(--px-dur-fast) var(--px-ease);
+}
+
+.input:focus {
+  outline: none;
+  background: var(--px-surface);
+  border-color: var(--px-accent-border);
+}
+
+.input.invalid {
+  border-color: var(--px-danger);
+}
+
+.error {
+  font-size: 12px;
+  color: var(--px-danger);
+}

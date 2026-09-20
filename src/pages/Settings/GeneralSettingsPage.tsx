@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { Check, Globe, Search, User } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SettingsSubpageHeader } from '../../components/settings/SettingsSubpageHeader';
 import { SettingsSection, SettingsRow } from '../../components/settings/SettingsSection';
 import { SettingsActionButton } from '../../components/settings/SettingsActionButton';
@@ -7,13 +7,13 @@ import { Switch } from '../../components/common/Switch';
 import { usePreferences } from '../../hooks/usePreferences';
 import { getSearchEngines } from '../../services/search/searchEngineService';
 import { useAuth } from '../../services/auth/AuthContext';
-import { AuthSheet } from '../../components/auth/AuthSheet';
 import styles from './GeneralSettingsPage.module.css';
 
 export function GeneralSettingsPage() {
   const { preferences, update } = usePreferences();
-  const { isAuthenticated, user, signOut } = useAuth();
-  const [showAuth, setShowAuth] = useState(false);
+  const { isAuthenticated, user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <div>
@@ -43,7 +43,7 @@ export function GeneralSettingsPage() {
       <SettingsSection title="Account" icon={User}>
         {isAuthenticated ? (
           <SettingsRow
-            label={user?.email ?? 'Signed in'}
+            label={profile?.name || user?.email || 'Signed in'}
             description="Signed in to your PlourX account"
             control={<SettingsActionButton label="Sign out" onClick={() => void signOut()} />}
           />
@@ -51,12 +51,10 @@ export function GeneralSettingsPage() {
           <SettingsRow
             label="Not signed in"
             description="Sign in to your PlourX account"
-            control={<SettingsActionButton label="Sign in" onClick={() => setShowAuth(true)} />}
+            control={<SettingsActionButton label="Sign in" onClick={() => navigate('/login', { state: { from: location.pathname } })} />}
           />
         )}
       </SettingsSection>
-
-      {showAuth && <AuthSheet onClose={() => setShowAuth(false)} />}
     </div>
   );
 }

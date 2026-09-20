@@ -1,0 +1,87 @@
+.page {
+  min-height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--px-safe-top) + 32px) 16px calc(var(--px-safe-bottom) + 32px);
+  background: var(--px-bg);
+  overflow-y: auto;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--px-surface-raised);
+  border: 1px solid var(--px-border);
+  border-radius: var(--px-radius-lg);
+  box-shadow: var(--px-shadow-md);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: px-fade-in var(--px-dur-base) var(--px-ease);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--px-radius-md);
+  margin-bottom: 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--px-text-dim);
+  font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--px-text-dim);
+}
+
+.footer a {
+  color: var(--px-accent-strong);
+  font-weight: 700;
+}
+
+.error {
+  font-size: 0.875rem;
+  color: var(--px-danger);
+  background: rgba(255, 59, 48, 0.1);
+  border: 1px solid rgba(255, 59, 48, 0.25);
+  border-radius: var(--px-radius-sm);
+  padding: 12px 14px;
+}
+
+.success {
+  font-size: 0.875rem;
+  color: var(--px-success);
+  background: rgba(52, 199, 89, 0.1);
+  border: 1px solid rgba(52, 199, 89, 0.25);
+  border-radius: var(--px-radius-sm);
+  padding: 12px 14px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

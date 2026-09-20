@@ -1,0 +1,33 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 20px;
+  border-radius: var(--px-radius-pill);
+  font-size: 14px;
+  font-weight: 700;
+  transition: opacity var(--px-dur-fast) var(--px-ease), transform var(--px-dur-fast) var(--px-ease);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+}
+
+.primary {
+  background: var(--px-accent-gradient);
+  color: var(--px-white);
+}
+
+.outline {
+  background: var(--px-tap);
+  color: var(--px-text);
+}
+
+.fullWidth {
+  width: 100%;
+}

@@ -11,6 +11,10 @@ import { SettingsHubPage } from './pages/Settings/SettingsHubPage';
 import { GeneralSettingsPage } from './pages/Settings/GeneralSettingsPage';
 import { AppearanceSettingsPage } from './pages/Settings/AppearanceSettingsPage';
 import { TabsSettingsPage } from './pages/Settings/TabsSettingsPage';
+import { LoginPage } from './pages/Login/LoginPage';
+import { SignupPage } from './pages/Signup/SignupPage';
+import { ForgotPasswordPage } from './pages/ForgotPassword/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/ResetPassword/ResetPasswordPage';
 
 function App() {
   return (
@@ -22,6 +26,10 @@ function App() {
             <Route path="/bookmarks" element={<BookmarksPage />} />
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/downloads" element={<DownloadsPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/settings" element={<SettingsLayout />}>
               <Route index element={<SettingsHubPage />} />
               <Route path="general" element={<GeneralSettingsPage />} />
