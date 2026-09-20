@@ -1,4 +1,5 @@
 .wrap {
+  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -8,6 +9,15 @@
   padding: 24px;
   overflow-y: auto;
   animation: px-fade-in var(--px-dur-base) var(--px-ease);
+}
+
+.topBar {
+  position: absolute;
+  top: calc(var(--px-safe-top) + 16px);
+  right: calc(var(--px-safe-right) + 16px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .brand {

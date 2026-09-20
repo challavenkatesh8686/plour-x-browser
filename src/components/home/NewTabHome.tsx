@@ -3,6 +3,8 @@ import { Search, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../services/auth/AuthContext';
 import { useTabs } from '../../services/tabs/TabsContext';
+import { ThemeToggle } from '../common/ThemeToggle';
+import { TranslateButton } from '../common/TranslateButton';
 import { ShortcutGrid } from './ShortcutGrid';
 import styles from './NewTabHome.module.css';
 
@@ -14,6 +16,11 @@ export function NewTabHome() {
 
   return (
     <div className={styles.wrap}>
+      <div className={styles.topBar}>
+        <TranslateButton />
+        <ThemeToggle />
+      </div>
+
       <h1 className={styles.brand}>PlourX Browser</h1>
 
       <form

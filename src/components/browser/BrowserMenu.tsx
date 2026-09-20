@@ -1,6 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { Monitor, Share2, Smartphone } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Languages, Monitor, Moon, Share2, Smartphone, Sun } from 'lucide-react';
 import { useTabs } from '../../services/tabs/TabsContext';
+import { useTheme } from '../../hooks/useTheme';
+import { useGoogleTranslate } from '../../hooks/useGoogleTranslate';
+import { LanguageSheet } from '../common/LanguageSheet';
 import styles from './BrowserMenu.module.css';
 
 /**
@@ -10,7 +13,11 @@ import styles from './BrowserMenu.module.css';
  */
 export function BrowserMenu({ onClose }: { onClose: () => void }) {
   const { activeTab, toggleDesktopMode, shareActiveTab } = useTabs();
+  const { resolvedTheme, toggleTheme } = useTheme();
+  const { language, pending, error, setLanguage } = useGoogleTranslate();
+  const [languageSheetOpen, setLanguageSheetOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const isDark = resolvedTheme === 'dark';
 
   useEffect(() => {
     const onPointerDown = (e: PointerEvent) => {
@@ -46,6 +53,29 @@ export function BrowserMenu({ onClose }: { onClose: () => void }) {
         {activeTab.isDesktopMode ? <Smartphone size={17} /> : <Monitor size={17} />}
         {activeTab.isDesktopMode ? 'Mobile site' : 'Desktop site'}
       </button>
+      <button type="button" className={styles.item} onClick={toggleTheme}>
+        {isDark ? <Sun size={17} /> : <Moon size={17} />}
+        {isDark ? 'Light mode' : 'Dark mode'}
+      </button>
+      <button type="button" className={styles.item} onClick={() => setLanguageSheetOpen(true)}>
+        <Languages size={17} />
+        {language ? `Translated (${language})` : 'Translate app'}
+      </button>
+      <LanguageSheet
+        open={languageSheetOpen}
+        currentLanguage={language}
+        pending={pending}
+        error={error}
+        onSelect={(code) => {
+          void setLanguage(code).then((ok) => {
+            if (ok) {
+              setLanguageSheetOpen(false);
+              onClose();
+            }
+          });
+        }}
+        onClose={() => setLanguageSheetOpen(false)}
+      />
     </div>
   );
 }

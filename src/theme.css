@@ -17,12 +17,16 @@
   --px-text-dim: rgba(23, 23, 27, 0.62);
   --px-text-faint: rgba(23, 23, 27, 0.4);
 
-  /* PlourX accent */
-  --px-accent: #7c5cff;
-  --px-accent-strong: #6d3bff;
-  --px-accent-bg: rgba(124, 92, 255, 0.12);
-  --px-accent-border: rgba(124, 92, 255, 0.35);
-  --px-accent-gradient: linear-gradient(135deg, #b26bff 0%, #7c5cff 100%);
+  /* PlourX accent -- the real brand pink/magenta + cherry-blossom petal
+     gradient from plour-x-website's design tokens (src/index.css), not the
+     purple accent plour-x-dialer/camera happen to use. Deliberately the
+     SAME accent in both light and dark mode (matching the website, which
+     only varies surfaces/text by theme, not the accent itself). */
+  --px-accent: #e8489e;
+  --px-accent-strong: #ff6fc7;
+  --px-accent-bg: rgba(232, 72, 158, 0.14);
+  --px-accent-border: rgba(232, 72, 158, 0.35);
+  --px-accent-gradient: linear-gradient(135deg, #ff87d0 0%, #7c3aed 100%);
 
   /* Status */
   --px-danger: #ff3b30;
@@ -81,11 +85,6 @@
     --px-text-dim: rgba(245, 245, 247, 0.62);
     --px-text-faint: rgba(245, 245, 247, 0.38);
 
-    --px-accent: #b26bff;
-    --px-accent-strong: #c084fc;
-    --px-accent-bg: rgba(178, 107, 255, 0.14);
-    --px-accent-border: rgba(178, 107, 255, 0.4);
-
     --px-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
     --px-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
     --px-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.55);
@@ -107,11 +106,6 @@
   --px-text: #f5f5f7;
   --px-text-dim: rgba(245, 245, 247, 0.62);
   --px-text-faint: rgba(245, 245, 247, 0.38);
-
-  --px-accent: #b26bff;
-  --px-accent-strong: #c084fc;
-  --px-accent-bg: rgba(178, 107, 255, 0.14);
-  --px-accent-border: rgba(178, 107, 255, 0.4);
 
   --px-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
   --px-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);

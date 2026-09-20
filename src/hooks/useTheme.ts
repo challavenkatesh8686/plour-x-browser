@@ -68,5 +68,9 @@ export function useTheme() {
     queueMicrotask(() => window.dispatchEvent(new Event(THEME_EVENT)));
   }, []);
 
-  return { theme, resolvedTheme, setTheme };
+  const toggleTheme = useCallback(() => {
+    setTheme(resolveTheme(theme) === 'dark' ? 'light' : 'dark');
+  }, [theme, setTheme]);
+
+  return { theme, resolvedTheme, setTheme, toggleTheme };
 }
