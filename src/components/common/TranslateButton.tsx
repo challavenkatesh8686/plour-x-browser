@@ -21,7 +21,7 @@ export function TranslateButton() {
   return (
     <>
       <IconButton
-        icon={pending ? <Loader2 size={18} className="px-spin" /> : <Languages size={18} />}
+        icon={pending ? <Loader2 size={18} className="px-spin" style={{ color: 'var(--px-accent)' }} /> : <Languages size={18} />}
         label={language ? `Translated (${language})` : 'Translate this app'}
         size="sm"
         variant="plain"

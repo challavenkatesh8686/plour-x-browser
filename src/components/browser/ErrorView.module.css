@@ -10,11 +10,6 @@
   animation: px-fade-in var(--px-dur-base) var(--px-ease);
 }
 
-.icon {
-  color: var(--px-warning);
-  margin-bottom: 8px;
-}
-
 .title {
   margin: 0;
   font-size: 17px;
@@ -51,6 +46,12 @@
   border-radius: var(--px-radius-pill);
   font-size: 13px;
   font-weight: 700;
+  transition: transform var(--px-dur-fast) var(--px-ease), opacity var(--px-dur-fast) var(--px-ease);
+}
+
+.primary:active,
+.secondary:active {
+  transform: scale(0.96);
 }
 
 .primary {
@@ -61,4 +62,14 @@
 .secondary {
   background: var(--px-tap);
   color: var(--px-text);
+}
+
+@media (hover: hover) {
+  .primary:hover {
+    opacity: 0.9;
+  }
+
+  .secondary:hover {
+    background: var(--px-tap-active);
+  }
 }

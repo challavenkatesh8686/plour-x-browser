@@ -47,6 +47,18 @@ export function tabsReducer(state: TabsState, action: TabsAction): TabsState {
       return { ...state, tabs, activeTabId, recentlyClosed };
     }
 
+    case 'CLOSE_ALL_TABS': {
+      const newlyClosed = state.tabs
+        .filter((tab) => tab.url && !tab.isCrashed)
+        .map((tab): ClosedTab => ({ url: tab.url, title: tab.title, faviconUrl: tab.faviconUrl }));
+      return {
+        ...state,
+        tabs: [],
+        activeTabId: null,
+        recentlyClosed: [...state.recentlyClosed, ...newlyClosed].slice(-MAX_RECENTLY_CLOSED),
+      };
+    }
+
     case 'REOPEN_CLOSED_TAB':
       return {
         ...state,
@@ -112,6 +124,9 @@ export function tabsReducer(state: TabsState, action: TabsAction): TabsState {
     case 'SET_TAB_DESKTOP_MODE':
       return { ...state, tabs: updateTab(state.tabs, action.tabId, { isDesktopMode: action.isDesktopMode }) };
 
+    case 'SET_TAB_ZOOM':
+      return { ...state, tabs: updateTab(state.tabs, action.tabId, { zoomPercent: action.zoomPercent }) };
+
     case 'OPEN_TAB_MANAGER':
       return { ...state, isTabManagerOpen: true };
 
@@ -137,6 +152,7 @@ export function createBlankTab(): Tab {
     isSuspended: false,
     isCrashed: false,
     isDesktopMode: false,
+    zoomPercent: 100,
     thumbnailBase64: null,
     error: null,
   };

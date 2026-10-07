@@ -101,7 +101,18 @@ const ACCELERATORS = new Set([
   'Alt+ArrowLeft',
   'Alt+ArrowRight',
   'F5',
+  'CmdOrCtrl+=',
+  'CmdOrCtrl+-',
+  'CmdOrCtrl+0',
+  'CmdOrCtrl+P',
+  'F11',
 ]);
+// Deliberately NOT intercepting 'Escape' here: before-input-event's
+// preventDefault() suppresses the key event from ever reaching the
+// renderer's DOM, which would break FindBar.tsx's own local Escape-to-close
+// handling. Exit-fullscreen-on-Escape is instead a renderer-side listener
+// (see useFullscreen.ts) that only works while the chrome window itself has
+// input focus -- an honest scoping limit, not a silently broken feature.
 
 function comboFromInput(input) {
   if (input.type !== 'keyDown') return null;
@@ -518,19 +529,29 @@ ipcMain.handle(channels.SHELL_COPY_LINK, (_e, url) => {
   if (typeof url === 'string') clipboard.writeText(url);
 });
 
-ipcMain.on(channels.FIND_START, (_e, query, forward) => {
-  if (!visibleTabId || typeof query !== 'string') return;
-  const tab = tabs.get(visibleTabId);
-  if (!tab) return;
+ipcMain.on(channels.FIND_START, (_e, tabId, query, forward) => {
+  const tab = tabs.get(tabId);
+  if (!tab || typeof query !== 'string') return;
   if (!query) {
     tab.view.webContents.stopFindInPage('clearSelection');
     return;
   }
   tab.view.webContents.findInPage(query, { forward: forward !== false });
 });
-ipcMain.on(channels.FIND_STOP, () => {
-  if (!visibleTabId) return;
-  tabs.get(visibleTabId)?.view.webContents.stopFindInPage('clearSelection');
+ipcMain.on(channels.FIND_STOP, (_e, tabId) => {
+  tabs.get(tabId)?.view.webContents.stopFindInPage('clearSelection');
+});
+
+ipcMain.handle(channels.TAB_SET_ZOOM, (_e, tabId, percent) => {
+  const tab = tabs.get(tabId);
+  if (tab && typeof percent === 'number') tab.view.webContents.zoomFactor = percent / 100;
+});
+ipcMain.handle(channels.TAB_PRINT, (_e, tabId) => {
+  tabs.get(tabId)?.view.webContents.print({ silent: false });
+});
+
+ipcMain.handle(channels.WINDOW_SET_FULLSCREEN, (_e, fullscreen) => {
+  if (mainWindow) mainWindow.setFullScreen(Boolean(fullscreen));
 });
 
 ipcMain.handle(channels.DOWNLOADS_LIST, () => [...downloads.values()].map(({ item: _item, ...rest }) => rest));
@@ -542,6 +563,10 @@ ipcMain.handle(channels.DOWNLOADS_OPEN, (_e, id) => {
 ipcMain.handle(channels.DOWNLOADS_SHOW_IN_FOLDER, (_e, id) => {
   const record = downloads.get(id);
   if (record) shell.showItemInFolder(record.savePath);
+});
+/** Clears download HISTORY records only -- matches Android's clearAllDownloads, which also doesn't delete files already on disk. */
+ipcMain.handle(channels.DOWNLOADS_CLEAR_ALL, () => {
+  downloads.clear();
 });
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,19 @@
+.chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--px-radius-lg);
+  flex-shrink: 0;
+}
+
+.accent {
+  background: var(--px-accent-bg);
+  color: var(--px-accent);
+}
+
+.warning {
+  background: rgba(255, 149, 0, 0.14);
+  color: var(--px-warning);
+}

@@ -18,6 +18,7 @@ export interface Tab {
   isSuspended: boolean;
   isCrashed: boolean;
   isDesktopMode: boolean;
+  zoomPercent: number;
   thumbnailBase64: string | null;
   error: TabError | null;
 }
@@ -40,6 +41,7 @@ export type TabsAction =
   | { type: 'RESTORE_TABS'; tabs: Tab[]; activeTabId: string | null }
   | { type: 'CREATE_TAB'; tab: Tab; makeActive: boolean }
   | { type: 'CLOSE_TAB'; tabId: string }
+  | { type: 'CLOSE_ALL_TABS' }
   | { type: 'SWITCH_TAB'; tabId: string }
   | { type: 'SET_TAB_URL'; tabId: string; url: string }
   | { type: 'SET_TAB_LOADING'; tabId: string; isLoading: boolean; progress?: number }
@@ -51,6 +53,7 @@ export type TabsAction =
   | { type: 'SET_TAB_SNAPSHOT'; tabId: string; thumbnailBase64: string | null }
   | { type: 'SET_TAB_ERROR'; tabId: string; error: TabError | null }
   | { type: 'SET_TAB_DESKTOP_MODE'; tabId: string; isDesktopMode: boolean }
+  | { type: 'SET_TAB_ZOOM'; tabId: string; zoomPercent: number }
   | { type: 'OPEN_TAB_MANAGER' }
   | { type: 'CLOSE_TAB_MANAGER' }
   | { type: 'REOPEN_CLOSED_TAB'; tab: Tab };

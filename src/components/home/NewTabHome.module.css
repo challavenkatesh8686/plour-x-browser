@@ -42,6 +42,11 @@
   background: var(--px-surface-raised);
   border: 1px solid var(--px-border);
   box-shadow: var(--px-shadow-sm);
+  transition: border-color var(--px-dur-fast) var(--px-ease);
+}
+
+.searchForm:focus-within {
+  border-color: var(--px-accent-border);
 }
 
 .searchIcon {
@@ -64,7 +69,20 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--px-radius-pill);
   font-size: 12px;
   color: var(--px-text-faint);
   font-weight: 500;
+  transition: background var(--px-dur-fast) var(--px-ease);
+}
+
+.accountRow:active {
+  background: var(--px-tap);
+}
+
+@media (hover: hover) {
+  .accountRow:hover {
+    background: var(--px-tap);
+  }
 }

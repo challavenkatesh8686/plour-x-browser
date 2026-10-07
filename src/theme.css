@@ -116,6 +116,46 @@
   color-scheme: light;
 }
 
+/*
+ * Accent color options (Settings > Appearance). Pink is the default/baseline
+ * accent defined in :root above, so there's no [data-accent='pink'] block --
+ * clearing the attribute is how useAccentColor.ts resets to it. Each variant
+ * overrides the full accent token group (base/strong/bg/border/gradient) so
+ * every surface that reads --px-accent-* stays consistent, regardless of
+ * light/dark mode (the dark-mode block above never touches accent tokens).
+ */
+:root[data-accent='purple'] {
+  --px-accent: #9333ea;
+  --px-accent-strong: #a855f7;
+  --px-accent-bg: rgba(147, 51, 234, 0.14);
+  --px-accent-border: rgba(147, 51, 234, 0.35);
+  --px-accent-gradient: linear-gradient(135deg, #c084fc 0%, #6d28d9 100%);
+}
+
+:root[data-accent='blue'] {
+  --px-accent: #3b82f6;
+  --px-accent-strong: #60a5fa;
+  --px-accent-bg: rgba(59, 130, 246, 0.14);
+  --px-accent-border: rgba(59, 130, 246, 0.35);
+  --px-accent-gradient: linear-gradient(135deg, #7dd3fc 0%, #3b82f6 100%);
+}
+
+:root[data-accent='teal'] {
+  --px-accent: #14b8a6;
+  --px-accent-strong: #2dd4bf;
+  --px-accent-bg: rgba(20, 184, 166, 0.14);
+  --px-accent-border: rgba(20, 184, 166, 0.35);
+  --px-accent-gradient: linear-gradient(135deg, #5eead4 0%, #0f766e 100%);
+}
+
+:root[data-accent='amber'] {
+  --px-accent: #f59e0b;
+  --px-accent-strong: #fbbf24;
+  --px-accent-bg: rgba(245, 158, 11, 0.14);
+  --px-accent-border: rgba(245, 158, 11, 0.35);
+  --px-accent-gradient: linear-gradient(135deg, #fde68a 0%, #d97706 100%);
+}
+
 * {
   box-sizing: border-box;
 }

@@ -91,6 +91,34 @@ describe('tabsReducer', () => {
     expect(state.recentlyClosed[9].url).toBe('https://example.com/11');
   });
 
+  it('closes all tabs, clears the active tab, and records the real ones as reopenable', () => {
+    const blank = createBlankTab();
+    const first = withUrl(createBlankTab(), 'https://example.com');
+    const second = withUrl(createBlankTab(), 'https://example.org');
+    const state = tabsReducer(
+      { ...initialTabsState, tabs: [blank, first, second], activeTabId: first.id },
+      { type: 'CLOSE_ALL_TABS' },
+    );
+    expect(state.tabs).toHaveLength(0);
+    expect(state.activeTabId).toBeNull();
+    expect(state.recentlyClosed.map((t) => t.url)).toEqual(['https://example.com', 'https://example.org']);
+  });
+
+  it('caps recentlyClosed at 10 when closing all tabs at once', () => {
+    const tabs = Array.from({ length: 12 }, (_, i) => withUrl(createBlankTab(), `https://example.com/${i}`));
+    const state = tabsReducer({ ...initialTabsState, tabs, activeTabId: tabs[0].id }, { type: 'CLOSE_ALL_TABS' });
+    expect(state.recentlyClosed).toHaveLength(10);
+    expect(state.recentlyClosed[0].url).toBe('https://example.com/2');
+  });
+
+  it('sets a tab zoom level independently of other tabs', () => {
+    const first = createBlankTab();
+    const second = createBlankTab();
+    const state = tabsReducer({ ...initialTabsState, tabs: [first, second] }, { type: 'SET_TAB_ZOOM', tabId: first.id, zoomPercent: 150 });
+    expect(state.tabs.find((t) => t.id === first.id)?.zoomPercent).toBe(150);
+    expect(state.tabs.find((t) => t.id === second.id)?.zoomPercent).toBe(100);
+  });
+
   it('switching tabs closes the tab manager overlay', () => {
     const tab = createBlankTab();
     const state = tabsReducer(

@@ -27,3 +27,31 @@
 .item:active {
   background: var(--px-tap);
 }
+
+@media (hover: hover) {
+  .item:hover {
+    background: var(--px-tap);
+  }
+}
+
+.zoomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 4px 6px;
+}
+
+.zoomReset {
+  flex: 1;
+  text-align: center;
+  padding: 8px 4px;
+  border-radius: var(--px-radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--px-text);
+}
+
+.zoomReset:active {
+  background: var(--px-tap);
+}

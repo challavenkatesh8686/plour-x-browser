@@ -67,6 +67,16 @@
   background: var(--px-tap);
 }
 
+@media (hover: hover) {
+  .close:hover {
+    background: var(--px-tap);
+  }
+
+  .card:not(.active):hover {
+    border-color: var(--px-border-strong);
+  }
+}
+
 .preview {
   aspect-ratio: 3 / 4;
   background: var(--px-tap);

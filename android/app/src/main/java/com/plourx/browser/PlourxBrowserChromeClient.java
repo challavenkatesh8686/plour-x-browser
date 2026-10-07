@@ -1,14 +1,20 @@
 package com.plourx.browser;
 
+import android.Manifest;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Message;
 import android.util.Base64;
+import android.webkit.GeolocationPermissions;
 import android.webkit.PermissionRequest;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /** Bridges progress/title/favicon/new-window/permission callbacks for one tab's WebView back to JS. */
 class PlourxBrowserChromeClient extends WebChromeClient {
@@ -81,14 +87,13 @@ class PlourxBrowserChromeClient extends WebChromeClient {
     }
 
     /**
-     * Site permissions (camera/mic/etc.) aren't supported yet -- deny by
-     * default so a page's getUserMedia() promise rejects cleanly instead of
-     * hanging forever, and still tell JS so it can inform the user rather
-     * than leaving the request silently unanswered.
+     * Maps a WebView PermissionRequest resource to the real Android runtime
+     * permission it needs, requests it if not already granted (showing the
+     * genuine system dialog), and grants/denies the WebView request based on
+     * the outcome -- replacing the previous unconditional deny.
      */
     @Override
     public void onPermissionRequest(PermissionRequest request) {
-        request.deny();
         JSArray resources = new JSArray();
         for (String resource : request.getResources()) {
             resources.put(resource);
@@ -97,5 +102,53 @@ class PlourxBrowserChromeClient extends WebChromeClient {
         data.put("tabId", tabId);
         data.put("resources", resources);
         plugin.emit("permissionRequested", data);
+
+        List<String> androidPermissions = new ArrayList<>();
+        for (String resource : request.getResources()) {
+            if (PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(resource)) androidPermissions.add(Manifest.permission.CAMERA);
+            if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(resource)) androidPermissions.add(Manifest.permission.RECORD_AUDIO);
+        }
+        if (androidPermissions.isEmpty()) {
+            // Unsupported resource kind (e.g. protected media id) -- nothing we can grant.
+            request.deny();
+            return;
+        }
+        plugin.requestAndroidPermissions(
+            androidPermissions.toArray(new String[0]),
+            granted -> {
+                boolean allGranted = true;
+                for (String permission : androidPermissions) {
+                    if (!Boolean.TRUE.equals(granted.get(permission))) {
+                        allGranted = false;
+                        break;
+                    }
+                }
+                if (allGranted) {
+                    request.grant(request.getResources());
+                } else {
+                    request.deny();
+                }
+            }
+        );
+    }
+
+    /** Real geolocation support: gated behind the actual Android location permission dialog, not an automatic grant. */
+    @Override
+    public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+        plugin.requestAndroidPermissions(
+            new String[] { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION },
+            granted -> {
+                boolean allowed =
+                    Boolean.TRUE.equals(granted.get(Manifest.permission.ACCESS_FINE_LOCATION)) ||
+                    Boolean.TRUE.equals(granted.get(Manifest.permission.ACCESS_COARSE_LOCATION));
+                callback.invoke(origin, allowed, false);
+            }
+        );
+    }
+
+    /** Real file chooser support for `<input type=file>` -- launches the system picker (gallery/camera/documents per the page's accept/capture attributes). */
+    @Override
+    public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+        return plugin.showFileChooser(filePathCallback, fileChooserParams);
     }
 }

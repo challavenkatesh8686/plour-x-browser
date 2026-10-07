@@ -20,6 +20,12 @@
   font-weight: 700;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .grid {
   flex: 1;
   min-height: 0;
@@ -28,6 +34,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   padding: 4px 16px 16px;
+  animation: px-pop var(--px-dur-slow) var(--px-ease-spring);
 }
 
 @media (min-width: 720px) {

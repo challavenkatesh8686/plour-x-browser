@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Clock, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ConfirmSheet } from '../../components/common/ConfirmSheet';
 import { EmptyState } from '../../components/common/EmptyState';
 import { HistoryDateGroup } from '../../components/history/HistoryDateGroup';
 import * as historyService from '../../services/history/historyService';
@@ -85,26 +86,16 @@ export function HistoryPage() {
         )}
       </div>
 
-      {showClearSheet && (
-        <div className={styles.sheetBackdrop} onClick={() => setShowClearSheet(false)}>
-          <div className={`${styles.sheet} px-glass`} onClick={(e) => e.stopPropagation()}>
-            <h2 className={styles.sheetTitle}>Clear browsing data</h2>
-            {RANGE_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                className={styles.sheetOption}
-                onClick={async () => {
-                  await historyService.deleteRange(option.value);
-                  setShowClearSheet(false);
-                }}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      <ConfirmSheet
+        open={showClearSheet}
+        title="Clear browsing data"
+        options={RANGE_OPTIONS}
+        onClose={() => setShowClearSheet(false)}
+        onSelect={async (value) => {
+          await historyService.deleteRange(value as HistoryDeleteRange);
+          setShowClearSheet(false);
+        }}
+      />
     </div>
   );
 }

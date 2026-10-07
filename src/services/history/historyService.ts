@@ -54,10 +54,17 @@ export async function deleteRange(range: HistoryDeleteRange): Promise<void> {
     await db.clearAll();
   } else {
     const now = Date.now();
+    const HOUR = 60 * 60 * 1000;
     const since =
       range === 'lastHour'
-        ? now - 60 * 60 * 1000
-        : new Date(new Date(now).getFullYear(), new Date(now).getMonth(), new Date(now).getDate()).getTime();
+        ? now - HOUR
+        : range === 'last24Hours'
+          ? now - 24 * HOUR
+          : range === 'last7Days'
+            ? now - 7 * 24 * HOUR
+            : range === 'last4Weeks'
+              ? now - 28 * 24 * HOUR
+              : new Date(new Date(now).getFullYear(), new Date(now).getMonth(), new Date(now).getDate()).getTime(); // 'today'
     await db.deleteEntriesSince(since);
   }
   window.dispatchEvent(new Event(CHANGE_EVENT));

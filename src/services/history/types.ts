@@ -6,4 +6,4 @@ export interface HistoryEntry {
   visitedAt: number;
 }
 
-export type HistoryDeleteRange = 'lastHour' | 'today' | 'all';
+export type HistoryDeleteRange = 'lastHour' | 'today' | 'last24Hours' | 'last7Days' | 'last4Weeks' | 'all';

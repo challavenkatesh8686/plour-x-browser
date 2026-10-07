@@ -1,4 +1,113 @@
-.checkIcon {
+/*
+ * Theme grid: a 3-up icon-above-label button grid, the same pattern
+ * plour-x-music's Settings.tsx (.theme-grid/.theme-card) uses, translated
+ * onto this project's own --px-* tokens.
+ */
+.themeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.themeCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--px-border);
+  border-radius: var(--px-radius-md);
+  padding: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--px-text-dim);
+  transition:
+    background var(--px-dur-fast) var(--px-ease),
+    border-color var(--px-dur-fast) var(--px-ease),
+    color var(--px-dur-fast) var(--px-ease);
+}
+
+.themeCard.active {
+  border-color: var(--px-accent-border);
+  background: var(--px-accent-bg);
   color: var(--px-accent);
-  flex-shrink: 0;
+}
+
+@media (hover: hover) {
+  .themeCard:not(.active):hover {
+    background: var(--px-tap);
+  }
+}
+
+/* Accent color swatches: circular, matching plour-x-music's .swatches/.swatch, sized up slightly (28px vs their 24px) for a more comfortable touch target. */
+.swatches {
+  display: flex;
+  gap: 10px;
+}
+
+.swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: transform var(--px-dur-fast) var(--px-ease), border-color var(--px-dur-fast) var(--px-ease);
+}
+
+.swatch.active {
+  border-color: var(--px-text);
+}
+
+@media (hover: hover) {
+  .swatch:hover {
+    transform: scale(1.1);
+  }
+}
+
+/* Font size: a 4-up segmented "A" picker (the row's own font-size scales with each option, as direct visual feedback) instead of plour-x-music's plain <select>. */
+.fontSizeGrid {
+  display: flex;
+  gap: 6px;
+}
+
+.fontSizeOption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--px-border);
+  border-radius: var(--px-radius-sm);
+  font-weight: 600;
+  color: var(--px-text-dim);
+  transition:
+    background var(--px-dur-fast) var(--px-ease),
+    border-color var(--px-dur-fast) var(--px-ease),
+    color var(--px-dur-fast) var(--px-ease);
+}
+
+.fontSizeOption.active {
+  border-color: var(--px-accent-border);
+  background: var(--px-accent-bg);
+  color: var(--px-accent);
+}
+
+@media (hover: hover) {
+  .fontSizeOption:not(.active):hover {
+    background: var(--px-tap);
+  }
+}
+
+/* Family/weight/text-case dropdowns -- plour-x-music's .select, translated onto --px-* tokens. */
+.select {
+  max-width: 160px;
+  border: 1px solid var(--px-border);
+  border-radius: var(--px-radius-sm);
+  background: var(--px-surface);
+  color: var(--px-text);
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--px-accent-border);
 }

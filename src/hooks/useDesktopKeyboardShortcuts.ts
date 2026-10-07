@@ -3,6 +3,9 @@ import { onAccelerator } from '../services/browserEngine/browserEngineService';
 import { useBookmarkToggle } from '../services/bookmarks/useBookmarkToggle';
 import { useTabs } from '../services/tabs/TabsContext';
 import { isElectronDesktop } from '../utils/platform';
+import { ZOOM_STEPS } from '../services/tabs/zoomSteps';
+import { useFindBar } from './useFindBar';
+import { useFullscreen } from './useFullscreen';
 
 /**
  * Desktop-only (no-op on Android/web): reacts to accelerator combos the
@@ -11,7 +14,7 @@ import { isElectronDesktop } from '../utils/platform';
  * OS input focus is usually inside a loaded page's WebContentsView, not the
  * chrome renderer).
  */
-export function useDesktopKeyboardShortcuts(onToggleFindBar: () => void) {
+export function useDesktopKeyboardShortcuts() {
   const {
     tabs,
     activeTab,
@@ -24,8 +27,12 @@ export function useDesktopKeyboardShortcuts(onToggleFindBar: () => void) {
     goForward,
     reload,
     openSuggestions,
+    setActiveTabZoom,
+    printActiveTab,
   } = useTabs();
   const { toggle: toggleBookmark } = useBookmarkToggle(activeTab);
+  const { toggleFullscreen } = useFullscreen();
+  const { toggle: toggleFindBar } = useFindBar();
 
   useEffect(() => {
     if (!isElectronDesktop()) return;
@@ -48,7 +55,7 @@ export function useDesktopKeyboardShortcuts(onToggleFindBar: () => void) {
           reload();
           break;
         case 'CmdOrCtrl+F':
-          onToggleFindBar();
+          toggleFindBar();
           break;
         case 'CmdOrCtrl+D':
           toggleBookmark();
@@ -68,12 +75,34 @@ export function useDesktopKeyboardShortcuts(onToggleFindBar: () => void) {
         case 'Alt+ArrowRight':
           goForward();
           break;
+        case 'CmdOrCtrl+=': {
+          if (!activeTab) break;
+          const next = ZOOM_STEPS.find((step) => step > activeTab.zoomPercent) ?? ZOOM_STEPS[ZOOM_STEPS.length - 1];
+          setActiveTabZoom(next);
+          break;
+        }
+        case 'CmdOrCtrl+-': {
+          if (!activeTab) break;
+          const next = [...ZOOM_STEPS].reverse().find((step) => step < activeTab.zoomPercent) ?? ZOOM_STEPS[0];
+          setActiveTabZoom(next);
+          break;
+        }
+        case 'CmdOrCtrl+0':
+          setActiveTabZoom(100);
+          break;
+        case 'CmdOrCtrl+P':
+          printActiveTab();
+          break;
+        case 'F11':
+          toggleFullscreen();
+          break;
         default:
           break;
       }
     });
   }, [
     tabs,
+    activeTab,
     activeTabId,
     openNewTab,
     closeTab,
@@ -84,6 +113,9 @@ export function useDesktopKeyboardShortcuts(onToggleFindBar: () => void) {
     reload,
     openSuggestions,
     toggleBookmark,
-    onToggleFindBar,
+    toggleFindBar,
+    setActiveTabZoom,
+    printActiveTab,
+    toggleFullscreen,
   ]);
 }

@@ -1,17 +1,38 @@
 package com.plourx.browser;
 
+import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.print.PrintAttributes;
+import android.print.PrintManager;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.URLUtil;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
+import android.webkit.WebStorage;
 import android.webkit.WebView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -19,9 +40,11 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import org.json.JSONObject;
 
 /**
@@ -50,6 +73,105 @@ public class PlourxBrowserEnginePlugin extends Plugin {
     private CoordinatorLayout root;
     /** Tracks whichever tab is currently shown, so a system-triggered trim (see MainActivity.onTrimMemory) knows what NOT to suspend without JS having to tell it. */
     private String visibleTabId;
+
+    // -- Runtime permissions + file chooser plumbing -----------------------
+    // Both onPermissionRequest/onGeolocationPermissionsShowPrompt/
+    // onShowFileChooser fire from PlourxBrowserChromeClient, not from a
+    // JS-invoked PluginCall, so Capacitor's declarative @Permission/
+    // requestPermissionForAlias (which needs a PluginCall to resolve) doesn't
+    // fit. Registering these launchers directly against the Bridge -- the
+    // same public API Capacitor's own @PermissionCallback/@ActivityCallback
+    // sugar uses internally -- sidesteps that and works independent of any
+    // PluginCall. Must be registered in load(), before the host Activity is
+    // started (AndroidX activity-result-API requirement).
+    private ActivityResultLauncher<String[]> permissionLauncher;
+    private ActivityResultLauncher<Intent> fileChooserLauncher;
+    private Consumer<Map<String, Boolean>> pendingPermissionCallback;
+    private ValueCallback<Uri[]> pendingFileChooserCallback;
+
+    // -- Downloads -----------------------------------------------------------
+    // DownloadManager handles scoped storage, retries, and the system
+    // notification/progress UI for us; this plugin only needs to enqueue the
+    // request (with cookies/UA carried over, so authenticated downloads
+    // actually work -- "open in system browser" alone can't do that) and
+    // poll it for progress, since DownloadManager has no push-based progress
+    // callback of its own.
+    private static final long DOWNLOAD_POLL_INTERVAL_MS = 750;
+    private final Map<Long, DownloadRecord> downloadRecords = new LinkedHashMap<>();
+    private Handler downloadPollHandler;
+    private final Runnable downloadPollRunnable = this::pollDownloads;
+
+    private static class DownloadRecord {
+        final long id;
+        final String filename;
+        final String url;
+
+        DownloadRecord(long id, String filename, String url) {
+            this.id = id;
+            this.filename = filename;
+            this.url = url;
+        }
+    }
+
+    @Override
+    public void load() {
+        super.load();
+        permissionLauncher = getBridge()
+            .registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), this::onPermissionLauncherResult);
+        fileChooserLauncher = getBridge()
+            .registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::onFileChooserLauncherResult);
+    }
+
+    /** Resolves immediately if everything is already granted, otherwise shows the real system dialog. */
+    void requestAndroidPermissions(String[] permissions, Consumer<Map<String, Boolean>> callback) {
+        boolean allGranted = true;
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(getContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+                allGranted = false;
+                break;
+            }
+        }
+        if (allGranted) {
+            Map<String, Boolean> result = new HashMap<>();
+            for (String permission : permissions) result.put(permission, true);
+            callback.accept(result);
+            return;
+        }
+        pendingPermissionCallback = callback;
+        permissionLauncher.launch(permissions);
+    }
+
+    private void onPermissionLauncherResult(Map<String, Boolean> result) {
+        Consumer<Map<String, Boolean>> callback = pendingPermissionCallback;
+        pendingPermissionCallback = null;
+        if (callback != null) callback.accept(result);
+    }
+
+    /** Launches the real system file/camera/gallery picker for an `<input type=file>` tap. Returns false if nothing on the device can handle it, matching WebChromeClient's contract. */
+    boolean showFileChooser(ValueCallback<Uri[]> callback, WebChromeClient.FileChooserParams params) {
+        if (pendingFileChooserCallback != null) {
+            pendingFileChooserCallback.onReceiveValue(null);
+        }
+        pendingFileChooserCallback = callback;
+        try {
+            // createIntent() already respects the page's `accept` mime types
+            // and `capture` attribute (camera vs. gallery) -- no manual
+            // Intent building needed.
+            fileChooserLauncher.launch(params.createIntent());
+        } catch (ActivityNotFoundException e) {
+            pendingFileChooserCallback = null;
+            return false;
+        }
+        return true;
+    }
+
+    private void onFileChooserLauncherResult(androidx.activity.result.ActivityResult result) {
+        ValueCallback<Uri[]> callback = pendingFileChooserCallback;
+        pendingFileChooserCallback = null;
+        if (callback == null) return;
+        Uri[] uris = WebChromeClient.FileChooserParams.parseResult(result.getResultCode(), result.getData());
+        callback.onReceiveValue(uris);
+    }
 
     private CoordinatorLayout getRoot() {
         if (root == null) {
@@ -126,6 +248,12 @@ public class PlourxBrowserEnginePlugin extends Plugin {
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
+        // Gated by the real Android runtime permission dialog -- see
+        // PlourxBrowserChromeClient#onGeolocationPermissionsShowPrompt --
+        // not a free pass; a page still can't get a location fix without the
+        // user granting ACCESS_FINE_LOCATION/ACCESS_COARSE_LOCATION first.
+        settings.setGeolocationEnabled(true);
+        settings.setTextZoom(tab.zoomPercent);
         if (tab.desktopMode) settings.setUserAgentString(DESKTOP_USER_AGENT);
 
         webView.setWebViewClient(new PlourxBrowserWebViewClient(this, tab.tabId));
@@ -138,7 +266,10 @@ public class PlourxBrowserEnginePlugin extends Plugin {
             data.put("contentDisposition", contentDisposition != null ? contentDisposition : "");
             data.put("contentLength", contentLength);
             notifyListeners("downloadRequested", data);
+            startDownload(url, userAgent, contentDisposition, mimeType);
         });
+
+        webView.setOnTouchListener(new PlourxSwipeNavigator(webView));
 
         CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(0, 0);
         webView.setLayoutParams(params);
@@ -455,6 +586,325 @@ public class PlourxBrowserEnginePlugin extends Plugin {
             }
         });
         call.resolve();
+    }
+
+    /** WebView's own built-in text-scaling zoom (default 100) -- the standard way an Android WebView-based browser implements page zoom; it doesn't change layout viewport the way desktop browser zoom does, just text/relative-unit scaling, which is the real platform capability. */
+    @PluginMethod
+    public void setZoom(PluginCall call) {
+        PlourxBrowserTab tab = requireTab(call);
+        if (tab == null) return;
+        int percent = call.getInt("percent", 100);
+        getActivity().runOnUiThread(() -> {
+            tab.zoomPercent = percent;
+            if (tab.webView != null) tab.webView.getSettings().setTextZoom(percent);
+        });
+        call.resolve();
+    }
+
+    /**
+     * Real Find in Page using WebView's own findAllAsync/findNext/FindListener
+     * -- no JS injection, exact match-count/active-index parity with what
+     * Electron's webContents.findInPage already reports on desktop.
+     */
+    @PluginMethod
+    public void startFindInPage(PluginCall call) {
+        PlourxBrowserTab tab = requireTab(call);
+        if (tab == null) return;
+        String query = call.getString("query", "");
+        String tabId = tab.tabId;
+        getActivity().runOnUiThread(() -> {
+            if (tab.webView == null) {
+                call.resolve();
+                return;
+            }
+            tab.webView.setFindListener((activeMatchOrdinal, numberOfMatches, isDoneCounting) -> {
+                if (!isDoneCounting) return;
+                JSObject data = new JSObject();
+                data.put("tabId", tabId);
+                // WebView reports a 0-based ordinal; the desktop side (and FindBar.tsx) expects 1-based, matching Electron's own convention.
+                data.put("activeMatchOrdinal", numberOfMatches > 0 ? activeMatchOrdinal + 1 : 0);
+                data.put("matches", numberOfMatches);
+                notifyListeners("findResultChanged", data);
+            });
+            tab.webView.findAllAsync(query);
+        });
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void findNext(PluginCall call) {
+        PlourxBrowserTab tab = requireTab(call);
+        if (tab == null) return;
+        boolean forward = call.getBoolean("forward", true);
+        getActivity().runOnUiThread(() -> {
+            if (tab.webView != null) tab.webView.findNext(forward);
+        });
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void stopFindInPage(PluginCall call) {
+        PlourxBrowserTab tab = requireTab(call);
+        if (tab == null) return;
+        getActivity().runOnUiThread(() -> {
+            if (tab.webView != null) {
+                tab.webView.clearMatches();
+                tab.webView.setFindListener(null);
+            }
+        });
+        call.resolve();
+    }
+
+    /**
+     * Real immersive fullscreen via WindowInsetsControllerCompat (the modern
+     * androidx replacement for the deprecated setSystemUiVisibility flags) --
+     * hides the system status/navigation bars. The React chrome (Toolbar/
+     * BottomNav) hides itself separately in response to this same user
+     * action (see useFullscreen.ts); the two always happen together, never
+     * one standing in for the other.
+     */
+    @PluginMethod
+    public void setFullscreen(PluginCall call) {
+        boolean fullscreen = call.getBoolean("fullscreen", false);
+        getActivity().runOnUiThread(() -> {
+            android.view.Window window = getActivity().getWindow();
+            WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, window.getDecorView());
+            if (fullscreen) {
+                controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                controller.hide(WindowInsetsCompat.Type.systemBars());
+            } else {
+                controller.show(WindowInsetsCompat.Type.systemBars());
+            }
+        });
+        call.resolve();
+    }
+
+    /** Hands off to the real Android print framework -- fire-and-forget, the system print UI takes over from here. */
+    @PluginMethod
+    public void printTab(PluginCall call) {
+        PlourxBrowserTab tab = requireTab(call);
+        if (tab == null) return;
+        getActivity().runOnUiThread(() -> {
+            if (tab.webView == null) {
+                call.resolve();
+                return;
+            }
+            PrintManager printManager = (PrintManager) getContext().getSystemService(Context.PRINT_SERVICE);
+            String jobName = "PlourX Browser Document";
+            printManager.print(jobName, tab.webView.createPrintDocumentAdapter(jobName), new PrintAttributes.Builder().build());
+        });
+        call.resolve();
+    }
+
+    /** Backs "Download history" in the Privacy settings page's Delete Browsing Data screen -- removes every record DownloadManager knows about (files already on disk aren't deleted, matching how clearing download *history* works in every major browser). */
+    @PluginMethod
+    public void clearAllDownloads(PluginCall call) {
+        DownloadManager manager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+        List<Long> ids = new ArrayList<>();
+        try (Cursor cursor = manager.query(new DownloadManager.Query())) {
+            while (cursor != null && cursor.moveToNext()) {
+                ids.add(cursor.getLong(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_ID)));
+            }
+        }
+        for (Long id : ids) manager.remove(id);
+        downloadRecords.clear();
+        call.resolve();
+    }
+
+    /** Enqueues a real download via DownloadManager -- called from the WebView's DownloadListener for every downloadRequested event. */
+    private void startDownload(String url, String userAgent, String contentDisposition, String mimeType) {
+        try {
+            String filename = URLUtil.guessFileName(url, contentDisposition, mimeType);
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+            String cookie = CookieManager.getInstance().getCookie(url);
+            if (cookie != null) request.addRequestHeader("Cookie", cookie);
+            if (userAgent != null) request.addRequestHeader("User-Agent", userAgent);
+            if (mimeType != null) request.setMimeType(mimeType);
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
+            request.setTitle(filename);
+
+            DownloadManager manager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+            long id = manager.enqueue(request);
+            DownloadRecord record = new DownloadRecord(id, filename, url);
+            downloadRecords.put(id, record);
+            emitDownloadState(record, 0, 0, "progressing");
+            schedulePolling();
+        } catch (Exception e) {
+            // Malformed URL, unsupported scheme (blob:/data:), or no external
+            // storage available -- nothing more we can do natively; the
+            // existing downloadRequested toast/"open in system browser"
+            // fallback already covers whatever this can't.
+        }
+    }
+
+    private void schedulePolling() {
+        if (downloadPollHandler == null) downloadPollHandler = new Handler(Looper.getMainLooper());
+        downloadPollHandler.removeCallbacks(downloadPollRunnable);
+        downloadPollHandler.postDelayed(downloadPollRunnable, DOWNLOAD_POLL_INTERVAL_MS);
+    }
+
+    /** DownloadManager has no push-based progress callback -- this is the standard polling workaround. */
+    private void pollDownloads() {
+        if (downloadRecords.isEmpty()) return;
+        DownloadManager manager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+        List<Long> finished = new ArrayList<>();
+        for (DownloadRecord record : new ArrayList<>(downloadRecords.values())) {
+            DownloadManager.Query query = new DownloadManager.Query().setFilterById(record.id);
+            try (Cursor cursor = manager.query(query)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int status = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS));
+                    long bytes = cursor.getLong(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                    long total = cursor.getLong(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                    String state = statusToState(status);
+                    emitDownloadState(record, bytes, total, state);
+                    if (!"progressing".equals(state)) finished.add(record.id);
+                } else {
+                    finished.add(record.id);
+                }
+            }
+        }
+        for (Long id : finished) downloadRecords.remove(id);
+        if (!downloadRecords.isEmpty()) schedulePolling();
+    }
+
+    private String statusToState(int status) {
+        if (status == DownloadManager.STATUS_SUCCESSFUL) return "completed";
+        if (status == DownloadManager.STATUS_FAILED) return "interrupted";
+        return "progressing"; // STATUS_PENDING / STATUS_RUNNING / STATUS_PAUSED
+    }
+
+    private void emitDownloadState(DownloadRecord record, long receivedBytes, long totalBytes, String state) {
+        JSObject data = new JSObject();
+        data.put("id", String.valueOf(record.id));
+        data.put("filename", record.filename);
+        data.put("url", record.url);
+        data.put("savePath", "");
+        data.put("receivedBytes", receivedBytes);
+        data.put("totalBytes", totalBytes);
+        data.put("state", state);
+        notifyListeners("downloadStateChanged", data);
+    }
+
+    @PluginMethod
+    public void listDownloads(PluginCall call) {
+        DownloadManager manager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+        JSArray results = new JSArray();
+        try (Cursor cursor = manager.query(new DownloadManager.Query())) {
+            while (cursor != null && cursor.moveToNext()) {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_ID));
+                String title = cursor.getString(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_TITLE));
+                String uri = cursor.getString(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_URI));
+                int status = cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS));
+                long bytes = cursor.getLong(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                long total = cursor.getLong(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                JSObject item = new JSObject();
+                item.put("id", String.valueOf(id));
+                item.put("filename", title != null ? title : "");
+                item.put("url", uri != null ? uri : "");
+                item.put("savePath", "");
+                item.put("receivedBytes", bytes);
+                item.put("totalBytes", total);
+                item.put("state", statusToState(status));
+                results.put(item);
+            }
+        }
+        JSObject result = new JSObject();
+        result.put("downloads", results);
+        call.resolve(result);
+    }
+
+    @PluginMethod
+    public void cancelDownload(PluginCall call) {
+        String downloadIdStr = call.getString("downloadId");
+        if (downloadIdStr == null) {
+            call.reject("downloadId is required");
+            return;
+        }
+        long id = Long.parseLong(downloadIdStr);
+        DownloadManager manager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.remove(id);
+        downloadRecords.remove(id);
+        JSObject data = new JSObject();
+        data.put("id", downloadIdStr);
+        data.put("filename", "");
+        data.put("url", "");
+        data.put("savePath", "");
+        data.put("receivedBytes", 0);
+        data.put("totalBytes", 0);
+        data.put("state", "cancelled");
+        notifyListeners("downloadStateChanged", data);
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void openDownload(PluginCall call) {
+        String downloadIdStr = call.getString("downloadId");
+        if (downloadIdStr == null) {
+            call.reject("downloadId is required");
+            return;
+        }
+        long id = Long.parseLong(downloadIdStr);
+        DownloadManager manager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+        // DownloadManager vends its own content:// Uri for a completed
+        // download via its own FileProvider-equivalent -- no need to route
+        // this through this app's own FileProvider.
+        Uri localUri = manager.getUriForDownloadedFile(id);
+        if (localUri == null) {
+            call.reject("Download not found or not yet complete");
+            return;
+        }
+        String mimeType = manager.getMimeTypeForDownloadedFile(id);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(localUri, mimeType != null ? mimeType : "*/*");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
+            getActivity().startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            call.reject("No app on this device can open this file");
+            return;
+        }
+        call.resolve();
+    }
+
+    /** Android has no folder-browser equivalent to desktop's "show in folder" -- opening the system Downloads app is the closest honest equivalent. */
+    @PluginMethod
+    public void showDownloadInFolder(PluginCall call) {
+        try {
+            getActivity().startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        } catch (ActivityNotFoundException ignored) {
+            // No app on the device can handle this -- nothing more we can do.
+        }
+        call.resolve();
+    }
+
+    /** Backs the Privacy settings page's "Clear browsing data." Cookies/site storage are process-wide (CookieManager/WebStorage are singletons); cache is cleared via any live tab's WebView, or a short-lived throwaway if none are alive -- same pattern as the transport WebView PlourxBrowserChromeClient#onCreateWindow already uses. */
+    @PluginMethod
+    public void clearBrowsingData(PluginCall call) {
+        boolean clearCookies = call.getBoolean("cookies", false);
+        boolean clearCache = call.getBoolean("cache", false);
+        getActivity().runOnUiThread(() -> {
+            if (clearCookies) {
+                CookieManager cookieManager = CookieManager.getInstance();
+                cookieManager.removeAllCookies(null);
+                cookieManager.flush();
+            }
+            if (clearCache) {
+                WebStorage.getInstance().deleteAllData();
+                WebView target = null;
+                for (PlourxBrowserTab tab : tabs.values()) {
+                    if (tab.webView != null) {
+                        target = tab.webView;
+                        break;
+                    }
+                }
+                boolean throwaway = target == null;
+                if (throwaway) target = new WebView(getActivity());
+                target.clearCache(true);
+                if (throwaway) target.destroy();
+            }
+            call.resolve();
+        });
     }
 
     /**

@@ -33,6 +33,8 @@ export interface PlourxDesktopBridge {
   closeTab(tabId: string): Promise<void>;
   getTabSnapshot(tabId: string): Promise<string | null>;
   evaluateJavascript(tabId: string, script: string): Promise<string | null>;
+  setZoom(tabId: string, percent: number): Promise<void>;
+  printTab(tabId: string): Promise<void>;
   openInSystemBrowser(url: string): Promise<void>;
   copyLink(url: string): Promise<void>;
 
@@ -40,12 +42,15 @@ export interface PlourxDesktopBridge {
   onAccelerator(handler: (combo: string) => void): () => void;
   onFindResult(handler: (result: DesktopFindResult) => void): () => void;
 
-  findInPage(query: string, forward: boolean): void;
-  stopFindInPage(): void;
+  findInPage(tabId: string, query: string, forward: boolean): void;
+  stopFindInPage(tabId: string): void;
+
+  setFullscreen(fullscreen: boolean): Promise<void>;
 
   onDownloadUpdated(handler: (item: DesktopDownloadItem) => void): () => void;
   listDownloads(): Promise<DesktopDownloadItem[]>;
   cancelDownload(id: string): Promise<void>;
   openDownload(id: string): Promise<void>;
   showDownloadInFolder(id: string): Promise<void>;
+  clearAllDownloads(): Promise<void>;
 }

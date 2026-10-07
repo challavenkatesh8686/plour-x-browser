@@ -31,6 +31,14 @@
   display: block;
 }
 
+.exitFullscreenSlot {
+  position: absolute;
+  top: calc(var(--px-safe-top) + 10px);
+  right: calc(var(--px-safe-right) + 10px);
+  z-index: 80;
+  animation: px-fade-in var(--px-dur-fast) var(--px-ease);
+}
+
 /* Desktop-conventional layout at wide viewports: a tab strip instead of the
    mobile bottom navigation, matching the spec's "do not force the mobile
    bottom navigation onto desktop" requirement. Pure CSS, not a JS platform

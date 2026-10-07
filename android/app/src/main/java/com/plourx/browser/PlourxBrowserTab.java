@@ -10,6 +10,7 @@ class PlourxBrowserTab {
     String lastUrl = "";
     boolean crashed = false;
     boolean desktopMode = false;
+    int zoomPercent = 100;
     Bitmap thumbnail;
     long lastActiveAt = System.currentTimeMillis();
 

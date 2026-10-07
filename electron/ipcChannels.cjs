@@ -16,6 +16,8 @@ module.exports = {
   TAB_CLOSE: 'tab:close',
   TAB_GET_SNAPSHOT: 'tab:getSnapshot',
   TAB_EVALUATE_JS: 'tab:evaluateJavascript',
+  TAB_SET_ZOOM: 'tab:setZoom',
+  TAB_PRINT: 'tab:print',
   SHELL_OPEN_EXTERNAL: 'shell:openExternal',
   SHELL_COPY_LINK: 'shell:copyLink',
   FIND_START: 'find:start',
@@ -24,6 +26,8 @@ module.exports = {
   DOWNLOADS_CANCEL: 'downloads:cancel',
   DOWNLOADS_OPEN: 'downloads:open',
   DOWNLOADS_SHOW_IN_FOLDER: 'downloads:showInFolder',
+  DOWNLOADS_CLEAR_ALL: 'downloads:clearAll',
+  WINDOW_SET_FULLSCREEN: 'window:setFullscreen',
 
   // Events (main -> renderer, via webContents.send + ipcRenderer.on)
   ENGINE_EVENT: 'engine:event',

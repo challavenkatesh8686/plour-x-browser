@@ -32,6 +32,7 @@ export function loadPersistedTabs(): { tabs: Tab[]; activeTabId: string | null }
       isSuspended: true,
       isCrashed: false,
       isDesktopMode: false,
+      zoomPercent: 100,
       thumbnailBase64: null,
       error: null,
     }));

@@ -3,6 +3,7 @@ import { Compass } from 'lucide-react';
 import { useTabs } from '../../services/tabs/TabsContext';
 import { useViewportBounds } from '../../hooks/useViewportBounds';
 import { isEngineAvailable } from '../../services/browserEngine/browserEngineService';
+import { IconChip } from '../common/IconChip';
 import { NewTabHome } from '../home/NewTabHome';
 import { ErrorView } from './ErrorView';
 import styles from './BrowserContentHost.module.css';
@@ -28,7 +29,7 @@ export function BrowserContentHost() {
       {showError && <ErrorView error={activeTab.error!} onRetry={reload} onGoHome={openNewTab} />}
       {showUnavailablePlaceholder && (
         <div className={styles.placeholder}>
-          <Compass size={40} className={styles.placeholderIcon} />
+          <IconChip icon={Compass} size={32} />
           <h2 className={styles.placeholderTitle}>Open PlourX Browser on Android to browse</h2>
           <p className={styles.placeholderText}>
             Real page rendering uses a native Android WebView engine, so it only runs in the Android app -- this desktop

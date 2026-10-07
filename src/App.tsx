@@ -11,6 +11,8 @@ import { SettingsHubPage } from './pages/Settings/SettingsHubPage';
 import { GeneralSettingsPage } from './pages/Settings/GeneralSettingsPage';
 import { AppearanceSettingsPage } from './pages/Settings/AppearanceSettingsPage';
 import { TabsSettingsPage } from './pages/Settings/TabsSettingsPage';
+import { PrivacySettingsPage } from './pages/Settings/PrivacySettingsPage';
+import { AboutSettingsPage } from './pages/Settings/AboutSettingsPage';
 import { LoginPage } from './pages/Login/LoginPage';
 import { SignupPage } from './pages/Signup/SignupPage';
 import { ForgotPasswordPage } from './pages/ForgotPassword/ForgotPasswordPage';
@@ -35,6 +37,8 @@ function App() {
               <Route path="general" element={<GeneralSettingsPage />} />
               <Route path="appearance" element={<AppearanceSettingsPage />} />
               <Route path="tabs" element={<TabsSettingsPage />} />
+              <Route path="privacy" element={<PrivacySettingsPage />} />
+              <Route path="about" element={<AboutSettingsPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

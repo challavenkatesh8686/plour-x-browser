@@ -1,26 +1,32 @@
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
+import { IconButton } from './IconButton';
 import styles from './ThemeToggle.module.css';
 
-/** Ported from plour-x-website's quick-access header toggle (src/components/ui/ThemeToggle.tsx) -- a sliding sun/moon pill, not buried in a settings list. */
+/**
+ * A compact round "orb" button (matching plour-x-music's ThemeToggle.tsx /
+ * .theme-orb), not the wider sliding sun/moon pill this used to be -- that
+ * pill read fine alone but crowded the mobile topBar once sat next to
+ * TranslateButton's plain round IconButton, which is the shared sizing
+ * convention every other topBar icon here already follows.
+ */
 export function ThemeToggle() {
   const { resolvedTheme, toggleTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
 
   return (
-    <button
-      type="button"
+    <IconButton
+      icon={
+        <span className={`${styles.orb} ${isDark ? styles.orbDark : styles.orbLight}`}>
+          {isDark ? <Moon size={11} /> : <Sun size={11} />}
+        </span>
+      }
+      label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+      size="sm"
+      variant="plain"
+      onClick={toggleTheme}
       role="switch"
       aria-checked={isDark}
-      aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-      className={styles.toggle}
-      onClick={toggleTheme}
-    >
-      <Sun size={12} className={styles.railIcon} />
-      <Moon size={12} className={styles.railIcon} />
-      <span className={`${styles.thumb} ${isDark ? styles.thumbDark : styles.thumbLight}`}>
-        {isDark ? <Moon size={12} /> : <Sun size={12} />}
-      </span>
-    </button>
+    />
   );
 }

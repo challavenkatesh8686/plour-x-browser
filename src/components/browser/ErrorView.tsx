@@ -1,11 +1,12 @@
 import { AlertTriangle, Home, RotateCw } from 'lucide-react';
+import { IconChip } from '../common/IconChip';
 import type { TabError } from '../../services/tabs/types';
 import styles from './ErrorView.module.css';
 
 export function ErrorView({ error, onRetry, onGoHome }: { error: TabError; onRetry: () => void; onGoHome: () => void }) {
   return (
     <div className={styles.wrap}>
-      <AlertTriangle size={40} className={styles.icon} />
+      <IconChip icon={AlertTriangle} tone="warning" size={32} />
       <h2 className={styles.title}>This page couldn&apos;t load</h2>
       <p className={styles.description}>{error.description || 'The site may be down, or check your connection.'}</p>
       <p className={styles.url}>{error.failingUrl}</p>

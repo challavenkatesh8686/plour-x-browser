@@ -61,8 +61,25 @@ export interface TabCrashedEvent {
   tabId: string;
 }
 
+export interface FindResultChangedEvent {
+  tabId: string;
+  activeMatchOrdinal: number;
+  matches: number;
+}
+
 export interface TabSnapshotResult {
   thumbnailBase64: string | null;
+}
+
+/** Shaped identically to desktop's DesktopDownloadItem (see desktopBridgeTypes.ts) so downloadsService.ts/DownloadsPage.tsx work unmodified across platforms. */
+export interface DownloadItem {
+  id: string;
+  filename: string;
+  url: string;
+  savePath: string;
+  receivedBytes: number;
+  totalBytes: number;
+  state: 'progressing' | 'completed' | 'cancelled' | 'interrupted';
 }
 
 export interface PlourxBrowserEnginePlugin {
@@ -83,6 +100,18 @@ export interface PlourxBrowserEnginePlugin {
   openInSystemBrowser(args: { url: string }): Promise<void>;
   shareUrl(args: { url: string; title?: string }): Promise<void>;
   setDesktopMode(args: TabIdArg & { desktop: boolean }): Promise<void>;
+  listDownloads(): Promise<{ downloads: DownloadItem[] }>;
+  cancelDownload(args: { downloadId: string }): Promise<void>;
+  openDownload(args: { downloadId: string }): Promise<void>;
+  showDownloadInFolder(args: { downloadId: string }): Promise<void>;
+  clearAllDownloads(): Promise<void>;
+  clearBrowsingData(args: { cookies: boolean; cache: boolean }): Promise<void>;
+  setZoom(args: TabIdArg & { percent: number }): Promise<void>;
+  startFindInPage(args: TabIdArg & { query: string }): Promise<void>;
+  findNext(args: TabIdArg & { forward: boolean }): Promise<void>;
+  stopFindInPage(args: TabIdArg): Promise<void>;
+  setFullscreen(args: { fullscreen: boolean }): Promise<void>;
+  printTab(args: TabIdArg): Promise<void>;
 
   addListener(eventName: 'pageStarted', listenerFunc: (data: NavigationState) => void): Promise<{ remove: () => void }>;
   addListener(eventName: 'pageFinished', listenerFunc: (data: NavigationState) => void): Promise<{ remove: () => void }>;
@@ -95,4 +124,6 @@ export interface PlourxBrowserEnginePlugin {
   addListener(eventName: 'permissionRequested', listenerFunc: (data: PermissionRequestedEvent) => void): Promise<{ remove: () => void }>;
   addListener(eventName: 'errorReceived', listenerFunc: (data: ErrorReceivedEvent) => void): Promise<{ remove: () => void }>;
   addListener(eventName: 'tabCrashed', listenerFunc: (data: TabCrashedEvent) => void): Promise<{ remove: () => void }>;
+  addListener(eventName: 'downloadStateChanged', listenerFunc: (data: DownloadItem) => void): Promise<{ remove: () => void }>;
+  addListener(eventName: 'findResultChanged', listenerFunc: (data: FindResultChangedEvent) => void): Promise<{ remove: () => void }>;
 }

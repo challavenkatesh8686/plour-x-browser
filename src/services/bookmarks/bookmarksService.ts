@@ -51,6 +51,10 @@ export function removeBookmarkByUrl(url: string) {
   writeAll(readAll().filter((b) => b.url !== url));
 }
 
+export function clearAll() {
+  writeAll([]);
+}
+
 export function updateBookmark(id: string, updates: Partial<Pick<Bookmark, 'title' | 'url'>>) {
   writeAll(readAll().map((b) => (b.id === id ? { ...b, ...updates } : b)));
 }

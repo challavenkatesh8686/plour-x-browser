@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useReducer,
 import type { ReactNode } from 'react';
 import * as engine from '../browserEngine/browserEngineService';
 import { record as recordHistory } from '../history/historyService';
+import { setDesktopSite } from '../sitePreferences/desktopSiteService';
 import { resolveAddressBarInput } from '../../utils/url';
 import { loadPersistedTabs, persistTabs } from './tabsPersistenceService';
 import { createBlankTab, initialTabsState, tabsReducer } from './tabsReducer';
@@ -23,12 +24,15 @@ interface TabsContextValue {
   navigateActiveTab: (input: string) => void;
   switchTab: (tabId: string) => void;
   closeTab: (tabId: string) => void;
+  closeAllTabs: () => void;
   goBack: () => void;
   goForward: () => void;
   reload: () => void;
   stop: () => void;
   toggleDesktopMode: () => void;
   shareActiveTab: () => void;
+  setActiveTabZoom: (percent: number) => void;
+  printActiveTab: () => void;
   openTabManager: () => void;
   closeTabManager: () => void;
   requestSnapshot: (tabId: string) => void;
@@ -149,6 +153,20 @@ export function TabsProvider({ children }: { children: ReactNode }) {
     void safeEngineCall(() => engine.closeTab(tabId));
   }, []);
 
+  const closeAllTabs = useCallback(() => {
+    const idsToClose = state.tabs.map((tab) => tab.id);
+    dispatch({ type: 'CLOSE_ALL_TABS' });
+    for (const id of idsToClose) {
+      void safeEngineCall(() => engine.closeTab(id));
+    }
+    // A browser with zero tabs has nothing to show -- fall back to a fresh
+    // blank tab immediately, same as what a cold start with no persisted
+    // tabs does.
+    const blank = createBlankTab();
+    dispatch({ type: 'CREATE_TAB', tab: blank, makeActive: true });
+    void safeEngineCall(() => engine.createTab(blank.id));
+  }, [state.tabs]);
+
   const goBack = useCallback(() => {
     if (!activeTab) return;
     void safeEngineCall(() => engine.goBack(activeTab.id));
@@ -174,11 +192,29 @@ export function TabsProvider({ children }: { children: ReactNode }) {
     const next = !activeTab.isDesktopMode;
     dispatch({ type: 'SET_TAB_DESKTOP_MODE', tabId: activeTab.id, isDesktopMode: next });
     void safeEngineCall(() => engine.setDesktopMode(activeTab.id, next));
+    // A manual toggle is a per-site preference, not just a one-off for this
+    // tab -- the next time this hostname loads (even in a different tab),
+    // useTabEngineEvents.ts's pageFinished handler re-applies it.
+    if (activeTab.url) setDesktopSite(activeTab.url, next);
   }, [activeTab]);
 
   const shareActiveTab = useCallback(() => {
     if (!activeTab?.url) return;
     void safeEngineCall(() => engine.shareUrl(activeTab.url, activeTab.title));
+  }, [activeTab]);
+
+  const setActiveTabZoom = useCallback(
+    (percent: number) => {
+      if (!activeTab) return;
+      dispatch({ type: 'SET_TAB_ZOOM', tabId: activeTab.id, zoomPercent: percent });
+      void safeEngineCall(() => engine.setZoom(activeTab.id, percent));
+    },
+    [activeTab],
+  );
+
+  const printActiveTab = useCallback(() => {
+    if (!activeTab) return;
+    void safeEngineCall(() => engine.printTab(activeTab.id));
   }, [activeTab]);
 
   const openTabManager = useCallback(() => dispatch({ type: 'OPEN_TAB_MANAGER' }), []);
@@ -222,12 +258,15 @@ export function TabsProvider({ children }: { children: ReactNode }) {
       navigateActiveTab,
       switchTab,
       closeTab,
+      closeAllTabs,
       goBack,
       goForward,
       reload,
       stop,
       toggleDesktopMode,
       shareActiveTab,
+      setActiveTabZoom,
+      printActiveTab,
       openTabManager,
       closeTabManager,
       requestSnapshot,
@@ -248,12 +287,15 @@ export function TabsProvider({ children }: { children: ReactNode }) {
       navigateActiveTab,
       switchTab,
       closeTab,
+      closeAllTabs,
       goBack,
       goForward,
       reload,
       stop,
       toggleDesktopMode,
       shareActiveTab,
+      setActiveTabZoom,
+      printActiveTab,
       openTabManager,
       closeTabManager,
       requestSnapshot,

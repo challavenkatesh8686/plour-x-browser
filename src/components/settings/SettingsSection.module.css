@@ -1,8 +1,15 @@
+/*
+ * Matches the card treatment shared by plour-x-weather's SettingsModal and
+ * plour-x-clock's SettingsPage (rounded-2xl/border/bg-card, text-sm/600
+ * normal-case heading, gap-4 whitespace between rows instead of dividers) --
+ * translated onto this project's own --px-* tokens rather than copying their
+ * Tailwind class names, since the two token systems don't line up 1:1.
+ */
 .section {
-  border-radius: var(--px-radius-lg);
+  border-radius: var(--px-radius-md);
   background: var(--px-surface-raised);
   border: 1px solid var(--px-border);
-  padding: 16px;
+  padding: 20px;
   margin-bottom: 16px;
 }
 
@@ -10,12 +17,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--px-text-faint);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--px-text);
 }
 
 .headingIcon {
@@ -25,7 +30,7 @@
 .rows {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 16px;
 }
 
 .row {
@@ -33,16 +38,11 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--px-border);
-}
-
-.rows > .row:last-child {
-  border-bottom: none;
 }
 
 .rowButton {
   width: 100%;
+  padding: 2px 0;
   text-align: left;
 }
 
@@ -54,8 +54,8 @@
 }
 
 .rowLabel {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .rowDescription {

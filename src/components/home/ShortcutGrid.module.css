@@ -23,6 +23,18 @@
   background: var(--px-surface-raised);
   border: 1px solid var(--px-border);
   box-shadow: var(--px-shadow-sm);
+  transition: transform var(--px-dur-fast) var(--px-ease), background var(--px-dur-fast) var(--px-ease);
+}
+
+.tile:active .iconWrap {
+  transform: scale(0.94);
+  background: var(--px-tap);
+}
+
+@media (hover: hover) {
+  .tile:hover .iconWrap {
+    background: var(--px-tap);
+  }
 }
 
 .icon {
