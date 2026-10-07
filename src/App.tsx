@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './components/common/AppShell';
 import { AuthProvider } from './services/auth/AuthContext';
+import { DesignStyleProvider } from './services/design/DesignStyleContext';
 import { TabsProvider } from './services/tabs/TabsContext';
 import { HomePage } from './pages/Home/HomePage';
 import { BookmarksPage } from './pages/Bookmarks/BookmarksPage';
@@ -21,6 +22,7 @@ import { ResetPasswordPage } from './pages/ResetPassword/ResetPasswordPage';
 function App() {
   return (
     <AuthProvider>
+      <DesignStyleProvider>
       <TabsProvider>
         <AppShell>
           <Routes>
@@ -44,6 +46,7 @@ function App() {
           </Routes>
         </AppShell>
       </TabsProvider>
+      </DesignStyleProvider>
     </AuthProvider>
   );
 }

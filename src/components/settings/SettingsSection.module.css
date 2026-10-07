@@ -6,9 +6,12 @@
  * Tailwind class names, since the two token systems don't line up 1:1.
  */
 .section {
-  border-radius: var(--px-radius-md);
-  background: var(--px-surface-raised);
-  border: 1px solid var(--px-border);
+  border-radius: calc(var(--px-radius-md) + var(--dx-radius-offset));
+  background: var(--dx-card, var(--px-surface-raised));
+  border: 1px solid var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow, none);
+  -webkit-backdrop-filter: blur(var(--dx-blur));
+  backdrop-filter: blur(var(--dx-blur));
   padding: 20px;
   margin-bottom: 16px;
 }

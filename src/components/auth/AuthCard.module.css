@@ -12,10 +12,12 @@
 .card {
   width: 100%;
   max-width: 420px;
-  background: var(--px-surface-raised);
-  border: 1px solid var(--px-border);
-  border-radius: var(--px-radius-lg);
-  box-shadow: var(--px-shadow-md);
+  background: var(--dx-card, var(--px-surface-raised));
+  border: 1px solid var(--dx-border, var(--px-border));
+  border-radius: calc(var(--px-radius-lg) + var(--dx-radius-offset));
+  box-shadow: var(--dx-shadow, var(--px-shadow-md));
+  -webkit-backdrop-filter: blur(var(--dx-blur));
+  backdrop-filter: blur(var(--dx-blur));
   padding: 32px;
   display: flex;
   flex-direction: column;

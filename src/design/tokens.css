@@ -1,0 +1,31 @@
+/* ============================================================
+   PlourX design-system tokens for PlourX Browser.
+   ------------------------------------------------------------
+   The Browser already owns --px-* tokens (theme.css) with their own
+   meaning, so the admin-selected design style (morphism.css, driven by
+   <html data-design-style>) uses a separate --dx-* namespace.
+
+   Surface tokens (--dx-card, --dx-card-hover, --dx-border, --dx-shadow,
+   --dx-shadow-soft, --dx-shadow-inset, --dx-surface, ...) are
+   intentionally left UNDEFINED by default: components read them as
+   var(--dx-card, <their own current value>), so "PlourX Original" is
+   pixel-identical to before and only a selected style changes anything.
+   Must be imported BEFORE morphism.css.
+   ============================================================ */
+
+:root {
+  /* Names the shared presets reference (mapped to the Browser's own tokens) */
+  --dx-bg-base: var(--px-bg);
+  --dx-bg-raised: var(--px-surface);
+  --dx-bg-elevated: var(--px-surface-raised);
+  --dx-bg-elevated-hover: var(--px-surface-raised);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --dx-radius: 16px;
+  --dx-blur: 0px;
+  --dx-transition: 180ms ease;
+
+  /* Added to a component's own radius so default size is unchanged
+     (--dx-radius default 16px => offset 0px). */
+  --dx-radius-offset: calc(var(--dx-radius) - 16px);
+}

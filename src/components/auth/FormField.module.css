@@ -18,8 +18,9 @@
 .input {
   height: 46px;
   padding: 0 14px;
-  border-radius: var(--px-radius-md);
+  border-radius: calc(var(--px-radius-md) + var(--dx-radius-offset));
   background: var(--px-tap);
+  box-shadow: var(--dx-shadow-inset, none);
   border: 1px solid transparent;
   font-size: 14px;
   color: var(--px-text);

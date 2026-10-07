@@ -1,0 +1,170 @@
+/* ============================================================
+   PlourX Design / Morphism Theme Engine
+   ------------------------------------------------------------
+   Root --dx-* token DEFAULTS live in index.css (equal to the
+   existing site tokens, so "PlourX Original" is pixel-identical
+   to today's site). This file only supplies the PRESET overrides,
+   scoped to [data-design-style="<id>"] — set by <AppSurface> — so
+   nothing outside an AppSurface is ever affected.
+   ============================================================ */
+
+:root[data-design-style='modern-skeuomorphism'] {
+  --dx-surface: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 60%), var(--dx-bg-elevated);
+  --dx-card: var(--dx-surface);
+  --dx-card-hover: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 60%), var(--dx-bg-elevated-hover);
+  --dx-border: rgba(255, 255, 255, 0.12);
+  --dx-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 10px 26px -10px rgba(0, 0, 0, 0.5);
+  --dx-shadow-soft: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 6px 16px -8px rgba(0, 0, 0, 0.4);
+  --dx-shadow-inset: inset 0 1px 1px rgba(255, 255, 255, 0.08), inset 0 -6px 12px -8px rgba(0, 0, 0, 0.4);
+  --dx-elevation: 0 16px 40px -14px rgba(0, 0, 0, 0.55);
+  --dx-radius: 14px;
+}
+
+:root[data-design-style='neumorphism'] {
+  --dx-surface: var(--dx-bg-raised);
+  --dx-card: var(--dx-bg-raised);
+  --dx-card-hover: var(--dx-bg-raised);
+  --dx-border: transparent;
+  --dx-border-subtle: transparent;
+  --dx-shadow: 8px 8px 16px rgba(0, 0, 0, 0.45), -8px -8px 16px rgba(255, 255, 255, 0.03);
+  --dx-shadow-soft: 4px 4px 10px rgba(0, 0, 0, 0.35), -4px -4px 10px rgba(255, 255, 255, 0.025);
+  --dx-shadow-inset: inset 4px 4px 10px rgba(0, 0, 0, 0.4), inset -4px -4px 10px rgba(255, 255, 255, 0.03);
+  --dx-elevation: var(--dx-shadow);
+  --dx-radius: 20px;
+}
+
+:root[data-theme='light'][data-design-style='neumorphism'] {
+  --dx-shadow: 8px 8px 16px rgba(87, 23, 57, 0.12), -8px -8px 16px rgba(255, 255, 255, 0.8);
+  --dx-shadow-soft: 4px 4px 10px rgba(87, 23, 57, 0.09), -4px -4px 10px rgba(255, 255, 255, 0.7);
+  --dx-shadow-inset: inset 4px 4px 10px rgba(87, 23, 57, 0.1), inset -4px -4px 10px rgba(255, 255, 255, 0.7);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme])[data-design-style='neumorphism'] {
+    --dx-shadow: 8px 8px 16px rgba(87, 23, 57, 0.12), -8px -8px 16px rgba(255, 255, 255, 0.8);
+    --dx-shadow-soft: 4px 4px 10px rgba(87, 23, 57, 0.09), -4px -4px 10px rgba(255, 255, 255, 0.7);
+    --dx-shadow-inset: inset 4px 4px 10px rgba(87, 23, 57, 0.1), inset -4px -4px 10px rgba(255, 255, 255, 0.7);
+  }
+}
+
+:root[data-design-style='glassmorphism'] {
+  --dx-surface: rgba(255, 255, 255, 0.06);
+  --dx-card: rgba(255, 255, 255, 0.055);
+  --dx-card-hover: rgba(255, 255, 255, 0.09);
+  --dx-border: rgba(255, 255, 255, 0.16);
+  --dx-border-subtle: rgba(255, 255, 255, 0.1);
+  --dx-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+  --dx-shadow-soft: 0 4px 16px rgba(0, 0, 0, 0.2);
+  --dx-elevation: 0 16px 48px rgba(0, 0, 0, 0.32);
+  --dx-blur: 18px;
+  --dx-radius: 18px;
+}
+
+:root[data-theme='light'][data-design-style='glassmorphism'] {
+  --dx-surface: rgba(36, 23, 41, 0.05);
+  --dx-card: rgba(36, 23, 41, 0.045);
+  --dx-card-hover: rgba(36, 23, 41, 0.08);
+  --dx-border: rgba(36, 23, 41, 0.14);
+  --dx-border-subtle: rgba(36, 23, 41, 0.09);
+  --dx-shadow: 0 8px 32px rgba(36, 23, 41, 0.12);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme])[data-design-style='glassmorphism'] {
+    --dx-surface: rgba(36, 23, 41, 0.05);
+    --dx-card: rgba(36, 23, 41, 0.045);
+    --dx-card-hover: rgba(36, 23, 41, 0.08);
+    --dx-border: rgba(36, 23, 41, 0.14);
+    --dx-border-subtle: rgba(36, 23, 41, 0.09);
+    --dx-shadow: 0 8px 32px rgba(36, 23, 41, 0.12);
+  }
+}
+
+:root[data-design-style='claymorphism'] {
+  --dx-surface: var(--dx-bg-elevated);
+  --dx-card: var(--dx-bg-elevated);
+  --dx-card-hover: var(--dx-bg-elevated-hover);
+  --dx-border: rgba(255, 255, 255, 0.1);
+  --dx-shadow: 10px 10px 24px rgba(0, 0, 0, 0.4), -8px -8px 20px rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --dx-shadow-soft: 6px 6px 14px rgba(0, 0, 0, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.03);
+  --dx-shadow-inset: inset 6px 6px 14px rgba(0, 0, 0, 0.35), inset -6px -6px 14px rgba(255, 255, 255, 0.03);
+  --dx-radius: 28px;
+}
+
+:root[data-design-style='tactile-skeuomorphism'] {
+  --dx-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 40%), var(--dx-bg-elevated);
+  --dx-card: var(--dx-surface);
+  --dx-card-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 40%), var(--dx-bg-elevated-hover);
+  --dx-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 14px 30px -12px rgba(0, 0, 0, 0.55);
+  --dx-shadow-soft: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 8px 18px -10px rgba(0, 0, 0, 0.45);
+  --dx-shadow-inset: inset 0 3px 8px rgba(0, 0, 0, 0.5), inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  --dx-elevation: 0 18px 36px -14px rgba(0, 0, 0, 0.6);
+  --dx-radius: 12px;
+}
+
+:root[data-design-style='3d'] {
+  --dx-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.6), 0 2px 0 rgba(255, 255, 255, 0.04) inset;
+  --dx-shadow-soft: 0 10px 24px -10px rgba(0, 0, 0, 0.5);
+  --dx-elevation: 0 30px 60px -16px rgba(0, 0, 0, 0.65);
+  --dx-glow: 0 0 0 1px rgba(232, 72, 158, 0.45), 0 0 32px rgba(232, 72, 158, 0.3);
+  --dx-radius: 16px;
+}
+
+:root[data-design-style='minimal'] {
+  --dx-surface: var(--dx-bg-base);
+  --dx-card: var(--dx-bg-base);
+  --dx-card-hover: var(--dx-bg-raised);
+  --dx-shadow: none;
+  --dx-shadow-soft: none;
+  --dx-shadow-inset: none;
+  --dx-elevation: none;
+  --dx-glow: none;
+  --dx-radius: 8px;
+  --dx-transition: 120ms var(--ease-out);
+}
+
+:root[data-design-style='futuristic-cyber'] {
+  --dx-surface: rgba(20, 10, 35, 0.55);
+  --dx-card: rgba(20, 10, 35, 0.5);
+  --dx-card-hover: rgba(30, 15, 48, 0.6);
+  --dx-border: rgba(232, 72, 158, 0.5);
+  --dx-border-subtle: rgba(124, 58, 237, 0.3);
+  --dx-shadow: 0 0 0 1px rgba(232, 72, 158, 0.35), 0 0 24px rgba(124, 58, 237, 0.35);
+  --dx-shadow-soft: 0 0 0 1px rgba(232, 72, 158, 0.25), 0 0 14px rgba(124, 58, 237, 0.25);
+  --dx-glow: 0 0 0 1px rgba(255, 111, 199, 0.5), 0 0 40px rgba(232, 72, 158, 0.4);
+  --dx-blur: 10px;
+  --dx-radius: 10px;
+}
+
+:root[data-design-style='material'] {
+  --dx-surface: var(--dx-bg-elevated);
+  --dx-card: var(--dx-bg-elevated);
+  --dx-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 3px 6px rgba(0, 0, 0, 0.3);
+  --dx-shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --dx-elevation: 0 6px 10px rgba(0, 0, 0, 0.4), 0 1px 18px rgba(0, 0, 0, 0.3);
+  --dx-radius: 12px;
+}
+
+/* ---------------------------------------------------------
+   Graceful degradation
+   --------------------------------------------------------- */
+
+/* Browsers without backdrop-filter support fall back to a solid surface
+   so glass/futuristic presets never read as broken transparency. */
+@supports not (backdrop-filter: blur(1px)) {
+  :root[data-design-style='glassmorphism'],
+  :root[data-design-style='futuristic-cyber'] {
+    --dx-surface: var(--dx-bg-elevated);
+    --dx-card: var(--dx-bg-elevated);
+    --dx-blur: 0px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-design-style] * {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

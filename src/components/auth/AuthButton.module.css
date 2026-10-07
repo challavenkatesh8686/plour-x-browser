@@ -19,6 +19,7 @@
 }
 
 .primary {
+  box-shadow: var(--dx-shadow-soft, none);
   background: var(--px-accent-gradient);
   color: var(--px-white);
 }

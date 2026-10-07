@@ -40,8 +40,9 @@
 }
 
 .glass {
-  background: var(--px-surface-raised);
-  border: 1px solid var(--px-border);
+  background: var(--dx-card, var(--px-surface-raised));
+  border: 1px solid var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow-soft, none);
 }
 
 .plain {

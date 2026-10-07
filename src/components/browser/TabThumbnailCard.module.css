@@ -1,9 +1,10 @@
 .card {
   display: flex;
   flex-direction: column;
-  border-radius: var(--px-radius-lg);
-  background: var(--px-surface-raised);
-  border: 2px solid var(--px-border);
+  border-radius: calc(var(--px-radius-lg) + var(--dx-radius-offset));
+  background: var(--dx-card, var(--px-surface-raised));
+  border: 2px solid var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow-soft, none);
   overflow: hidden;
   text-align: left;
   margin-bottom: auto;

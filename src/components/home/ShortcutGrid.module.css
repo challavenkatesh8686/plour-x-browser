@@ -20,9 +20,9 @@
   width: 52px;
   height: 52px;
   border-radius: var(--px-radius-lg);
-  background: var(--px-surface-raised);
-  border: 1px solid var(--px-border);
-  box-shadow: var(--px-shadow-sm);
+  background: var(--dx-card, var(--px-surface-raised));
+  border: 1px solid var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow-soft, var(--px-shadow-sm));
   transition: transform var(--px-dur-fast) var(--px-ease), background var(--px-dur-fast) var(--px-ease);
 }
 
