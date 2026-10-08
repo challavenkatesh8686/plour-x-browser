@@ -57,3 +57,6 @@
   color: var(--px-text-faint);
   flex-shrink: 0;
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .row:active { background: var(--dx-card-hover, var(--px-tap)); }

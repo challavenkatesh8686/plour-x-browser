@@ -86,3 +86,19 @@
     background: var(--px-tap);
   }
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .searchForm {
+  background: var(--dx-card, var(--px-surface-raised));
+  border-color: var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow, var(--px-shadow-sm));
+  backdrop-filter: blur(var(--dx-blur, 0px));
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .searchForm:focus-within { border-color: var(--px-accent-border); }
+
+/* The desktop tab strip shows the avatar from this width up. */
+@media (min-width: 840px) {
+  .mobileAvatar {
+    display: none;
+  }
+}

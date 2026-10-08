@@ -97,3 +97,19 @@
   background: var(--px-tap);
   color: var(--px-text);
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .header {
+  border-bottom-color: var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow-soft, none);
+}
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .row {
+  background: var(--dx-card, transparent);
+  border: 1px solid var(--dx-border, transparent);
+  box-shadow: var(--dx-shadow-soft, none);
+  backdrop-filter: blur(var(--dx-blur, 0px));
+}
+
+:root[data-design-style]:not([data-design-style='plourx-original']) .progressTrack { box-shadow: var(--dx-shadow-inset, none); }

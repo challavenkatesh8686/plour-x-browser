@@ -109,3 +109,7 @@
   font-size: 11px;
   text-align: center;
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .card.active { border-color: var(--px-accent); }
+:root[data-design-style]:not([data-design-style='plourx-original']) .preview { background: var(--dx-card-hover, var(--px-tap)); }

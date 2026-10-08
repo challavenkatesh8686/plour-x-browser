@@ -17,3 +17,9 @@
   background: rgba(255, 149, 0, 0.14);
   color: var(--px-warning);
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .chip {
+  border: 1px solid var(--dx-border-subtle, transparent);
+  box-shadow: var(--dx-shadow-soft, none);
+}

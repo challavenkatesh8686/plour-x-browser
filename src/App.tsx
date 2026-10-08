@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './components/common/AppShell';
 import { AuthProvider } from './services/auth/AuthContext';
+import { AuthGate } from './components/auth/AuthGate';
 import { DesignStyleProvider } from './services/design/DesignStyleContext';
 import { TabsProvider } from './services/tabs/TabsContext';
 import { HomePage } from './pages/Home/HomePage';
@@ -23,6 +24,7 @@ function App() {
   return (
     <AuthProvider>
       <DesignStyleProvider>
+      <AuthGate>
       <TabsProvider>
         <AppShell>
           <Routes>
@@ -46,6 +48,7 @@ function App() {
           </Routes>
         </AppShell>
       </TabsProvider>
+      </AuthGate>
       </DesignStyleProvider>
     </AuthProvider>
   );

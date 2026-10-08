@@ -35,3 +35,16 @@
   overflow-y: auto;
   padding: 8px 12px 16px;
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .header {
+  border-bottom-color: var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow-soft, none);
+}
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .search {
+  background: var(--dx-card, var(--px-tap));
+  border: 1px solid var(--dx-border, transparent);
+  box-shadow: var(--dx-shadow-inset, none);
+}

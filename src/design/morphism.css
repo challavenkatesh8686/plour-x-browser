@@ -168,3 +168,30 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Light theme: the dark translucent cyber panels turn muddy grey over a light page. */
+:root[data-theme='light'][data-design-style='futuristic-cyber'] {
+  --dx-surface: rgba(255, 255, 255, 0.65);
+  --dx-card: rgba(255, 255, 255, 0.6);
+  --dx-card-hover: rgba(255, 255, 255, 0.85);
+  --dx-border: rgba(232, 72, 158, 0.55);
+  --dx-border-subtle: rgba(124, 58, 237, 0.3);
+  --dx-shadow: 0 0 0 1px rgba(232, 72, 158, 0.25), 0 6px 24px rgba(124, 58, 237, 0.18);
+  --dx-shadow-soft: 0 0 0 1px rgba(232, 72, 158, 0.18), 0 3px 12px rgba(124, 58, 237, 0.12);
+  --dx-glow: 0 0 0 1px rgba(232, 72, 158, 0.45), 0 0 28px rgba(232, 72, 158, 0.25);
+  --dx-accent: #e8489e;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme])[data-design-style='futuristic-cyber'] {
+    --dx-surface: rgba(255, 255, 255, 0.65);
+    --dx-card: rgba(255, 255, 255, 0.6);
+    --dx-card-hover: rgba(255, 255, 255, 0.85);
+    --dx-border: rgba(232, 72, 158, 0.55);
+    --dx-border-subtle: rgba(124, 58, 237, 0.3);
+    --dx-shadow: 0 0 0 1px rgba(232, 72, 158, 0.25), 0 6px 24px rgba(124, 58, 237, 0.18);
+    --dx-shadow-soft: 0 0 0 1px rgba(232, 72, 158, 0.18), 0 3px 12px rgba(124, 58, 237, 0.12);
+    --dx-glow: 0 0 0 1px rgba(232, 72, 158, 0.45), 0 0 28px rgba(232, 72, 158, 0.25);
+    --dx-accent: #e8489e;
+  }
+}

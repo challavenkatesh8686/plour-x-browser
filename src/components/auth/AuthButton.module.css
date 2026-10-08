@@ -32,3 +32,9 @@
 .fullWidth {
   width: 100%;
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .outline {
+  background: var(--dx-card, var(--px-tap));
+  box-shadow: var(--dx-shadow-soft, none);
+}

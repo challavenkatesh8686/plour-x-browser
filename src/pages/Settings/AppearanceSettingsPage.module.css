@@ -41,10 +41,12 @@
 /* Accent color swatches: circular, matching plour-x-music's .swatches/.swatch, sized up slightly (28px vs their 24px) for a more comfortable touch target. */
 .swatches {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
 .swatch {
+  flex: none;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -111,3 +113,23 @@
   outline: none;
   border-color: var(--px-accent-border);
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .themeCard,
+:root[data-design-style]:not([data-design-style='plourx-original']) .fontSizeOption {
+  background: var(--dx-card, transparent);
+  border-color: var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow-soft, none);
+  backdrop-filter: blur(var(--dx-blur, 0px));
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .themeCard.active,
+:root[data-design-style]:not([data-design-style='plourx-original']) .fontSizeOption.active {
+  border-color: var(--px-accent-border);
+  background: var(--px-accent-bg);
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .select {
+  background: var(--dx-card, var(--px-surface));
+  border-color: var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow-soft, none);
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .select:focus { border-color: var(--px-accent-border); }

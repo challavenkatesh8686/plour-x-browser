@@ -30,3 +30,9 @@
   overflow-y: auto;
   padding: 16px 16px 24px;
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .topBar {
+  border-bottom-color: var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow-soft, none);
+}

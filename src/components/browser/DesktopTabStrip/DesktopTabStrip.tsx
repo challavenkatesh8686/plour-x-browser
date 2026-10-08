@@ -1,5 +1,6 @@
 import { Bookmark, Clock, Download, Plus, Settings, X } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { ProfileAvatarButton } from '../../common/ProfileAvatarButton';
 import { useTabs } from '../../../services/tabs/TabsContext';
 import { getDisplayHost } from '../../../utils/url';
 import styles from './DesktopTabStrip.module.css';
@@ -86,6 +87,7 @@ export function DesktopTabStrip() {
           </NavLink>
         ))}
       </div>
+      <ProfileAvatarButton size={28} withName />
     </div>
   );
 }

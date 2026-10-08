@@ -69,3 +69,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .list {
+  border-radius: calc(var(--px-radius-lg) + var(--dx-radius-offset, 0px));
+  box-shadow: var(--dx-elevation, var(--px-shadow-lg));
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .row:active { background: var(--dx-card-hover, var(--px-tap)); }

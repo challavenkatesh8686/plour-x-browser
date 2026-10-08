@@ -41,3 +41,8 @@
   font-size: 12px;
   color: var(--px-danger);
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .input { border-color: var(--dx-border, transparent); background: var(--dx-card, var(--px-tap)); }
+:root[data-design-style]:not([data-design-style='plourx-original']) .input:focus { background: var(--dx-card-hover, var(--px-surface)); border-color: var(--px-accent-border); }
+:root[data-design-style]:not([data-design-style='plourx-original']) .input.invalid { border-color: var(--px-danger); }

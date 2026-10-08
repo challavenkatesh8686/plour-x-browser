@@ -3,6 +3,7 @@ import { Search, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../services/auth/AuthContext';
 import { useTabs } from '../../services/tabs/TabsContext';
+import { ProfileAvatarButton } from '../common/ProfileAvatarButton';
 import { ThemeToggle } from '../common/ThemeToggle';
 import { TranslateButton } from '../common/TranslateButton';
 import { ShortcutGrid } from './ShortcutGrid';
@@ -19,6 +20,7 @@ export function NewTabHome() {
       <div className={styles.topBar}>
         <TranslateButton />
         <ThemeToggle />
+        <ProfileAvatarButton size={32} className={styles.mobileAvatar} />
       </div>
 
       <h1 className={styles.brand}>PlourX Browser</h1>

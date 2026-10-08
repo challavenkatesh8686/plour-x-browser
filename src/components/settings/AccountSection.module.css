@@ -1,0 +1,118 @@
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.email {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--px-text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.photoRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: var(--px-radius-pill);
+  background: var(--dx-card, var(--px-tap));
+  border: 1px solid var(--dx-border, var(--px-border));
+  color: var(--px-text);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+}
+
+.photoBtn {
+  flex: 1;
+  min-width: 0;
+}
+
+.removeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--px-radius-pill);
+  border: 1px solid var(--px-border);
+  color: var(--px-text);
+}
+
+.removeBtn:disabled {
+  opacity: 0.5;
+}
+
+@media (hover: hover) {
+  .removeBtn:not(:disabled):hover {
+    color: var(--px-danger);
+    border-color: color-mix(in srgb, var(--px-danger) 40%, transparent);
+  }
+}
+
+.hint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--px-text-faint);
+}
+
+.signOut {
+  display: flex;
+}
+
+.signOutBtn {
+  flex: 1;
+}
+
+.logOutIcon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .photoBtn {
+    flex: 0 0 auto;
+  }
+
+  .signOut {
+    justify-content: flex-end;
+  }
+
+  .signOutBtn {
+    flex: 0 0 auto;
+  }
+}

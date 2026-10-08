@@ -68,3 +68,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .bar {
+  background: var(--dx-card, var(--px-tap));
+  border: 1px solid var(--dx-border, transparent);
+  box-shadow: var(--dx-shadow-inset, none);
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .bar.focused {
+  background: var(--dx-card-hover, var(--px-surface-raised));
+  border-color: var(--px-accent-border);
+}

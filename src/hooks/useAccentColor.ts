@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { ACCENT_CUSTOM_KEY, applyCustomAccent, normalizeHex, readCustomHex, writeCustomHex } from '../utils/customAccent';
 
 export type AccentColor = 'pink' | 'purple' | 'blue' | 'teal' | 'amber';
 
@@ -16,12 +17,18 @@ export const ACCENT_SWATCH_HEX: Record<AccentColor, string> = {
 const ACCENT_KEY = 'plourx-browser-accent';
 const ACCENT_EVENT = 'plourx-browser:accent-changed';
 
-function readStoredAccent(): AccentColor {
+function readStoredAccent(): AccentColor | 'custom' {
+  try {
+    if (localStorage.getItem(ACCENT_KEY) === 'custom' && normalizeHex(localStorage.getItem(ACCENT_CUSTOM_KEY) ?? '')) return 'custom';
+  } catch {
+    /* ignore */
+  }
   const stored = localStorage.getItem(ACCENT_KEY);
   return stored && (ACCENT_COLORS as string[]).includes(stored) ? (stored as AccentColor) : 'pink';
 }
 
-function applyAccent(accent: AccentColor) {
+function applyAccent(accent: AccentColor | 'custom') {
+  applyCustomAccent(accent === 'custom' ? readCustomHex() : null);
   // Pink is the baseline defined directly on :root in theme.css -- clearing
   // the attribute (rather than stamping data-accent="pink") is how a reset
   // to the default works, same pattern as useTheme's 'system' case.
@@ -33,7 +40,7 @@ function applyAccent(accent: AccentColor) {
 }
 
 export function useAccentColor() {
-  const [accent, setAccentState] = useState<AccentColor>(() => {
+  const [accent, setAccentState] = useState<AccentColor | 'custom'>(() => {
     const stored = readStoredAccent();
     applyAccent(stored);
     return stored;
@@ -60,5 +67,19 @@ export function useAccentColor() {
     queueMicrotask(() => window.dispatchEvent(new Event(ACCENT_EVENT)));
   }, []);
 
-  return { accent, setAccent };
+  const setCustomColor = useCallback((hex: string) => {
+    const value = normalizeHex(hex);
+    if (!value) return;
+    writeCustomHex(value);
+    try {
+      localStorage.setItem(ACCENT_KEY, 'custom');
+    } catch {
+      /* ignore */
+    }
+    applyAccent('custom');
+    setAccentState('custom');
+    queueMicrotask(() => window.dispatchEvent(new Event(ACCENT_EVENT)));
+  }, []);
+
+  return { accent, setAccent, customColor: readCustomHex(), setCustomColor };
 }

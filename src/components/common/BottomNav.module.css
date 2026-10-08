@@ -64,3 +64,11 @@
   line-height: 15px;
   text-align: center;
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .nav {
+  background: var(--dx-card, var(--px-surface-glass));
+  border-color: var(--dx-border, var(--px-border));
+  border-radius: calc(var(--px-radius-lg) + var(--dx-radius-offset, 0px));
+  box-shadow: var(--dx-elevation, var(--px-shadow-md));
+}

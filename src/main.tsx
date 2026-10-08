@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './theme.css';
 import './design/tokens.css';
 import './design/morphism.css';
+import './design/surfaces.css';
 import App from './App.tsx';
 
 createRoot(document.getElementById('root')!).render(
@@ -13,3 +14,11 @@ createRoot(document.getElementById('root')!).render(
     </BrowserRouter>
   </StrictMode>,
 );
+
+const boot = document.getElementById('boot')
+if (boot) {
+  requestAnimationFrame(() => {
+    boot.classList.add('hide')
+    window.setTimeout(() => boot.remove(), 300)
+  })
+}

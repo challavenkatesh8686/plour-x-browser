@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
 import { Check, Globe, Search, User } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SettingsSubpageHeader } from '../../components/settings/SettingsSubpageHeader';
 import { SettingsSection, SettingsRow } from '../../components/settings/SettingsSection';
+import { AccountSection } from '../../components/settings/AccountSection';
 import { SettingsActionButton } from '../../components/settings/SettingsActionButton';
 import { Switch } from '../../components/common/Switch';
 import { usePreferences } from '../../hooks/usePreferences';
@@ -11,9 +13,14 @@ import styles from './GeneralSettingsPage.module.css';
 
 export function GeneralSettingsPage() {
   const { preferences, update } = usePreferences();
-  const { isAuthenticated, user, profile, signOut } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // The header avatar links here (#account) -- bring the Account card into view.
+  useEffect(() => {
+    if (location.hash === '#account') document.getElementById('account')?.scrollIntoView({ block: 'start' });
+  }, [location.hash]);
 
   return (
     <div>
@@ -40,21 +47,19 @@ export function GeneralSettingsPage() {
         />
       </SettingsSection>
 
-      <SettingsSection title="Account" icon={User}>
+      <div id="account">
         {isAuthenticated ? (
-          <SettingsRow
-            label={profile?.name || user?.email || 'Signed in'}
-            description="Signed in to your PlourX account"
-            control={<SettingsActionButton label="Sign out" onClick={() => void signOut()} />}
-          />
+          <AccountSection />
         ) : (
-          <SettingsRow
-            label="Not signed in"
-            description="Sign in to your PlourX account"
-            control={<SettingsActionButton label="Sign in" onClick={() => navigate('/login', { state: { from: location.pathname } })} />}
-          />
+          <SettingsSection title="Account" icon={User}>
+            <SettingsRow
+              label="Not signed in"
+              description="Sign in to your PlourX account"
+              control={<SettingsActionButton label="Sign in" onClick={() => navigate('/login', { state: { from: location.pathname } })} />}
+            />
+          </SettingsSection>
         )}
-      </SettingsSection>
+      </div>
     </div>
   );
 }

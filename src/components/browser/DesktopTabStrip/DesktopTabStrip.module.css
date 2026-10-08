@@ -120,3 +120,13 @@
   color: var(--px-accent);
   background: var(--px-accent-bg);
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .tab {
+  background: var(--dx-card, var(--px-tap));
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .tab.active {
+  background: var(--dx-card-hover, var(--px-surface-raised));
+  box-shadow: var(--dx-shadow-soft, var(--px-shadow-sm));
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .navLinks { border-left-color: var(--dx-border-subtle, var(--px-border)); }

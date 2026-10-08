@@ -55,3 +55,10 @@
 .zoomReset:active {
   background: var(--px-tap);
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .menu {
+  border-radius: calc(var(--px-radius-lg) + var(--dx-radius-offset, 0px));
+  box-shadow: var(--dx-elevation, var(--px-shadow-lg));
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .item:active { background: var(--dx-card-hover, var(--px-tap)); }

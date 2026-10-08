@@ -94,3 +94,18 @@
 .cancelButton:active {
   background: var(--px-tap);
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .sheet {
+  border-radius: calc(var(--px-radius-lg) + var(--dx-radius-offset, 0px)) calc(var(--px-radius-lg) + var(--dx-radius-offset, 0px)) 0 0;
+  box-shadow: var(--dx-elevation, none);
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .rangeChip {
+  background: var(--dx-card, transparent);
+  border-color: var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow-soft, none);
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .rangeChipActive {
+  border-color: var(--px-accent-border);
+  background: var(--px-accent-bg);
+}

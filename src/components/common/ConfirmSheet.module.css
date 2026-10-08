@@ -55,3 +55,10 @@
   border-top: 1px solid var(--px-border);
   padding-top: 18px;
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .sheet {
+  border-radius: calc(var(--px-radius-lg) + var(--dx-radius-offset, 0px)) calc(var(--px-radius-lg) + var(--dx-radius-offset, 0px)) 0 0;
+  box-shadow: var(--dx-elevation, none);
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .cancel { border-top-color: var(--dx-border-subtle, var(--px-border)); }

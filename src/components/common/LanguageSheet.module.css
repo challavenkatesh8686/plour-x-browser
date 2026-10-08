@@ -135,3 +135,16 @@
   font-size: 13px;
   color: var(--px-text-faint);
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .card {
+  background: var(--dx-card, var(--px-surface));
+  border-color: var(--dx-border, var(--px-border));
+  border-radius: calc(var(--px-radius-lg) + var(--dx-radius-offset, 0px));
+  box-shadow: var(--dx-elevation, var(--px-shadow-lg));
+  backdrop-filter: blur(var(--dx-blur, 0px));
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .searchBar {
+  background: var(--dx-card-hover, var(--px-surface-raised));
+  box-shadow: var(--dx-shadow-inset, none);
+}

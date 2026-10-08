@@ -1,3 +1,5 @@
+import { AccentPicker } from '../../components/common/AccentPicker';
+import { useState } from 'react';
 import { Laptop, Moon, Palette, Sun, Type, type LucideIcon } from 'lucide-react';
 import { SettingsSubpageHeader } from '../../components/settings/SettingsSubpageHeader';
 import { SettingsSection, SettingsRow } from '../../components/settings/SettingsSection';
@@ -16,7 +18,8 @@ const THEME_OPTIONS: { value: Theme; label: string; icon: LucideIcon }[] = [
 
 export function AppearanceSettingsPage() {
   const { theme, setTheme } = useTheme();
-  const { accent, setAccent } = useAccentColor();
+  const { accent, setAccent, customColor, setCustomColor } = useAccentColor();
+  const [pickerOpen, setPickerOpen] = useState(false);
   const { fontStyle, updateFontStyle, resetFontStyle } = useFontStyle();
 
   return (
@@ -59,6 +62,25 @@ export function AppearanceSettingsPage() {
                   onClick={() => setAccent(color)}
                 />
               ))}
+              <button
+                type="button"
+                role="radio"
+                aria-checked={accent === 'custom'}
+                aria-label="Custom color"
+                title="Custom color"
+                className={`${styles.swatch} ${accent === 'custom' ? styles.active : ''} px-swatch-rainbow`}
+                onClick={() => setPickerOpen(true)}
+              />
+              {pickerOpen && (
+                <AccentPicker
+                  initial={customColor}
+                  onCancel={() => setPickerOpen(false)}
+                  onApply={(hex) => {
+                    setCustomColor(hex)
+                    setPickerOpen(false)
+                  }}
+                />
+              )}
             </div>
           }
         />

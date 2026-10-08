@@ -38,9 +38,10 @@
 
 .row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px 12px;
 }
 
 .rowButton {
@@ -54,6 +55,7 @@
   flex-direction: column;
   gap: 2px;
   min-width: 0;
+  flex: 1 1 140px;
 }
 
 .rowLabel {

@@ -1,0 +1,12 @@
+/* ============================================================
+   Design-style surfaces (global classes only; module-scoped rules
+   live at the bottom of each CSS module). Reads --dx-* tokens with
+   fallbacks to today's values; inert for 'plourx-original'.
+   Must be imported AFTER morphism.css.
+   ============================================================ */
+
+:root[data-design-style]:not([data-design-style='plourx-original']) .px-glass {
+  background: var(--dx-card, var(--px-surface-glass));
+  border: 1px solid var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-elevation, var(--dx-shadow, none));
+}

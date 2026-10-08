@@ -11,3 +11,9 @@
 .button:disabled {
   opacity: 0.5;
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .button {
+  border: 1px solid var(--dx-border, transparent);
+  box-shadow: var(--dx-shadow-soft, none);
+}

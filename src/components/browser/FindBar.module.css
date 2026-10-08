@@ -31,3 +31,12 @@
   min-width: 36px;
   text-align: center;
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .bar {
+  box-shadow: var(--dx-elevation, var(--px-shadow-lg));
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) .input {
+  background: var(--dx-card, var(--px-tap));
+  box-shadow: var(--dx-shadow-inset, none);
+}

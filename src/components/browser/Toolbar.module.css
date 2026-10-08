@@ -33,3 +33,10 @@
   background: var(--px-accent);
   transition: width var(--px-dur-base) var(--px-ease);
 }
+
+/* design style */
+:root[data-design-style]:not([data-design-style='plourx-original']) .wrap {
+  background: var(--dx-surface, var(--px-surface-glass));
+  border-bottom-color: var(--dx-border, var(--px-border));
+  box-shadow: var(--dx-shadow-soft, none);
+}
