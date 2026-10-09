@@ -12,6 +12,7 @@ import { useFontStyle } from '../../hooks/useFontStyle';
 import { useFindBar } from '../../hooks/useFindBar';
 import { useFullscreen } from '../../hooks/useFullscreen';
 import { isElectronDesktop } from '../../utils/platform';
+import { ChatWidget } from '../chat/ChatWidget';
 import { TabManagerOverlay } from '../browser/TabManagerOverlay';
 import { DesktopTabStrip } from '../browser/DesktopTabStrip/DesktopTabStrip';
 import { FindBar } from '../browser/FindBar';
@@ -74,6 +75,8 @@ export function AppShell({ children }: { children: ReactNode }) {
             <IconButton icon={<Minimize2 size={16} />} label="Exit fullscreen" size="sm" onClick={exitFullscreen} />
           </div>
         )}
+        {/* Hidden on the browsing route: the active tab's native WebView is drawn over the chrome there. */}
+        {!isAuthRoute && pathname !== '/' && !isFullscreen && <ChatWidget />}
         <Toast />
         {isTabManagerOpen && <TabManagerOverlay />}
         {isFindBarOpen && <FindBar onClose={closeFindBar} />}

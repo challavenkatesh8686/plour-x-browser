@@ -2,6 +2,8 @@ import { App } from '@capacitor/app';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { isNativeAndroid } from '../utils/platform';
+import { isFormSheetOpen } from '../utils/backGuard';
+import { isChatPanelOpen } from '../services/chat/chatService';
 import { useTabs } from '../services/tabs/TabsContext';
 import { useFindBar } from './useFindBar';
 import { useFullscreen } from './useFullscreen';
@@ -23,6 +25,10 @@ export function useHardwareBackButton() {
   useEffect(() => {
     if (!isNativeAndroid()) return;
     const sub = App.addListener('backButton', () => {
+      // The PlourX AI panel closes itself on back; don't also navigate.
+      if (isChatPanelOpen()) return;
+      // Contact/feedback sheets close themselves on back.
+      if (isFormSheetOpen()) return;
       if (isFullscreen) {
         exitFullscreen();
         return;

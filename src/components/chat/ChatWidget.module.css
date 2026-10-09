@@ -1,0 +1,51 @@
+/* PlourX AI assistant widget. Built only from the shared --px-* tokens. Positioned inside the AppShell frame. */
+.root {
+  position: absolute;
+  right: 16px;
+  bottom: calc(6rem + var(--px-safe-bottom));
+  z-index: 41;
+}
+
+@media (min-width: 840px) {
+  .root { right: 24px; bottom: 24px; }
+}
+
+.launcher {
+  display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+  background: var(--px-accent-gradient); color: var(--px-white); border: 0;
+  box-shadow: var(--px-shadow-md);
+  transition: transform var(--px-dur-fast) var(--px-ease);
+}
+.launcher:active { transform: scale(0.94); }
+.launcher svg { width: 24px; height: 24px; }
+
+.panel {
+  position: fixed; inset: auto 0 0 0; z-index: 80; display: flex; flex-direction: column; overflow: hidden;
+  height: min(34rem, calc(100dvh - 4rem)); padding-bottom: var(--px-safe-bottom);
+  background: var(--px-surface); border: 1px solid var(--px-border-strong);
+  border-radius: var(--px-radius-lg) var(--px-radius-lg) 0 0; box-shadow: var(--px-shadow-lg);
+  animation: px-fade-in var(--px-dur-base) var(--px-ease) both;
+}
+@media (min-width: 840px) {
+  .panel { position: static; width: 22rem; height: 32rem; border-radius: var(--px-radius-lg); }
+}
+
+.head { display: flex; align-items: center; gap: 10px; padding: 10px 12px 10px 16px; border-bottom: 1px solid var(--px-border); }
+.title { flex: 1; min-width: 0; font-weight: 600; color: var(--px-text); }
+
+.list { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 14px; overflow-y: auto; }
+.bubble { max-width: 85%; padding: 8px 12px; border-radius: 16px; font-size: 14px; color: var(--px-text); white-space: pre-wrap; overflow-wrap: anywhere; }
+.user { align-self: flex-end; background: var(--px-accent); color: var(--px-white); border-bottom-right-radius: 6px; }
+.model { align-self: flex-start; background: var(--px-surface-raised); border: 1px solid var(--px-border); border-bottom-left-radius: 6px; }
+.error { margin: 0; padding: 8px 12px; border-radius: 12px; font-size: 12px; color: var(--px-danger); background: color-mix(in srgb, var(--px-danger) 12%, transparent); }
+
+.form { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--px-border); }
+.form input {
+  flex: 1; min-width: 0; height: 40px; padding: 0 14px; font: inherit; color: var(--px-text);
+  background: var(--px-surface-raised); border: 1px solid var(--px-border-strong); border-radius: var(--px-radius-pill);
+}
+.form input:focus { outline: none; border-color: var(--px-accent); }
+.form input:disabled { opacity: 0.6; }
+.send { display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; background: var(--px-accent); color: var(--px-white); border: 0; }
+.send:disabled { opacity: 0.4; }
+.send svg { width: 18px; height: 18px; }

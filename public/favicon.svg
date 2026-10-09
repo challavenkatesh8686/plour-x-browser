@@ -1,36 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <radialGradient id="petal" cx="32" cy="26" r="24" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#FFE1F3"/>
-      <stop offset="60%" stop-color="#FF9FD9"/>
-      <stop offset="100%" stop-color="#F572C0"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff6ec0"/>
+      <stop offset="0.55" stop-color="#d946a8"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#ffe3f4"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="0.3" cy="0.2" r="0.8">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="core" cx="27" cy="24" r="8" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#B794F6"/>
-      <stop offset="100%" stop-color="#6D28D9"/>
-    </radialGradient>
-    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="4.5" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
-
-  <rect width="64" height="64" rx="16" fill="#170D1C"/>
-
-  <g opacity="0.55" filter="url(#glow)">
-    <circle cx="32" cy="32" r="17" fill="#FF9FD9" opacity="0.35"/>
-  </g>
-
-  <g transform="translate(32,32)" fill="url(#petal)">
-    <path d="M0,0 C-11,-4 -12,-14 -5,-20 C-2.5,-23 -0.6,-24.5 0,-25 C0.6,-24.5 2.5,-23 5,-20 C12,-14 11,-4 0,0 Z"/>
-    <path d="M0,0 C-11,-4 -12,-14 -5,-20 C-2.5,-23 -0.6,-24.5 0,-25 C0.6,-24.5 2.5,-23 5,-20 C12,-14 11,-4 0,0 Z" transform="rotate(72)"/>
-    <path d="M0,0 C-11,-4 -12,-14 -5,-20 C-2.5,-23 -0.6,-24.5 0,-25 C0.6,-24.5 2.5,-23 5,-20 C12,-14 11,-4 0,0 Z" transform="rotate(144)"/>
-    <path d="M0,0 C-11,-4 -12,-14 -5,-20 C-2.5,-23 -0.6,-24.5 0,-25 C0.6,-24.5 2.5,-23 5,-20 C12,-14 11,-4 0,0 Z" transform="rotate(216)"/>
-    <path d="M0,0 C-11,-4 -12,-14 -5,-20 C-2.5,-23 -0.6,-24.5 0,-25 C0.6,-24.5 2.5,-23 5,-20 C12,-14 11,-4 0,0 Z" transform="rotate(288)"/>
-  </g>
-
-  <circle cx="32" cy="32" r="4.4" fill="url(#core)"/>
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="116" fill="url(#shine)"/>
+  <g transform="translate(256 256) scale(1) translate(-256 -256)">
+    <circle cx="256" cy="256" r="132" fill="url(#body)"/>
+    <ellipse cx="256" cy="256" rx="58" ry="132" fill="none" stroke="#a3279a" stroke-width="14" opacity=".45"/>
+    <path d="M124 256h264M148 184h216M148 328h216" fill="none" stroke="#a3279a" stroke-width="14" stroke-linecap="round" opacity=".45"/></g>
 </svg>
