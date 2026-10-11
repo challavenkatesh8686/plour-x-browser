@@ -8,7 +8,7 @@ const APP_ID = 'browser'
 const GLOBAL_ROW_ID = 'global'
 
 /**
- * Resolves the PlourX design/morphism style for PlourX Browser and writes it to
+ * Resolves the PlourX design/morphism style for PlourX Orbit and writes it to
  * <html data-design-style>. Same precedence and tables as the website:
  * user override -> admin app default -> global default -> PlourX Original.
  */
@@ -47,7 +47,7 @@ export function DesignStyleProvider({ children }: { children: ReactNode }) {
         if (isMorphismId(userRes.data?.design_style)) next = userRes.data.design_style
         if (active) setDesignStyle(next)
       } catch {
-        // Never break PlourX Browser over a design lookup — keep the current style.
+        // Never break PlourX Orbit over a design lookup — keep the current style.
       }
     }
 

@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.plourx.browser',
-  appName: 'PlourX Browser',
+  appName: 'PlourX Orbit',
   webDir: 'dist',
 };
 

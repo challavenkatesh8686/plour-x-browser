@@ -1,4 +1,4 @@
-# PlourX Browser
+# PlourX Orbit
 
 A real, mobile-first Android browser **and** a real Windows desktop browser, sharing one PlourX-designed chrome UI and one browser-state core (tabs, history, bookmarks, search engines, auth). Toolbar, address bar, tab management, real navigation, bookmarks, history, a configurable search-engine system, and PlourX account sign-in all work identically on both platforms; only the actual page-rendering engine underneath is platform-specific.
 
@@ -15,7 +15,7 @@ Almost everything in `src/` is platform-agnostic: `TabsContext`/`tabsReducer` (t
 - `androidBackend` wraps the existing `PlourxBrowserEngine` Capacitor plugin (unchanged from the Android-only version of this app).
 - `desktopBackend` wraps `window.plourxDesktop`, a bridge injected by `electron/preload.cjs`.
 
-`src/utils/platform.ts` exposes `isNativeAndroid()` and `isElectronDesktop()` (the latter detects the preload-injected bridge global, never user-agent sniffing). `isEngineAvailable()` is true when either is. On a plain web preview (`npm run dev` in a normal browser tab, neither bridge present), the browsing surface shows an honest "open PlourX Browser on Android or desktop to browse" placeholder instead of faking navigation with an iframe -- most real sites block iframing via `X-Frame-Options`/CSP anyway, and an iframe gives no back/forward/title/favicon events.
+`src/utils/platform.ts` exposes `isNativeAndroid()` and `isElectronDesktop()` (the latter detects the preload-injected bridge global, never user-agent sniffing). `isEngineAvailable()` is true when either is. On a plain web preview (`npm run dev` in a normal browser tab, neither bridge present), the browsing surface shows an honest "open PlourX Orbit on Android or desktop to browse" placeholder instead of faking navigation with an iframe -- most real sites block iframing via `X-Frame-Options`/CSP anyway, and an iframe gives no back/forward/title/favicon events.
 
 `src/hooks/useTabEngineEvents.ts` subscribes to a typed, platform-agnostic `EngineEventMap` (`onEngineEvent(...)`) instead of touching either native bridge directly, so the same event-handling code drives both platforms.
 

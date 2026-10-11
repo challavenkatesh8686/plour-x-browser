@@ -5,7 +5,7 @@ import type { EngineEventMap, EngineEventName } from './engineEvents';
 
 export class BrowserEngineUnavailableError extends Error {
   constructor() {
-    super('The PlourX Browser rendering engine is only available in the Android app or the desktop app.');
+    super('The PlourX Orbit rendering engine is only available in the Android app or the desktop app.');
     this.name = 'BrowserEngineUnavailableError';
   }
 }

@@ -2,7 +2,7 @@
   "name": "plour-x-browser",
   "private": true,
   "version": "0.1.0",
-  "description": "PlourX Browser -- a real, mobile-first and desktop browser with PlourX's own design language.",
+  "description": "PlourX Orbit -- a real, mobile-first and desktop browser with PlourX's own design language.",
   "author": "PlourX",
   "type": "module",
   "main": "electron/main.cjs",
@@ -48,7 +48,7 @@
   },
   "build": {
     "appId": "com.plourx.browser.desktop",
-    "productName": "PlourX Browser",
+    "productName": "PlourX Orbit",
     "directories": {
       "output": "dist-electron"
     },

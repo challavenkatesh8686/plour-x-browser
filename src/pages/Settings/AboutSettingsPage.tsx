@@ -13,7 +13,7 @@ export function AboutSettingsPage() {
     <div>
       <SettingsSubpageHeader title="About" />
 
-      <SettingsSection title="PlourX Browser" icon={Info}>
+      <SettingsSection title="PlourX Orbit" icon={Info}>
         <SettingsRow label="Version" description={__APP_VERSION__} />
       </SettingsSection>
 

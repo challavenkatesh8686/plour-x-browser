@@ -26,7 +26,7 @@ export function TabsSettingsPage() {
       </SettingsSection>
 
       <SettingsNote>
-        To keep memory use in check, PlourX Browser keeps at most 4 tabs actively rendering at once. Background tabs beyond
+        To keep memory use in check, PlourX Orbit keeps at most 4 tabs actively rendering at once. Background tabs beyond
         that are suspended (a snapshot is kept, but the page reloads when you switch back to it) -- the same tradeoff every
         mobile browser makes under memory pressure.
       </SettingsNote>

@@ -1,5 +1,5 @@
 export const CHAT_APP_ID = 'browser'
-export const CHAT_APP_NAME = 'PlourX Browser'
+export const CHAT_APP_NAME = 'PlourX Orbit'
 
 export interface ChatMessage {
   role: 'user' | 'model'

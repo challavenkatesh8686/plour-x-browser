@@ -9,7 +9,7 @@ const channels = require('./ipcChannels.cjs');
 // Without this, Electron falls back to the generic "Electron" userData
 // folder name when unpackaged, which is confusing to find on disk and would
 // collide with any other Electron app being developed on the same machine.
-app.setName('PlourX Browser');
+app.setName('PlourX Orbit');
 
 const isDev = Boolean(process.env.ELECTRON_START_URL);
 const DEV_URL = process.env.ELECTRON_START_URL;

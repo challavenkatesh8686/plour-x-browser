@@ -30,7 +30,7 @@ export function BrowserContentHost() {
       {showUnavailablePlaceholder && (
         <div className={styles.placeholder}>
           <IconChip icon={Compass} size={32} />
-          <h2 className={styles.placeholderTitle}>Open PlourX Browser on Android to browse</h2>
+          <h2 className={styles.placeholderTitle}>Open PlourX Orbit on Android to browse</h2>
           <p className={styles.placeholderText}>
             Real page rendering uses a native Android WebView engine, so it only runs in the Android app -- this desktop
             preview shows the chrome UI only.

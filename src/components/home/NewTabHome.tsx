@@ -23,7 +23,7 @@ export function NewTabHome() {
         <ProfileAvatarButton size={32} className={styles.mobileAvatar} />
       </div>
 
-      <h1 className={styles.brand}>PlourX Browser</h1>
+      <h1 className={styles.brand}>PlourX Orbit</h1>
 
       <form
         className={styles.searchForm}

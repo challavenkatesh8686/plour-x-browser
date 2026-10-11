@@ -48,7 +48,7 @@ import java.util.function.Consumer;
 import org.json.JSONObject;
 
 /**
- * Real page rendering for PlourX Browser. Capacitor's own WebView renders
+ * Real page rendering for PlourX Orbit. Capacitor's own WebView renders
  * the React chrome and fills the whole Activity; this plugin adds one
  * android.webkit.WebView PER TAB as an additional sibling view in that same
  * root CoordinatorLayout (confirmed by inspecting activity_main.xml -- the
@@ -690,7 +690,7 @@ public class PlourxBrowserEnginePlugin extends Plugin {
                 return;
             }
             PrintManager printManager = (PrintManager) getContext().getSystemService(Context.PRINT_SERVICE);
-            String jobName = "PlourX Browser Document";
+            String jobName = "PlourX Orbit Document";
             printManager.print(jobName, tab.webView.createPrintDocumentAdapter(jobName), new PrintAttributes.Builder().build());
         });
         call.resolve();

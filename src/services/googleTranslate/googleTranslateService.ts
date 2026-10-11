@@ -7,7 +7,7 @@
  *
  * Deliberately NOT loaded at app startup: the script is only injected the
  * first time the user opens the language picker, so no third-party request
- * happens until they opt in. This translates PlourX Browser's own chrome UI
+ * happens until they opt in. This translates PlourX Orbit's own chrome UI
  * text -- it has nothing to do with (and cannot reach into) the separate
  * native WebView/WebContentsView that renders an actual browsed page.
  */
