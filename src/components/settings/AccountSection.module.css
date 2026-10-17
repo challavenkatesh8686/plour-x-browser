@@ -82,6 +82,29 @@
   }
 }
 
+.genderField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--px-text-dim);
+}
+
+.genderField select {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: var(--px-radius-md);
+  background: var(--dx-card, var(--px-tap));
+  border: 1px solid var(--dx-border, var(--px-border));
+  font-size: 14px;
+  color: var(--px-text);
+}
+
+.genderField select:disabled {
+  opacity: 0.5;
+}
+
 .hint {
   margin: 0;
   font-size: 13px;

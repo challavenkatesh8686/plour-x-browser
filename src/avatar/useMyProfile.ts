@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../services/auth/supabaseClient';
 import { AVATAR_EVENT, PLOURX_API_ORIGIN } from '../services/auth/plourxApi';
+import { isGender, type Gender } from '../lib/gender';
 
 export interface MyProfile {
   /** Absolute URL of the uploaded picture, or null. */
   avatarUrl: string | null;
   isAdmin: boolean;
+  /** Chosen at sign-up; picks the male/female default avatar. */
+  gender: Gender | null;
 }
 
-const NONE: MyProfile = { avatarUrl: null, isAdmin: false };
+const NONE: MyProfile = { avatarUrl: null, isAdmin: false, gender: null };
 
 /** Makes a stored avatar path absolute (server-relative paths live on the PlourX AI server). */
 export function absoluteAvatarUrl(path: string | null | undefined): string | null {
@@ -26,14 +29,14 @@ export function useMyProfile(userId: string | null | undefined): MyProfile {
     const load = () => {
       void supabase
         .from('profiles')
-        .select('avatar_url, role')
+        .select('avatar_url, role, gender')
         .eq('id', userId)
         .maybeSingle()
         .then(({ data }) => {
           if (!active) return;
           setState({
             id: userId,
-            profile: { avatarUrl: absoluteAvatarUrl(data?.avatar_url as string | null | undefined), isAdmin: data?.role === 'admin' },
+            profile: { avatarUrl: absoluteAvatarUrl(data?.avatar_url as string | null | undefined), isAdmin: data?.role === 'admin', gender: isGender(data?.gender) ? data.gender : null },
           });
         });
     };

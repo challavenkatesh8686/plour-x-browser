@@ -9,11 +9,13 @@ import { Switch } from '../../components/common/Switch';
 import { usePreferences } from '../../hooks/usePreferences';
 import { getSearchEngines } from '../../services/search/searchEngineService';
 import { useAuth } from '../../services/auth/AuthContext';
+import { useAuthEnabled } from '../../hooks/useAuthEnabled';
 import styles from './GeneralSettingsPage.module.css';
 
 export function GeneralSettingsPage() {
   const { preferences, update } = usePreferences();
   const { isAuthenticated } = useAuth();
+  const authEnabled = useAuthEnabled();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,7 +52,7 @@ export function GeneralSettingsPage() {
       <div id="account">
         {isAuthenticated ? (
           <AccountSection />
-        ) : (
+        ) : authEnabled ? (
           <SettingsSection title="Account" icon={User}>
             <SettingsRow
               label="Not signed in"
@@ -58,7 +60,7 @@ export function GeneralSettingsPage() {
               control={<SettingsActionButton label="Sign in" onClick={() => navigate('/login', { state: { from: location.pathname } })} />}
             />
           </SettingsSection>
-        )}
+        ) : null}
       </div>
     </div>
   );

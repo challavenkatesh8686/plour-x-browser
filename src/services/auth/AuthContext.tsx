@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
 import { supabase } from './supabaseClient';
 import { toFriendlyAuthError } from './authErrors';
+import { CHAT_APP_ID } from '../chat/chatService';
+import type { Gender } from '../../lib/gender';
 
 // Ported from plour-x-website's src/context/AuthContext.tsx -- same shared
 // Supabase project, same `profiles` table shape, same auth flows (signup
@@ -62,7 +64,7 @@ interface AuthContextValue {
   isAuthenticated: boolean;
   isAdmin: boolean;
   signIn: (email: string, password: string) => Promise<{ error?: string }>;
-  signUp: (email: string, password: string, name: string, countryCode: string) => Promise<{ error?: string; session?: Session | null }>;
+  signUp: (email: string, password: string, name: string, countryCode: string, gender: Gender) => Promise<{ error?: string; session?: Session | null }>;
   signOut: () => Promise<void>;
   resendVerificationEmail: (email: string) => Promise<{ error?: string }>;
   requestPasswordReset: (email: string) => Promise<{ error?: string }>;
@@ -114,11 +116,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return error ? { error: toFriendlyAuthError(error.message) } : {};
   }, []);
 
-  const signUp = useCallback(async (email: string, password: string, name: string, countryCode: string) => {
+  const signUp = useCallback(async (email: string, password: string, name: string, countryCode: string, gender: Gender) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name, country_code: countryCode } },
+      options: { emailRedirectTo: (import.meta.env.PROD && window.location.hostname === 'localhost' ? 'https://plour-x.ai' : window.location.origin), data: { name, country_code: countryCode, gender, app_id: CHAT_APP_ID } },
     });
     if (error) return { error: toFriendlyAuthError(error.message) };
     // A non-null session means email confirmation is disabled on this
@@ -132,7 +134,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const resendVerificationEmail = useCallback(async (email: string) => {
-    const { error } = await supabase.auth.resend({ type: 'signup', email });
+    const { error } = await supabase.auth.resend({ type: 'signup', email, options: { emailRedirectTo: (import.meta.env.PROD && window.location.hostname === 'localhost' ? 'https://plour-x.ai' : window.location.origin) } });
     return error ? { error: toFriendlyAuthError(error.message) } : {};
   }, []);
 

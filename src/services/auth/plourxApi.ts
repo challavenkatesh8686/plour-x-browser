@@ -1,4 +1,5 @@
 import { authHeaders } from './supabaseClient';
+import type { Gender } from '../../lib/gender';
 
 /**
  * Origin of the PlourX AI server, which stores uploaded profile pictures for every PlourX app.
@@ -44,14 +45,18 @@ async function toSquareJpeg(file: File): Promise<File> {
   }
 }
 
-async function patchAvatar(avatarUrl: string | null) {
+async function patchProfile(body: Record<string, unknown>) {
   const response = await fetch(`${PLOURX_API_ORIGIN}/api/profile`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...(await authHeaders()) },
-    body: JSON.stringify({ avatarUrl }),
+    body: JSON.stringify(body),
     signal: AbortSignal.timeout(30_000),
   });
   if (!response.ok) throw new AvatarError('save');
+}
+
+function patchAvatar(avatarUrl: string | null) {
+  return patchProfile({ avatarUrl });
 }
 
 function announce() {
@@ -95,5 +100,11 @@ export async function changeAvatar(file: File): Promise<void> {
 
 export async function removeAvatar(): Promise<void> {
   await patchAvatar(null);
+  announce();
+}
+
+/** Saves the user's gender; the default avatar follows it until they upload a picture. */
+export async function changeGender(gender: Gender): Promise<void> {
+  await patchProfile({ gender });
   announce();
 }

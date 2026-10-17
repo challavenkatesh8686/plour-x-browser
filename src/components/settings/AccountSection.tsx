@@ -3,7 +3,8 @@ import { Camera, LogOut, Trash2, User } from 'lucide-react';
 import { UserAvatar } from '../../avatar/UserAvatar';
 import { useMyProfile } from '../../avatar/useMyProfile';
 import { useAuth } from '../../services/auth/AuthContext';
-import { AvatarError, changeAvatar, removeAvatar } from '../../services/auth/plourxApi';
+import { AvatarError, changeAvatar, changeGender, removeAvatar } from '../../services/auth/plourxApi';
+import { GENDER_OPTIONS, type Gender } from '../../lib/gender';
 import { showToast } from '../../services/toast/toastService';
 import { SettingsSection } from './SettingsSection';
 import styles from './AccountSection.module.css';
@@ -14,6 +15,9 @@ const MESSAGES = {
   uploading: 'Uploading…',
   hint: 'Used across all PlourX apps. JPG, PNG, WebP or GIF, up to 10 MB.',
   updated: 'Profile photo updated',
+  genderLabel: 'Gender',
+  genderSelect: 'Select your gender',
+  genderUpdated: 'Gender updated',
   removed: 'Profile photo removed',
   type: "That file isn't a supported image.",
   size: 'That image is too large. Choose one under 10 MB.',
@@ -24,7 +28,7 @@ const MESSAGES = {
 /** Account card for Settings: identity, profile photo (shared across PlourX apps) and sign out. */
 export function AccountSection() {
   const { user, profile, signOut } = useAuth();
-  const { avatarUrl } = useMyProfile(user?.id);
+  const { avatarUrl, gender } = useMyProfile(user?.id);
   const photoInput = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
 
@@ -85,6 +89,23 @@ export function AccountSection() {
         )}
       </div>
       <p className={styles.hint}>{MESSAGES.hint}</p>
+      <label className={styles.genderField}>
+        <span>{MESSAGES.genderLabel}</span>
+        <select
+          value={gender ?? ''}
+          disabled={busy}
+          onChange={(e) => void run(() => changeGender(e.target.value as Gender), MESSAGES.genderUpdated)}
+        >
+          <option value="" disabled>
+            {MESSAGES.genderSelect}
+          </option>
+          {GENDER_OPTIONS.map((g) => (
+            <option key={g.value} value={g.value}>
+              {g.label}
+            </option>
+          ))}
+        </select>
+      </label>
       <div className={styles.signOut}>
         <button type="button" className={`${styles.btn} ${styles.signOutBtn}`} onClick={() => void signOut()}>
           <LogOut className={styles.logOutIcon} aria-hidden="true" />

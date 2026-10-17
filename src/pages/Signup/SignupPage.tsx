@@ -4,6 +4,8 @@ import { AuthCard } from '../../components/auth/AuthCard';
 import styles from '../../components/auth/AuthCard.module.css';
 import { FormField } from '../../components/auth/FormField';
 import { CountrySelect } from '../../components/auth/CountrySelect';
+import { GenderSelect } from '../../components/auth/GenderSelect';
+import type { Gender } from '../../lib/gender';
 import { AuthButton } from '../../components/auth/AuthButton';
 import { useAuth } from '../../services/auth/AuthContext';
 import { EmailVerificationPending } from './EmailVerificationPending';
@@ -16,6 +18,7 @@ interface FieldErrors {
   password?: string;
   confirmPassword?: string;
   countryCode?: string;
+  gender?: string;
 }
 
 export function SignupPage() {
@@ -27,6 +30,7 @@ export function SignupPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [countryCode, setCountryCode] = useState<string | null>(null);
+  const [gender, setGender] = useState<Gender | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -46,6 +50,7 @@ export function SignupPage() {
     if (password.length < 6) next.password = 'Password must be at least 6 characters.';
     if (confirmPassword !== password) next.confirmPassword = 'Passwords do not match.';
     if (!countryCode) next.countryCode = 'Please select your country.';
+    if (!gender) next.gender = 'Please select your gender.';
     setFieldErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -56,7 +61,7 @@ export function SignupPage() {
     if (!validate()) return;
 
     setSubmitting(true);
-    const result = await signUp(email.trim(), password, name.trim(), countryCode!);
+    const result = await signUp(email.trim(), password, name.trim(), countryCode!, gender!);
     setSubmitting(false);
 
     if (result.error) {
@@ -113,6 +118,7 @@ export function SignupPage() {
           autoComplete="new-password"
         />
         <CountrySelect value={countryCode} onChange={setCountryCode} error={fieldErrors.countryCode} required />
+        <GenderSelect value={gender} onChange={setGender} error={fieldErrors.gender} required />
         {error && <p className={styles.error}>{error}</p>}
         <AuthButton type="submit" variant="primary" fullWidth disabled={submitting}>
           {submitting ? 'Creating account…' : 'Sign up'}
