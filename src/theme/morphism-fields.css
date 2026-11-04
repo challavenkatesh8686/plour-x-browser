@@ -1,0 +1,42 @@
+/* Text fields, panels and dashed drop-zones follow the selected design style (design/morphism.css).
+   Scoped to non-original styles, so "PlourX Original" keeps today's look. Imported last so it wins over the per-page rules. */
+
+:root[data-design-style]:not([data-design-style='plourx-original']) {
+  --px-field-radius: max(10px, calc(var(--px-radius) - 6px));
+}
+
+/* ---- Text fields: inset surface, style border, style radius ---- */
+:root[data-design-style]:not([data-design-style='plourx-original']) :is(
+  .select
+) {
+  background: var(--px-card); border: 1px solid var(--px-border); border-radius: var(--px-field-radius);
+  box-shadow: var(--px-shadow-inset);
+  -webkit-backdrop-filter: blur(var(--px-blur)); backdrop-filter: blur(var(--px-blur));
+}
+
+/* Focus keeps the accent ring whatever the border is (neumorphism has a transparent border). */
+:root[data-design-style]:not([data-design-style='plourx-original']) :is(
+  .select
+):focus {
+  border-color: var(--color-primary-hover);
+  box-shadow: var(--px-shadow-inset), 0 0 0 1px color-mix(in srgb, var(--color-primary-hover) 50%, transparent);
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) :is(
+  .select
+)[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+/* ---- Generic fallback: bare inputs, textareas and selects without a known class ---- */
+:root[data-design-style]:not([data-design-style='plourx-original']) :is(input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='color']):not([type='hidden']):not([type='submit']):not([type='button']):not([type='reset']):not([type='image']), textarea, select):not(.search-field input):not(.sr-only):not([hidden]):not(.switch *) {
+  background: var(--px-card); border: 1px solid var(--px-border); border-radius: var(--px-field-radius);
+  box-shadow: var(--px-shadow-inset);
+  -webkit-backdrop-filter: blur(var(--px-blur)); backdrop-filter: blur(var(--px-blur));
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) :is(input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='color']):not([type='hidden']):not([type='submit']):not([type='button']):not([type='reset']):not([type='image']), textarea, select):not(.search-field input):not(.sr-only):not([hidden]):not(.switch *):focus {
+  border-color: var(--color-primary-hover);
+  box-shadow: var(--px-shadow-inset), 0 0 0 1px color-mix(in srgb, var(--color-primary-hover) 50%, transparent);
+}
+:root[data-design-style]:not([data-design-style='plourx-original']) :is(input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='color']):not([type='hidden']):not([type='submit']):not([type='button']):not([type='reset']):not([type='image']), textarea, select):not(.search-field input):not(.sr-only):not([hidden]):not(.switch *)[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
