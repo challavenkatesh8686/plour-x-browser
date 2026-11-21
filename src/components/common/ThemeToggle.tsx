@@ -1,4 +1,4 @@
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun } from '../../lib/flatIcons/icons';
 import { useTheme } from '../../hooks/useTheme';
 import { IconButton } from './IconButton';
 import styles from './ThemeToggle.module.css';

@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
-import { Star } from 'lucide-react';
+import { Star } from '../../lib/flatIcons/icons';
 import { AuthButton } from '../auth/AuthButton';
 import { useAuth } from '../../services/auth/AuthContext';
 import {

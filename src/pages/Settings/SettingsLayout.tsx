@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from '../../lib/flatIcons/icons';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { IconButton } from '../../components/common/IconButton';
 import styles from './SettingsLayout.module.css';

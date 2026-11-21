@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Check, Search } from 'lucide-react';
+import { Check, Search } from '../../lib/flatIcons/icons';
 import { TRANSLATE_LANGUAGES } from '../../data/translateLanguages';
 import styles from './LanguageSheet.module.css';
 

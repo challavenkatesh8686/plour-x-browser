@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { App as CapacitorApp } from '@capacitor/app';
-import { X } from 'lucide-react';
+import { X } from '../../lib/flatIcons/icons';
 import { isNativeAndroid } from '../../utils/platform';
 import { setFormSheetOpen } from '../../utils/backGuard';
 import { IconButton } from '../common/IconButton';

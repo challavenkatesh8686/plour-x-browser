@@ -1,10 +1,12 @@
 import { AccentPicker } from '../../components/common/AccentPicker';
 import { useState } from 'react';
-import { Laptop, Moon, Palette, Sun, Type, type LucideIcon } from 'lucide-react';
+import { Laptop, Moon, Palette, Sun, Type, type LucideIcon } from '../../lib/flatIcons/icons';
 import { SettingsSubpageHeader } from '../../components/settings/SettingsSubpageHeader';
 import { SettingsSection, SettingsRow } from '../../components/settings/SettingsSection';
 import { SettingsActionButton } from '../../components/settings/SettingsActionButton';
 import { useTheme, type Theme } from '../../hooks/useTheme';
+import { useWebsiteEffects } from '../../hooks/useWebsiteEffects';
+import { Switch } from '../../components/common/Switch';
 import { useAccentColor, ACCENT_COLORS, ACCENT_SWATCH_HEX } from '../../hooks/useAccentColor';
 import { useFontStyle, DEFAULT_FONT_STYLE } from '../../hooks/useFontStyle';
 import { FONT_OPTIONS, FONT_WEIGHTS, FONT_WEIGHT_LABELS, FONT_SIZES, TEXT_CASES, TEXT_CASE_LABELS } from '../../data/fontOptions';
@@ -21,6 +23,7 @@ export function AppearanceSettingsPage() {
   const { accent, setAccent, customColor, setCustomColor } = useAccentColor();
   const [pickerOpen, setPickerOpen] = useState(false);
   const { fontStyle, updateFontStyle, resetFontStyle } = useFontStyle();
+  const websiteEffects = useWebsiteEffects();
 
   return (
     <div>
@@ -83,6 +86,13 @@ export function AppearanceSettingsPage() {
               )}
             </div>
           }
+        />
+      </SettingsSection>
+
+      <SettingsSection title="Effects" icon={Palette}>
+        <SettingsRow
+          label="Website effects"
+          control={<Switch checked={websiteEffects.enabled} onChange={websiteEffects.setEnabled} label="Website effects" />}
         />
       </SettingsSection>
 

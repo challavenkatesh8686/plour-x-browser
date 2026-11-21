@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, ChevronUp, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, X } from '../../lib/flatIcons/icons';
 import { findInPage, findNextInPage, onFindResult, stopFindInPage } from '../../services/browserEngine/browserEngineService';
 import { useTabs } from '../../services/tabs/TabsContext';
 import { IconButton } from '../common/IconButton';

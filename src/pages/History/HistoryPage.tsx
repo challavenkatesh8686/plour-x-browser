@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Clock, Trash2 } from 'lucide-react';
+import { Clock, Trash2 } from '../../lib/flatIcons/icons';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmSheet } from '../../components/common/ConfirmSheet';
 import { EmptyState } from '../../components/common/EmptyState';

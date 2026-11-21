@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight, MoreVertical, Plus, RotateCw, Star, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MoreVertical, Plus, RotateCw, Star, X } from '../../lib/flatIcons/icons';
 import { IconButton } from '../common/IconButton';
 import { useTabs } from '../../services/tabs/TabsContext';
 import { useBookmarkToggle } from '../../services/bookmarks/useBookmarkToggle';

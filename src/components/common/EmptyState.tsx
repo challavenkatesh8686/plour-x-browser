@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from '../../lib/flatIcons/icons';
 import { IconChip } from './IconChip';
 import styles from './EmptyState.module.css';
 

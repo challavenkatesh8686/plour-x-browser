@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Languages, Loader2 } from 'lucide-react';
+import { Languages, Loader2 } from '../../lib/flatIcons/icons';
 import { IconButton } from './IconButton';
 import { LanguageSheet } from './LanguageSheet';
 import { useGoogleTranslate } from '../../hooks/useGoogleTranslate';

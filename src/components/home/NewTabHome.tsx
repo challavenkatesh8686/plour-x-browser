@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, User } from 'lucide-react';
+import { Search, User } from '../../lib/flatIcons/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../services/auth/AuthContext';
 import { useAuthEnabled } from '../../hooks/useAuthEnabled';

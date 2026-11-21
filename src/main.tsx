@@ -6,6 +6,7 @@ import './design/tokens.css';
 import './design/morphism.css';
 import './design/surfaces.css';
 import './theme/morphism-fields.css';
+import './design/plourx-ui.css'
 import App from './App.tsx';
 
 createRoot(document.getElementById('root')!).render(

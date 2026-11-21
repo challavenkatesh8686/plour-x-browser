@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Info, LifeBuoy } from 'lucide-react';
+import { Info, LifeBuoy } from '../../lib/flatIcons/icons';
 import { SettingsSubpageHeader } from '../../components/settings/SettingsSubpageHeader';
 import { SettingsSection, SettingsRow } from '../../components/settings/SettingsSection';
 import { ContactFormSheet } from '../../components/settings/ContactFormSheet';
 import { FeedbackFormSheet } from '../../components/settings/FeedbackFormSheet';
+import { SocialIcons } from '../../components/SocialIcons';
 
 export function AboutSettingsPage() {
   const [contactOpen, setContactOpen] = useState(false);
@@ -21,6 +22,8 @@ export function AboutSettingsPage() {
         <SettingsRow label="Contact us" description="Questions or need help" onClick={() => setContactOpen(true)} />
         <SettingsRow label="Send feedback" description="Report a bug or share an idea" onClick={() => setFeedbackOpen(true)} />
       </SettingsSection>
+
+      <SocialIcons />
 
       <ContactFormSheet open={contactOpen} onClose={() => setContactOpen(false)} />
       <FeedbackFormSheet open={feedbackOpen} onClose={() => setFeedbackOpen(false)} />

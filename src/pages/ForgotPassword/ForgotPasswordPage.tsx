@@ -1,9 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthCard } from '../../components/auth/AuthCard';
-import styles from '../../components/auth/AuthCard.module.css';
-import { FormField } from '../../components/auth/FormField';
-import { AuthButton } from '../../components/auth/AuthButton';
+import { Mail } from '../../lib/flatIcons/icons';
+import { PillField, PillSubmit } from '../../components/auth/PillAuth';
 import { useAuth } from '../../services/auth/AuthContext';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -43,13 +42,11 @@ export function ForgotPasswordPage() {
       }
     >
       {sent ? (
-        <p className={styles.success}>Check your inbox for a password reset link.</p>
+        <p className="pxa-msg pxa-msg-ok" role="status">Check your inbox for a password reset link.</p>
       ) : (
-        <form className={styles.form} onSubmit={onSubmit} noValidate>
-          <FormField label="Email" name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required error={error ?? undefined} autoComplete="email" />
-          <AuthButton type="submit" variant="primary" fullWidth disabled={sending}>
-            {sending ? 'Sending…' : 'Send reset link'}
-          </AuthButton>
+        <form className="pxa-form" onSubmit={onSubmit} noValidate>
+          <PillField label="Email" icon={<Mail />} name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" error={error ?? undefined} autoComplete="email" />
+          <PillSubmit disabled={sending}>{sending ? 'Sending…' : 'Send reset link'}</PillSubmit>
         </form>
       )}
     </AuthCard>

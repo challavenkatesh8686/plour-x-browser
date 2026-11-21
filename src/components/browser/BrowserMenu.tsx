@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Languages, Maximize2, Minimize2, Minus, Monitor, Moon, Plus, Printer, Search, Share2, Smartphone, Sun } from 'lucide-react';
+import { Languages, Maximize2, Minimize2, Minus, Monitor, Moon, Plus, Printer, Search, Share2, Smartphone, Sun } from '../../lib/flatIcons/icons';
 import { useTabs } from '../../services/tabs/TabsContext';
 import { useTheme } from '../../hooks/useTheme';
 import { useGoogleTranslate } from '../../hooks/useGoogleTranslate';

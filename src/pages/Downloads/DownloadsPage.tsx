@@ -1,4 +1,4 @@
-import { Download, ExternalLink, FolderOpen, X } from 'lucide-react';
+import { Download, ExternalLink, FolderOpen, X } from '../../lib/flatIcons/icons';
 import { EmptyState } from '../../components/common/EmptyState';
 import { useDownloads } from '../../hooks/useDownloads';
 import * as downloadsService from '../../services/downloads/downloadsService';

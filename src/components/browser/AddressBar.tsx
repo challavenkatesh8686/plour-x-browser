@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Lock, Search } from 'lucide-react';
+import { Lock, Search } from '../../lib/flatIcons/icons';
 import { useTabs } from '../../services/tabs/TabsContext';
 import { getDisplayHost } from '../../utils/url';
 import { AddressSuggestions } from './AddressSuggestions';

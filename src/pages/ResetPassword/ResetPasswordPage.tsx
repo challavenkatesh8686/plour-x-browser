@@ -1,9 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthCard } from '../../components/auth/AuthCard';
-import styles from '../../components/auth/AuthCard.module.css';
-import { FormField } from '../../components/auth/FormField';
-import { AuthButton } from '../../components/auth/AuthButton';
+import { Lock } from '../../lib/flatIcons/icons';
+import { PillField, PillSubmit } from '../../components/auth/PillAuth';
 import { useAuth } from '../../services/auth/AuthContext';
 import { supabase } from '../../services/auth/supabaseClient';
 
@@ -66,17 +65,15 @@ export function ResetPasswordPage() {
   return (
     <AuthCard title="Choose a new password" subtitle="This link is single-use and expires shortly.">
       {success ? (
-        <p className={styles.success}>Password updated. Redirecting…</p>
+        <p className="pxa-msg pxa-msg-ok" role="status">Password updated. Redirecting…</p>
       ) : !ready ? (
         <p style={{ color: 'var(--px-text-dim)', fontSize: 14 }}>Verifying your reset link…</p>
       ) : (
-        <form className={styles.form} onSubmit={onSubmit} noValidate>
-          <FormField label="New password" name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="At least 6 characters" required autoComplete="new-password" />
-          <FormField label="Confirm new password" name="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Re-enter your new password" required autoComplete="new-password" />
-          {error && <p className={styles.error}>{error}</p>}
-          <AuthButton type="submit" variant="primary" fullWidth disabled={submitting}>
-            {submitting ? 'Updating…' : 'Update password'}
-          </AuthButton>
+        <form className="pxa-form" onSubmit={onSubmit} noValidate>
+          <PillField label="New password" icon={<Lock />} name="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="At least 6 characters" autoComplete="new-password" />
+          <PillField label="Confirm new password" icon={<Lock />} name="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Re-enter your new password" autoComplete="new-password" />
+          {error && <p className="pxa-msg pxa-msg-err" role="alert">{error}</p>}
+          <PillSubmit disabled={submitting}>{submitting ? 'Updating…' : 'Update password'}</PillSubmit>
         </form>
       )}
     </AuthCard>

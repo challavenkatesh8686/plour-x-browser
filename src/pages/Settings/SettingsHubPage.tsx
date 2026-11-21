@@ -1,4 +1,4 @@
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight } from '../../lib/flatIcons/icons';
 import { useNavigate } from 'react-router-dom';
 import { SETTINGS_CATEGORIES } from './settingsCategories';
 import styles from './SettingsHubPage.module.css';

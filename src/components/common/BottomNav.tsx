@@ -1,4 +1,4 @@
-import { Bookmark, Clock, Home, Layers, Settings } from 'lucide-react';
+import { Bookmark, Clock, Home, Layers, Settings } from '../../lib/flatIcons/icons';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useTabs } from '../../services/tabs/TabsContext';
 import styles from './BottomNav.module.css';

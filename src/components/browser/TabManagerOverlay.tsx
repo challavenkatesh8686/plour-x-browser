@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Trash2, X } from 'lucide-react';
+import { Plus, Trash2, X } from '../../lib/flatIcons/icons';
 import { useTabs } from '../../services/tabs/TabsContext';
 import { usePreferences } from '../../hooks/usePreferences';
 import { ConfirmSheet } from '../common/ConfirmSheet';

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Compass } from 'lucide-react';
+import { Compass } from '../../lib/flatIcons/icons';
 import { useTabs } from '../../services/tabs/TabsContext';
 import { useViewportBounds } from '../../hooks/useViewportBounds';
 import { isEngineAvailable } from '../../services/browserEngine/browserEngineService';

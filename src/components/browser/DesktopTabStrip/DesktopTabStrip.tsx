@@ -1,4 +1,4 @@
-import { Bookmark, Clock, Download, Plus, Settings, X } from 'lucide-react';
+import { Bookmark, Clock, Download, Plus, Settings, X } from '../../../lib/flatIcons/icons';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ProfileAvatarButton } from '../../common/ProfileAvatarButton';
 import { useTabs } from '../../../services/tabs/TabsContext';
@@ -45,7 +45,7 @@ export function DesktopTabStrip() {
             {tab.faviconUrl ? (
               <img src={tab.faviconUrl} alt="" className={styles.favicon} />
             ) : (
-              <img src="/plourx-logo.png" alt="" className={styles.faviconPlaceholder} />
+              <img src="/plourx-p-mark.png" alt="" className={styles.faviconPlaceholder} />
             )}
             <span className={styles.title}>{tab.url ? tab.title || getDisplayHost(tab.url) : 'New Tab'}</span>
             <span

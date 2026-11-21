@@ -1,4 +1,4 @@
-import { Trash2 } from 'lucide-react';
+import { Trash2 } from '../../lib/flatIcons/icons';
 import type { Bookmark } from '../../services/bookmarks/types';
 import { getDisplayHost } from '../../utils/url';
 import styles from './BookmarkRow.module.css';
@@ -10,7 +10,7 @@ export function BookmarkRow({ bookmark, onOpen, onDelete }: { bookmark: Bookmark
         {bookmark.faviconUrl ? (
           <img src={bookmark.faviconUrl} alt="" className={styles.favicon} />
         ) : (
-          <img src="/plourx-logo.png" alt="" className={styles.faviconPlaceholder} />
+          <img src="/plourx-p-mark.png" alt="" className={styles.faviconPlaceholder} />
         )}
         <div className={styles.text}>
           <span className={styles.title}>{bookmark.title}</span>

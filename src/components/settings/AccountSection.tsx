@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Camera, LogOut, Trash2, User } from 'lucide-react';
+import { Camera, LogOut, Trash2, User } from '../../lib/flatIcons/icons';
 import { UserAvatar } from '../../avatar/UserAvatar';
 import { useMyProfile } from '../../avatar/useMyProfile';
 import { useAuth } from '../../services/auth/AuthContext';

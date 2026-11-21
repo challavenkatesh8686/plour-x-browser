@@ -1,4 +1,4 @@
-import { Info, Layers, Palette, ShieldCheck, SlidersHorizontal, type LucideIcon } from 'lucide-react';
+import { Info, Layers, Palette, ShieldCheck, SlidersHorizontal, type LucideIcon } from '../../lib/flatIcons/icons';
 
 export interface SettingsCategory {
   to: string;

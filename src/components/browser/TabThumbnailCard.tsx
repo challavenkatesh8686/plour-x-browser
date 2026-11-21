@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { AlertTriangle, X } from 'lucide-react';
+import { AlertTriangle, X } from '../../lib/flatIcons/icons';
 import type { Tab } from '../../services/tabs/types';
 import { getDisplayHost } from '../../utils/url';
 import { useTabs } from '../../services/tabs/TabsContext';
@@ -23,7 +23,7 @@ export function TabThumbnailCard({ tab, isActive }: { tab: Tab; isActive: boolea
         {tab.faviconUrl ? (
           <img src={tab.faviconUrl} alt="" className={styles.favicon} />
         ) : (
-          <img src="/plourx-logo.png" alt="" className={styles.faviconPlaceholder} />
+          <img src="/plourx-p-mark.png" alt="" className={styles.faviconPlaceholder} />
         )}
         <span className={styles.title}>{tab.url ? tab.title || getDisplayHost(tab.url) : 'New Tab'}</span>
         <span

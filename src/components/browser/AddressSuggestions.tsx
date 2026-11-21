@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Bookmark, Clock, Globe } from 'lucide-react';
+import { Bookmark, Clock, Globe } from '../../lib/flatIcons/icons';
 import { searchBookmarks } from '../../services/bookmarks/bookmarksService';
 import { search as searchHistory } from '../../services/history/historyService';
 import { getDisplayHost } from '../../utils/url';

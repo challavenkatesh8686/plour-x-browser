@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from '../../lib/flatIcons/icons';
 import styles from './IconChip.module.css';
 
 /** Shared "something's wrong/empty" icon treatment -- originally EmptyState's own markup, generalized so ErrorView and BrowserContentHost's placeholder match it instead of each floating a bare icon. */

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { Minimize2 } from 'lucide-react';
+import { Minimize2 } from '../../lib/flatIcons/icons';
 import { useLocation } from 'react-router-dom';
 import { useTabs } from '../../services/tabs/TabsContext';
 import { useHardwareBackButton } from '../../hooks/useHardwareBackButton';

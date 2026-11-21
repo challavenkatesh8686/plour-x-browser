@@ -1,4 +1,4 @@
-import { Trash2 } from 'lucide-react';
+import { Trash2 } from '../../lib/flatIcons/icons';
 import type { HistoryEntry } from '../../services/history/types';
 import { getDisplayHost } from '../../utils/url';
 import styles from './HistoryRow.module.css';
@@ -10,7 +10,7 @@ export function HistoryRow({ entry, onOpen, onDelete }: { entry: HistoryEntry; o
         {entry.faviconUrl ? (
           <img src={entry.faviconUrl} alt="" className={styles.favicon} />
         ) : (
-          <img src="/plourx-logo.png" alt="" className={styles.faviconPlaceholder} />
+          <img src="/plourx-p-mark.png" alt="" className={styles.faviconPlaceholder} />
         )}
         <div className={styles.text}>
           <span className={styles.title}>{entry.title}</span>

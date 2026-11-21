@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Bookmark as BookmarkIcon } from 'lucide-react';
+import { Bookmark as BookmarkIcon } from '../../lib/flatIcons/icons';
 import { useNavigate } from 'react-router-dom';
 import { BookmarkRow } from '../../components/bookmarks/BookmarkRow';
 import { EmptyState } from '../../components/common/EmptyState';

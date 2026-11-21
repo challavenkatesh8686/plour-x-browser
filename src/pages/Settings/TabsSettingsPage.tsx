@@ -1,4 +1,4 @@
-import { Layers } from 'lucide-react';
+import { Layers } from '../../lib/flatIcons/icons';
 import { SettingsSubpageHeader } from '../../components/settings/SettingsSubpageHeader';
 import { SettingsSection, SettingsRow } from '../../components/settings/SettingsSection';
 import { SettingsNote } from '../../components/settings/SettingsNote';

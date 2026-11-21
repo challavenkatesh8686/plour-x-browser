@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Check, Globe, Search, User } from 'lucide-react';
+import { Check, Globe, Search, User } from '../../lib/flatIcons/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SettingsSubpageHeader } from '../../components/settings/SettingsSubpageHeader';
 import { SettingsSection, SettingsRow } from '../../components/settings/SettingsSection';

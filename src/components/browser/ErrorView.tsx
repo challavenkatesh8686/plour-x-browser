@@ -1,4 +1,4 @@
-import { AlertTriangle, Home, RotateCw } from 'lucide-react';
+import { AlertTriangle, Home, RotateCw } from '../../lib/flatIcons/icons';
 import { IconChip } from '../common/IconChip';
 import type { TabError } from '../../services/tabs/types';
 import styles from './ErrorView.module.css';

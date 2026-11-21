@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { Trash2 } from '../../lib/flatIcons/icons';
 import { SettingsSubpageHeader } from '../../components/settings/SettingsSubpageHeader';
 import { SettingsSection, SettingsRow } from '../../components/settings/SettingsSection';
 import { SettingsActionButton } from '../../components/settings/SettingsActionButton';
