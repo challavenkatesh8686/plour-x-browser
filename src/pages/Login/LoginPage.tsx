@@ -1,9 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthCard } from '../../components/auth/AuthCard';
-import styles from '../../components/auth/AuthCard.module.css';
-import { FormField } from '../../components/auth/FormField';
-import { AuthButton } from '../../components/auth/AuthButton';
+import { Lock, Mail } from '../../lib/flatIcons/icons';
+import { PillField, PillSocial, PillSubmit } from '../../components/auth/PillAuth';
 import { useAuth } from '../../services/auth/AuthContext';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -54,7 +53,7 @@ export function LoginPage() {
 
   return (
     <AuthCard
-      title="Welcome back"
+      title="Welcome Back!"
       subtitle="Sign in to continue to PlourX"
       footer={
         <>
@@ -62,36 +61,35 @@ export function LoginPage() {
         </>
       }
     >
-      <form className={styles.form} onSubmit={onSubmit} noValidate>
-        <FormField
+      <form className="pxa-form" onSubmit={onSubmit} noValidate>
+        <PillField
           label="Email"
+          icon={<Mail />}
           name="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
-          required
+          placeholder="Enter your email address"
           error={fieldErrors.email}
           autoComplete="email"
         />
-        <FormField
+        <PillField
           label="Password"
+          icon={<Lock />}
           name="password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="••••••••"
-          required
+          placeholder="Enter your password"
           error={fieldErrors.password}
           autoComplete="current-password"
         />
-        <Link to="/forgot-password" className={styles.footer} style={{ textAlign: 'left' }}>
+        <Link to="/forgot-password" className="pxa-link">
           Forgot password?
         </Link>
-        {error && <p className={styles.error}>{error}</p>}
-        <AuthButton type="submit" variant="primary" fullWidth disabled={submitting}>
-          {submitting ? 'Signing in…' : 'Sign in'}
-        </AuthButton>
+        {error && <p className="pxa-msg pxa-msg-err" role="alert">{error}</p>}
+        <PillSubmit disabled={submitting}>{submitting ? 'Signing in…' : 'Sign in'}</PillSubmit>
+        <PillSocial />
       </form>
     </AuthCard>
   );

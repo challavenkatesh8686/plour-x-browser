@@ -1,0 +1,74 @@
+/* Sign in / sign up form (same look as the PlourX website): P mark, pill fields with a leading icon, gradient button, social row. */
+.pxa-card { --pxa-card: var(--dx-card, var(--px-surface-raised)); --pxa-fg: var(--px-text); --pxa-fg2: var(--px-text-dim); --pxa-muted: var(--px-text-faint); --pxa-p: var(--px-accent); --pxa-ph: var(--px-accent-strong); --pxa-hover: var(--px-tap); --pxa-danger: var(--px-danger);  width: 100%; max-width: 440px; padding: 2rem 1.5rem; border-radius: 28px; background: var(--pxa-card); box-shadow: 0 18px 44px -18px rgba(0, 0, 0, 0.45); display: flex; flex-direction: column; gap: 1.25rem; }
+.pxa-head { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center; }
+.pxa-brand { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; color: var(--pxa-fg); text-decoration: none; }
+.pxa-brand img { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 6px 14px rgba(168, 70, 235, 0.45)); }
+.pxa-brand span { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; }
+.pxa-title { margin: 0; font-size: 1.75rem; font-weight: 800; line-height: 1.15; color: var(--pxa-fg); }
+.pxa-sub { margin: 0; font-size: 0.9rem; color: var(--pxa-fg2); }
+.pxa-form { display: flex; flex-direction: column; gap: 1rem; }
+.pxa-group { display: flex; flex-direction: column; gap: 6px; }
+.pxa-field { position: relative; display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 1rem; min-height: 56px; border-radius: 22px; background: color-mix(in srgb, var(--pxa-fg) 6%, transparent); box-shadow: inset 0 2px 7px rgba(0, 0, 0, 0.28), inset 0 -2px 7px rgba(255, 255, 255, 0.03); cursor: text; transition: box-shadow 0.2s ease; }
+.pxa-field:focus-within { box-shadow: inset 0 2px 7px rgba(0, 0, 0, 0.28), 0 0 0 2px color-mix(in srgb, var(--pxa-p) 55%, transparent); }
+.pxa-invalid, .pxa-invalid:focus-within { box-shadow: 0 0 0 2px var(--pxa-danger); }
+.pxa-icon { flex: 0 0 auto; width: 28px; height: 28px; display: grid; place-items: center; color: var(--pxa-ph); }
+.pxa-icon svg { width: 22px; height: 22px; }
+.pxa-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.pxa-label { font-size: 0.8125rem; font-weight: 700; color: var(--pxa-fg); }
+.pxa-body input, .pxa-body select { width: 100%; min-width: 0; padding: 0; margin: 0; border: 0 !important; border-radius: 0 !important; outline: 0; background: transparent !important; box-shadow: none !important; color: var(--pxa-fg); font: inherit; font-size: 0.875rem; height: auto; min-height: 0; appearance: none; -webkit-appearance: none; }
+.pxa-body select { cursor: pointer; }
+.pxa-body select option { background: var(--pxa-card); color: var(--pxa-fg); }
+.pxa-body input::placeholder { color: var(--pxa-muted); }
+.pxa-body input:-webkit-autofill { -webkit-text-fill-color: var(--pxa-fg); transition: background-color 600000s 0s; }
+.pxa-chev { flex: 0 0 auto; width: 18px; height: 18px; color: var(--pxa-fg2); pointer-events: none; }
+.pxa-eye { flex: 0 0 auto; width: 34px; height: 34px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--pxa-fg2); cursor: pointer; transition: transform 0.2s cubic-bezier(.34,1.56,.64,1), background 0.2s ease, color 0.2s ease; }
+.pxa-eye:hover { background: var(--pxa-hover); color: var(--pxa-fg); }
+.pxa-eye:active { transform: scale(0.88); }
+.pxa-eye:focus-visible, .pxa-link:focus-visible, .pxa-social button:focus-visible { outline: 2px solid var(--pxa-p); outline-offset: 2px; }
+.pxa-eye svg { width: 22px; height: 22px; animation: pxa-eye-pop 0.35s cubic-bezier(.34,1.56,.64,1); }
+@keyframes pxa-eye-pop { from { transform: scale(0.6) rotate(-12deg); opacity: 0.4; } to { transform: none; opacity: 1; } }
+.pxa-error { padding-left: 1rem; font-size: 0.8125rem; color: var(--pxa-danger); }
+.pxa-msg { margin: 0; font-size: 0.875rem; border-radius: 12px; padding: 0.7rem 1rem; }
+.pxa-msg-err { color: var(--pxa-danger); background: color-mix(in srgb, var(--pxa-danger) 12%, transparent); }
+.pxa-msg-ok { color: var(--pxa-fg2); background: var(--pxa-hover); }
+.pxa-link { align-self: flex-start; border: 0; background: transparent; padding: 0; font: inherit; font-size: 0.8125rem; font-weight: 700; color: #60a5fa; cursor: pointer; text-decoration: none; }
+.pxa-link:hover { text-decoration: underline; }
+.pxa-submit { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; min-height: 52px; border: 0; border-radius: 999px; color: #fff; font: inherit; font-weight: 700; cursor: pointer; background: linear-gradient(90deg, #7c3aed, #6366f1 55%, #8b5cf6); box-shadow: 0 10px 22px -10px rgba(99, 60, 240, 0.8); transition: transform 0.25s cubic-bezier(.22,1,.36,1), box-shadow 0.25s ease, opacity 0.2s ease; }
+.pxa-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 26px -10px rgba(99, 60, 240, 0.9); }
+.pxa-submit:focus-visible { outline: 2px solid var(--pxa-ph); outline-offset: 3px; }
+.pxa-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.pxa-submit svg { width: 18px; height: 18px; }
+.pxa-social { display: flex; justify-content: center; gap: 1rem; }
+.pxa-social button { width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 14px; background: var(--pxa-hover); color: var(--pxa-fg); }
+.pxa-social button:disabled { opacity: 0.55; cursor: not-allowed; }
+.pxa-social svg { width: 22px; height: 22px; }
+.pxa-foot { text-align: center; font-size: 0.875rem; color: var(--pxa-fg2); display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.pxa-foot .pxa-link { align-self: auto; }
+.pxa-guest { border: 0; background: transparent; font: inherit; font-size: 0.875rem; color: var(--pxa-muted); cursor: pointer; }
+.pxa-guest:hover { color: var(--pxa-fg); }
+.pxa-verify { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; text-align: center; }
+@media (prefers-reduced-motion: reduce) { .pxa-submit, .pxa-eye { transition: none; } .pxa-submit:hover:not(:disabled) { transform: none; } .pxa-eye svg { animation: none; } }
+
+/* custom control (searchable country list) inside a pill */
+.pxa-box { cursor: default; }
+.pxa-box .pxa-trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0; border: 0; background: transparent; color: var(--pxa-fg); font: inherit; font-size: 0.875rem; text-align: left; cursor: pointer; }
+.pxa-box .pxa-trigger.pxa-empty { color: var(--pxa-muted); }
+.pxa-box .pxa-trigger:focus-visible { outline: 0; }
+.pxa-box:focus-within { box-shadow: inset 0 2px 7px rgba(0, 0, 0, 0.28), 0 0 0 2px color-mix(in srgb, var(--pxa-p) 55%, transparent); }
+.pxa-panel { position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 40; overflow: hidden; border-radius: 18px; background: var(--pxa-card); box-shadow: 0 18px 36px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px color-mix(in srgb, var(--pxa-fg) 10%, transparent); }
+.pxa-panel input { width: 100%; padding: 0.7rem 1rem; color: var(--pxa-fg); font: inherit; font-size: 0.875rem; outline: 0; }
+.pxa-panel ul { border-top: 1px solid color-mix(in srgb, var(--pxa-fg) 10%, transparent); list-style: none; margin: 0; padding: 6px; max-height: 14rem; overflow-y: auto; }
+.pxa-panel li button { width: 100%; display: flex; justify-content: space-between; gap: 8px; padding: 0.5rem 0.8rem; border: 0; border-radius: 12px; background: transparent; color: var(--pxa-fg); font: inherit; font-size: 0.875rem; text-align: left; cursor: pointer; }
+.pxa-panel li button:hover, .pxa-panel li button[aria-selected='true'] { background: var(--pxa-hover); }
+.pxa-panel li button[aria-selected='true'] { font-weight: 700; }
+.pxa-panel .pxa-code { color: var(--pxa-muted); font-size: 0.75rem; }
+.pxa-check { display: inline-flex; align-items: center; gap: 0.5rem; align-self: flex-start; font-size: 0.8125rem; color: var(--pxa-fg2); cursor: pointer; }
+.pxa-check input { width: 16px; height: 16px; accent-color: var(--pxa-p); }
+.pxa-back { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; border: 0; background: transparent; padding: 0; font: inherit; font-size: 0.8125rem; font-weight: 700; color: var(--pxa-fg2); cursor: pointer; }
+.pxa-back:hover { color: var(--pxa-fg); }
+.pxa-back svg { width: 14px; height: 14px; }
+.pxa-center { text-align: center; }
+a.pxa-link { align-self: auto; }
+.pxa-stack { display: flex; flex-direction: column; gap: 1.25rem; }
+.pxa-foot a { color: #60a5fa; font-weight: 700; text-decoration: none; }
+.pxa-foot a:hover { text-decoration: underline; }

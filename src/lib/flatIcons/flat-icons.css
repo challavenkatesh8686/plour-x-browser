@@ -1,0 +1,2 @@
+/* flat illustrated icons: on an accent-filled surface the accent shapes would vanish, so they switch to a dark accent there */
+.bg-primary, .btn-primary, [data-flat-on-accent] { --flat-acc: #2a0f3d; }

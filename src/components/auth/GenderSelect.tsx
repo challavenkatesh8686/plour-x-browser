@@ -1,6 +1,7 @@
 import type { ChangeEvent } from 'react';
+import { Users } from '../../lib/flatIcons/icons';
 import { GENDER_OPTIONS, type Gender } from '../../lib/gender';
-import styles from './CountrySelect.module.css';
+import { PillSelect } from './PillAuth';
 
 interface GenderSelectProps {
   value: Gender | null;
@@ -15,28 +16,15 @@ export function GenderSelect({ value, onChange, error, required }: GenderSelectP
   }
 
   return (
-    <div className={styles.field}>
-      <label htmlFor="gender" className={styles.label}>
-        Gender {!required && <span className={styles.optional}>(optional)</span>}
-      </label>
-      <select
-        id="gender"
-        value={value ?? ''}
-        onChange={handleChange}
-        required={required}
-        aria-invalid={Boolean(error)}
-        className={`${styles.select} ${error ? styles.invalid : ''}`}
-      >
-        <option value="" disabled>
-          Select your gender
+    <PillSelect label={required ? 'Gender' : 'Gender (optional)'} icon={<Users />} id="gender" value={value ?? ''} onChange={handleChange} required={required} error={error}>
+      <option value="" disabled>
+        Select your gender
+      </option>
+      {GENDER_OPTIONS.map((g) => (
+        <option key={g.value} value={g.value}>
+          {g.label}
         </option>
-        {GENDER_OPTIONS.map((g) => (
-          <option key={g.value} value={g.value}>
-            {g.label}
-          </option>
-        ))}
-      </select>
-      {error && <span className={styles.error}>{error}</span>}
-    </div>
+      ))}
+    </PillSelect>
   );
 }

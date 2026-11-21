@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Mail } from 'lucide-react';
+import { Mail } from '../../lib/flatIcons/icons';
 import { AuthCard } from '../../components/auth/AuthCard';
 import styles from '../../components/auth/AuthCard.module.css';
 import { AuthButton } from '../../components/auth/AuthButton';
