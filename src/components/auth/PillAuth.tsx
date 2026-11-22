@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react';
-import { ArrowRight, ChevronDown, Eye, EyeOff } from '../../lib/flatIcons/icons';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
+import { ArrowRight, ChevronDown } from '../../lib/flatIcons/icons';
 import './pillAuth.css';
 
 /** Shared pieces of the PlourX sign in / sign up look: P mark head, pill fields (icon + bold label + hint inside), gradient button, disabled social row. */
@@ -63,6 +63,28 @@ export function PillHead({ title, subtitle }: { title: string; subtitle?: string
 
 type FieldBase = { label: string; icon: ReactNode; error?: string | undefined };
 
+/** Animated eye: blinks every few seconds, the lid and iris pop when toggled, and a slash draws across while the password is visible. */
+function PxaEye({ shown }: { shown: boolean }) {
+  const [clicked, setClicked] = useState(false);
+  const prev = useRef(shown);
+  useEffect(() => {
+    if (prev.current !== shown) {
+      prev.current = shown;
+      setClicked(true);
+    }
+  }, [shown]);
+  return (
+    <svg viewBox="0 0 24 24" width={24} height={24} className={`pxa-eyeicon${shown ? ' pxa-eye-shown' : ''}`} aria-hidden="true">
+      <g key={shown ? 'on' : 'off'} className={`pxa-eye-open${clicked ? ' pxa-eye-click' : ''}`}>
+        <path className="pxa-eye-shape" d="M2 12S5.8 5 12 5s10 7 10 7-3.8 7-10 7S2 12 2 12z" />
+        <circle className="pxa-eye-iris" cx="12" cy="12" r="3.4" />
+        <circle className="pxa-eye-pupil" cx="12" cy="12" r="1.3" />
+      </g>
+      <path className="pxa-eye-slash" d="M4 20 20 4" pathLength={1} />
+    </svg>
+  );
+}
+
 /** Pill field: leading icon, bold label above the input, and a show/hide button (with a small pop animation) for passwords. */
 export function PillField({ label, icon, error, type = 'text', ...props }: FieldBase & React.InputHTMLAttributes<HTMLInputElement>) {
   const [shown, setShown] = useState(false);
@@ -77,7 +99,7 @@ export function PillField({ label, icon, error, type = 'text', ...props }: Field
         </span>
         {isPassword && (
           <button type="button" className="pxa-eye" onClick={() => setShown((v) => !v)} aria-label={shown ? 'Hide password' : 'Show password'} aria-pressed={shown}>
-            {shown ? <EyeOff key="off" aria-hidden /> : <Eye key="on" aria-hidden />}
+            <PxaEye shown={shown} />
           </button>
         )}
       </label>
