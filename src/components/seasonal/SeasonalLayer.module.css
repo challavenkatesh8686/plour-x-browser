@@ -1,0 +1,136 @@
+/* Seasonal layer: a tint behind the page + a Canvas 2D animation (see SeasonCanvas / engine). Never interactive. */
+
+.washFixed,
+.washContained,
+.canvasBack,
+.festivalBack,
+.festivalFront,
+.canvasFixed,
+.canvasContained {
+  pointer-events: none;
+}
+
+/* Behind everything, like the existing website background. Kept translucent so Morphism surfaces stay readable. */
+.washFixed {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.22;
+}
+
+.containedRoot {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.washContained {
+  position: absolute;
+  inset: 0;
+  opacity: 0.9;
+}
+
+:global(:root[data-theme='light']) .washFixed {
+  opacity: 0.16;
+}
+
+:global(:root[data-theme='light']) .washContained {
+  opacity: 0.75;
+}
+
+/* Atmosphere (clouds, fog, sun rays) sits behind the page, like the existing website background. */
+.canvasBack {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Particles sit above page content (so it is visible on every page, including ones with opaque sections) but
+   below sticky headers (z 100+), drawers and modals. */
+.canvasFixed {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 30;
+  /* body only: clipped below the site header and above the footer (set by useLayerClip) */
+  clip-path: inset(var(--layer-top, 0px) 0 var(--layer-bottom, 0px) 0);
+}
+
+.canvasContained {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.washFixed[data-season='spring'],
+.washContained[data-season='spring'] {
+  background: linear-gradient(160deg, rgba(255, 196, 222, 0.5), rgba(255, 171, 205, 0.38) 55%, rgba(255, 208, 228, 0.45));
+}
+
+.washFixed[data-season='summer'],
+.washContained[data-season='summer'] {
+  background:
+    radial-gradient(70% 60% at 85% 0%, rgba(255, 214, 102, 0.65), transparent 70%),
+    linear-gradient(180deg, rgba(86, 170, 255, 0.4), rgba(255, 224, 150, 0.35));
+}
+
+.washFixed[data-season='monsoon'],
+.washContained[data-season='monsoon'] {
+  background:
+    radial-gradient(70% 50% at 30% 0%, rgba(90, 105, 135, 0.7), transparent 70%),
+    linear-gradient(170deg, rgba(60, 100, 140, 0.55), rgba(45, 120, 100, 0.45));
+}
+
+.washFixed[data-season='autumn'],
+.washContained[data-season='autumn'] {
+  background:
+    radial-gradient(60% 55% at 20% 0%, rgba(255, 190, 80, 0.6), transparent 70%),
+    linear-gradient(165deg, rgba(255, 170, 70, 0.4), rgba(150, 90, 40, 0.38));
+}
+
+.washFixed[data-season='prewinter'],
+.washContained[data-season='prewinter'] {
+  background:
+    radial-gradient(60% 50% at 80% 0%, rgba(176, 196, 222, 0.55), transparent 70%),
+    linear-gradient(170deg, rgba(96, 140, 200, 0.4), rgba(200, 210, 224, 0.38));
+}
+
+.washFixed[data-season='winter'],
+.washContained[data-season='winter'] {
+  background:
+    radial-gradient(70% 50% at 50% 0%, rgba(235, 245, 255, 0.7), transparent 70%),
+    linear-gradient(175deg, rgba(150, 200, 245, 0.42), rgba(236, 244, 252, 0.4));
+}
+
+/* Festival layer: independent canvases that stack with (never replace) the seasonal ones. */
+.festivalBack {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.festivalFront {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 31;
+  clip-path: inset(var(--layer-top, 0px) 0 var(--layer-bottom, 0px) 0);
+}
+
+.festivalWash {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.22;
+  pointer-events: none;
+}

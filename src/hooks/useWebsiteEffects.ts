@@ -5,9 +5,9 @@ export const WEBSITE_EFFECTS_KEY = 'wb.effects'
 
 const read = (): boolean => {
   try {
-    return localStorage.getItem(WEBSITE_EFFECTS_KEY) !== '0'
+    return localStorage.getItem(WEBSITE_EFFECTS_KEY) === '1'
   } catch {
-    return true
+    return false
   }
 }
 
@@ -37,7 +37,7 @@ if (typeof window !== 'undefined') {
 
 /** Settings > Appearance > Website effects. */
 export function useWebsiteEffects() {
-  const enabled = useSyncExternalStore(subscribe, () => on, () => true)
+  const enabled = useSyncExternalStore(subscribe, () => on, () => false)
   const setEnabled = useCallback((v: boolean) => {
     on = v
     try {

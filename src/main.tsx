@@ -8,11 +8,14 @@ import './design/surfaces.css';
 import './theme/morphism-fields.css';
 import './design/plourx-ui.css'
 import App from './App.tsx';
+import { SeasonFestivalProvider } from './components/seasonal/SeasonFestivalProvider'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <SeasonFestivalProvider>
+<App />
+</SeasonFestivalProvider>
     </BrowserRouter>
   </StrictMode>,
 );
