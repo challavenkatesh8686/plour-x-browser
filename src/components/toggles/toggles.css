@@ -1,0 +1,451 @@
+/* Toggle library. Geometry/colour come from inline --tg-* vars (see resolveConfig.ts); every design derives private --_* vars
+   from them with its own fallbacks. All parts are absolutely positioned inside a fixed w x h box, so toggling never shifts layout. */
+
+.tgl-root { display: inline-flex; align-items: center; gap: 0.6rem; vertical-align: middle; }
+.tgl-label { color: var(--color-fg); font-size: 0.875rem; cursor: pointer; user-select: none; }
+.tgl-root[data-disabled='true'] .tgl-label { opacity: 0.5; cursor: not-allowed; }
+
+.tgl {
+  --_w: var(--tg-w, 48px);
+  --_h: var(--tg-h, 26px);
+  --_thumb: var(--tg-thumb, calc(var(--_h) - 6px));
+  --_tw: var(--_thumb);
+  --_pad: calc((var(--_h) - var(--_thumb)) / 2);
+  --_travel: calc(var(--_w) - var(--_tw) - 2 * var(--_pad));
+  --_r: var(--tg-r, calc(var(--_h) / 2));
+  --_tr: 50%;
+  --_th: var(--tg-th, var(--_h));
+  --_neutral: var(--color-track);
+  --_ink: var(--color-fg);
+  --_card: var(--color-card);
+  --_on: var(--tg-on, var(--color-primary));
+  --_off: var(--tg-off, var(--_neutral));
+  --_tc: var(--tg-thumbc, #fff);
+  --_ring: var(--tg-accent, var(--color-primary));
+  --_base: 0.25s;
+  --_dur: calc(var(--_base) / var(--tg-speed, 1));
+  --_ease: var(--tg-ease, cubic-bezier(0.4, 0, 0.2, 1));
+  --_sh: var(--tg-shadow, 0.5);
+  --_gl: var(--tg-glow, 0.6);
+  --_tx0: 0px;
+  --_tx1: var(--_travel);
+  --_cx0: calc(var(--_tx0) + var(--_pad) + var(--_tw) / 2);
+  --_cx1: calc(var(--_tx1) + var(--_pad) + var(--_tw) / 2);
+
+  position: relative;
+  display: inline-block;
+  flex: none;
+  box-sizing: border-box;
+  width: var(--_w);
+  height: var(--_h);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--_r);
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.tgl[data-dir='reverse'] { --_tx0: var(--_travel); --_tx1: 0px; }
+.tgl:focus-visible { outline: 2px solid var(--_ring); outline-offset: 3px; }
+.tgl:disabled { opacity: 0.5; cursor: not-allowed; }
+.tgl[data-readonly='true'] { cursor: default; }
+
+.tgl[data-appearance='light'] { --_neutral: rgba(36, 23, 41, 0.14); --_ink: #1b1224; --_card: #fff; }
+.tgl[data-appearance='dark'] { --_neutral: rgba(255, 255, 255, 0.2); --_ink: #f5f0ff; --_card: #1e1430; }
+
+.tgl-track {
+  position: absolute; left: 0; right: 0; top: 50%;
+  height: var(--_th);
+  transform: translateY(-50%);
+  border-radius: var(--_r);
+  background: var(--_off);
+  overflow: hidden;
+  transition: background-color var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease), border-radius var(--_dur) var(--_ease);
+}
+.tgl-fill {
+  position: absolute; inset: 0;
+  background: var(--_on);
+  opacity: 0;
+  transition: opacity var(--_dur) var(--_ease), transform var(--_dur) var(--_ease), clip-path var(--_dur) var(--_ease), background-position var(--_dur) var(--_ease);
+}
+.tgl[data-state='on'] .tgl-fill { opacity: 1; }
+
+.tgl-thumb {
+  position: absolute; z-index: 1;
+  left: var(--_pad); top: 50%;
+  width: var(--_tw); height: var(--_thumb);
+  margin-top: calc(var(--_thumb) / -2);
+  box-sizing: border-box;
+  border-radius: var(--_tr);
+  background: var(--_tc);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, calc(0.5 * var(--_sh))), 0 1px 1px rgba(0, 0, 0, calc(0.3 * var(--_sh)));
+  display: grid; place-items: center;
+  transform: translateX(var(--_tx0));
+  transition: transform var(--_dur) var(--_ease), width var(--_dur) var(--_ease), background-color var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease), border-radius var(--_dur) var(--_ease);
+}
+.tgl[data-state='on'] .tgl-thumb { transform: translateX(var(--_tx1)); }
+
+.tgl-ic { width: 62%; height: 62%; color: var(--_on); transition: opacity var(--_dur) var(--_ease), transform var(--_dur) var(--_ease); }
+
+/* ===== 1 classic: pill track, white thumb ===== */
+.tgl[data-type='classic'] { --_base: 0.2s; }
+.tgl[data-type='classic'] .tgl-track { box-shadow: inset 0 1px 3px rgba(0, 0, 0, calc(0.35 * var(--_sh))); }
+
+/* ===== 2 ios: green, thumb stretches under the finger ===== */
+.tgl[data-type='ios'] {
+  --_thumb: var(--tg-thumb, calc(var(--_h) - 4px));
+  --_on: var(--tg-on, var(--color-success, #16a34a));
+  --_off: var(--tg-off, rgba(120, 120, 128, 0.32));
+  --_base: 0.3s;
+  --_ease: var(--tg-ease, cubic-bezier(0.3, 0.9, 0.3, 1));
+}
+.tgl[data-type='ios'] .tgl-thumb { box-shadow: 0 3px 8px rgba(0, 0, 0, calc(0.3 * var(--_sh))), 0 1px 1px rgba(0, 0, 0, 0.16), 0 3px 1px rgba(0, 0, 0, 0.08); }
+.tgl[data-type='ios']:not(:disabled):not([data-readonly='true']):active .tgl-thumb { width: calc(var(--_tw) * 1.3); }
+.tgl[data-type='ios'][data-end='true']:not(:disabled):not([data-readonly='true']):active .tgl-thumb {
+  transform: translateX(calc(var(--_tx1) - var(--_tw) * 0.3));
+}
+.tgl[data-type='ios'][data-dir='reverse'][data-end='true']:not(:disabled):not([data-readonly='true']):active .tgl-thumb {
+  transform: translateX(calc(var(--_tx0) - var(--_tw) * 0.3));
+}
+
+/* ===== 3 material: thin track, oversized thumb, halo ===== */
+.tgl[data-type='material'] {
+  --_th: var(--tg-th, calc(var(--_h) * 0.56));
+  --_thumb: var(--tg-thumb, calc(var(--_h) * 0.92));
+  --_off: var(--tg-off, color-mix(in srgb, var(--_ink) 30%, transparent));
+  --_base: 0.22s;
+}
+.tgl[data-type='material'] .tgl-fill { opacity: 0; }
+.tgl[data-type='material'][data-state='on'] .tgl-fill { opacity: 0.5; }
+.tgl[data-type='material'] .tgl-thumb {
+  background: var(--tg-thumbc, #f4f1f7);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, calc(0.6 * var(--_sh))), 0 0 0 0 transparent;
+}
+.tgl[data-type='material'][data-state='on'] .tgl-thumb { background: var(--tg-thumbc, var(--_on)); }
+.tgl[data-type='material'] .tgl-ic { color: #fff; opacity: 0; transform: scale(0.5); }
+.tgl[data-type='material'][data-state='on'] .tgl-ic { opacity: 1; transform: scale(1); }
+.tgl[data-type='material']:not(:disabled):hover .tgl-thumb,
+.tgl[data-type='material']:focus-visible .tgl-thumb { box-shadow: 0 2px 4px rgba(0, 0, 0, calc(0.6 * var(--_sh))), 0 0 0 calc(var(--_h) * 0.32) color-mix(in srgb, var(--_on) 16%, transparent); }
+.tgl[data-type='material']:not(:disabled):active .tgl-thumb { box-shadow: 0 2px 4px rgba(0, 0, 0, calc(0.6 * var(--_sh))), 0 0 0 calc(var(--_h) * 0.32) color-mix(in srgb, var(--_on) 28%, transparent); }
+
+/* ===== 4 minimal: hairline + dot ===== */
+.tgl[data-type='minimal'] {
+  --_th: var(--tg-th, 2px);
+  --_thumb: var(--tg-thumb, calc(var(--_h) * 0.5));
+  --_off: var(--tg-off, color-mix(in srgb, var(--_ink) 35%, transparent));
+  --_tc: var(--tg-thumbc, var(--_ink));
+  --_base: 0.18s;
+}
+.tgl[data-type='minimal'] .tgl-thumb { box-shadow: none; transform-origin: center; }
+.tgl[data-type='minimal'][data-state='on'] .tgl-thumb { background: var(--tg-thumbc, var(--_on)); }
+.tgl[data-type='minimal']:not(:disabled):hover .tgl-thumb { scale: 1.2; }
+
+/* ===== 5 outline: ring + inner dot ===== */
+.tgl[data-type='outline'] {
+  --_thumb: var(--tg-thumb, calc(var(--_h) - 10px));
+  --_edge: var(--tg-border, color-mix(in srgb, var(--_ink) 45%, transparent));
+  --_off: transparent;
+  --_base: 0.2s;
+}
+.tgl[data-type='outline'][data-state='on'] { --_edge: var(--tg-border, var(--_on)); }
+.tgl[data-type='outline'] .tgl-track { box-shadow: inset 0 0 0 2px var(--_edge); }
+.tgl[data-type='outline'] .tgl-fill { background: var(--_edge); }
+.tgl[data-type='outline'][data-state='on'] .tgl-fill { opacity: 0.12; }
+.tgl[data-type='outline'] .tgl-thumb { background: var(--tg-thumbc, var(--_edge)); box-shadow: none; }
+
+/* ===== 6 gradient: track gradient pans ===== */
+.tgl[data-type='gradient'] { --_base: 0.35s; }
+.tgl[data-type='gradient'] .tgl-fill { background: var(--tg-grad); background-size: 220% 100%; background-position: 0% 50%; opacity: 0; }
+.tgl[data-type='gradient'][data-state='on'] .tgl-fill { opacity: 1; background-position: 100% 50%; }
+.tgl[data-type='gradient'] .tgl-thumb { box-shadow: 0 2px 8px color-mix(in srgb, var(--_on) calc(70% * var(--_sh) * 2), transparent); }
+
+/* ===== 7 glass: frosted ===== */
+.tgl[data-type='glass'] {
+  --_off: var(--tg-off, color-mix(in srgb, var(--_ink) 10%, transparent));
+  --_tint: var(--tg-accent, var(--_on));
+  --_base: 0.3s;
+}
+.tgl[data-type='glass'] .tgl-track {
+  backdrop-filter: blur(10px) saturate(1.6);
+  -webkit-backdrop-filter: blur(10px) saturate(1.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 -1px 0 rgba(255, 255, 255, 0.08), 0 4px 14px rgba(0, 0, 0, calc(0.18 * var(--_sh)));
+}
+.tgl[data-type='glass'] .tgl-fill { background: color-mix(in srgb, var(--_tint) 58%, transparent); }
+.tgl[data-type='glass'] .tgl-thumb {
+  background: var(--tg-thumbc, rgba(255, 255, 255, 0.62));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), inset 0 -2px 4px rgba(255, 255, 255, 0.25), 0 3px 8px rgba(0, 0, 0, calc(0.3 * var(--_sh)));
+  overflow: hidden;
+}
+.tgl[data-type='glass'] .tgl-thumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255, 255, 255, 0.75), transparent 55%); border-radius: inherit; }
+
+/* ===== 8 neon: dark tube, glowing outline ===== */
+.tgl[data-type='neon'] {
+  --_neon: var(--tg-on, #22d3ee);
+  --_off: var(--tg-bg, #0b0a14);
+  --_dim: var(--tg-off, rgba(255, 255, 255, 0.28));
+  --_edge: var(--_dim);
+  --_base: 0.3s;
+}
+.tgl[data-type='neon'][data-state='on'] { --_edge: var(--_neon); }
+.tgl[data-type='neon'] .tgl-track {
+  box-shadow: inset 0 0 0 1.5px var(--_edge), inset 0 0 0 0 transparent, 0 0 0 0 transparent;
+}
+.tgl[data-type='neon'][data-state='on'] .tgl-track {
+  box-shadow: inset 0 0 0 1.5px var(--_neon), inset 0 0 calc(var(--_gl) * 10px) color-mix(in srgb, var(--_neon) 55%, transparent), 0 0 calc(var(--_gl) * 14px) color-mix(in srgb, var(--_neon) 65%, transparent);
+  animation: tgl-neon 1.8s ease-in-out infinite alternate;
+}
+.tgl[data-type='neon'] .tgl-fill { display: none; }
+.tgl[data-type='neon'] .tgl-thumb { --_tc: var(--tg-thumbc, #6b6880); box-shadow: none; }
+.tgl[data-type='neon'][data-state='on'] .tgl-thumb {
+  background: var(--tg-thumbc, var(--_neon));
+  box-shadow: 0 0 calc(var(--_gl) * 12px) var(--_neon), 0 0 calc(var(--_gl) * 3px) #fff inset;
+}
+@keyframes tgl-neon { to { filter: brightness(1.25); } }
+
+/* ===== 9 neumorphic: embossed groove, raised thumb ===== */
+.tgl[data-type='neumorphic'] {
+  --_nm: var(--tg-bg, #e6e9ef);
+  --_hi: rgba(255, 255, 255, 0.95);
+  --_lo: rgba(163, 177, 198, 0.75);
+  --_o: calc(var(--_h) * 0.12 * (0.4 + var(--_sh) * 1.2));
+  --_off: var(--_nm);
+  --_tc: var(--_nm);
+  --_base: 0.25s;
+}
+.tgl[data-type='neumorphic'][data-appearance='dark'],
+:root[data-theme='dark'] .tgl[data-type='neumorphic']:not([data-appearance='light']) { --_nm: var(--tg-bg, #261a3b); --_hi: rgba(255, 255, 255, 0.07); --_lo: rgba(0, 0, 0, 0.55); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .tgl[data-type='neumorphic']:not([data-appearance='light']) { --_nm: var(--tg-bg, #261a3b); --_hi: rgba(255, 255, 255, 0.07); --_lo: rgba(0, 0, 0, 0.55); }
+}
+.tgl[data-type='neumorphic'] .tgl-track { box-shadow: inset var(--_o) var(--_o) calc(var(--_o) * 2) var(--_lo), inset calc(var(--_o) * -1) calc(var(--_o) * -1) calc(var(--_o) * 2) var(--_hi); }
+.tgl[data-type='neumorphic'] .tgl-fill { display: none; }
+.tgl[data-type='neumorphic'] .tgl-thumb { box-shadow: var(--_o) var(--_o) calc(var(--_o) * 1.6) var(--_lo), calc(var(--_o) * -0.8) calc(var(--_o) * -0.8) calc(var(--_o) * 1.4) var(--_hi); }
+.tgl[data-type='neumorphic'] .tgl-thumb::after {
+  content: ''; width: 34%; height: 34%; border-radius: 50%;
+  background: var(--_ink); opacity: 0.22;
+  box-shadow: 0 0 0 0 transparent;
+  transition: background-color var(--_dur) var(--_ease), opacity var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease);
+}
+.tgl[data-type='neumorphic'][data-state='on'] .tgl-thumb::after { background: var(--_on); opacity: 1; box-shadow: 0 0 calc(var(--_gl) * 8px) var(--_on); }
+
+/* ===== 10 pill: capsule thumb, fill grows behind it ===== */
+.tgl[data-type='pill'] {
+  --_pad: 3px;
+  --_thumb: var(--tg-thumb, calc(var(--_h) - 6px));
+  --_tw: calc(var(--_w) / 2 - 3px);
+  --_tr: 999px;
+  --_base: 0.3s;
+}
+.tgl[data-type='pill'] .tgl-fill { opacity: 1; transform: scaleX(0); transform-origin: 0 50%; }
+.tgl[data-type='pill'][data-dir='reverse'] .tgl-fill { transform-origin: 100% 50%; }
+.tgl[data-type='pill'][data-state='on'] .tgl-fill { transform: scaleX(1); }
+.tgl[data-type='pill'] .tgl-thumb::after {
+  content: ''; width: 34%; height: 40%;
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.28) 0 1.5px, transparent 1.5px 4px);
+}
+
+/* ===== 11 morph: circle -> rotated squircle, track reshapes ===== */
+.tgl[data-type='morph'] { --_base: 0.45s; --_ease: var(--tg-ease, cubic-bezier(0.65, 0, 0.35, 1)); --_thumb: var(--tg-thumb, calc(var(--_h) - 8px)); }
+.tgl[data-type='morph'][data-state='on'],
+.tgl[data-type='morph'][data-state='on'] .tgl-track { border-radius: calc(var(--_r) * 0.38); }
+.tgl[data-type='morph'] .tgl-thumb { transition: transform var(--_dur) var(--_ease), border-radius var(--_dur) var(--_ease), background-color var(--_dur) var(--_ease); }
+.tgl[data-type='morph'][data-state='on'] .tgl-thumb { transform: translateX(var(--_tx1)) rotate(180deg) scale(0.9); border-radius: 28%; }
+
+/* ===== 12 elastic: squash and stretch with overshoot ===== */
+.tgl[data-type='elastic'] { --_thumb: var(--tg-thumb, calc(var(--_h) - 6px)); --_d: calc(var(--_tx1) - var(--_tx0)); }
+.tgl[data-type='elastic'] .tgl-thumb { transition: background-color 0.2s linear; }
+.tgl[data-type='elastic'] .tgl-track { transition: background-color 0.2s linear; }
+.tgl[data-type='elastic'][data-touched='true'][data-state='on'] .tgl-thumb { animation: tgl-el-fwd calc(0.7s / var(--tg-speed, 1)) both; }
+.tgl[data-type='elastic'][data-touched='true'][data-state='off'] .tgl-thumb { animation: tgl-el-back calc(0.7s / var(--tg-speed, 1)) both; }
+.tgl[data-type='elastic'][data-touched='true'] .tgl-track { animation: tgl-el-track calc(0.7s / var(--tg-speed, 1)) both; }
+@keyframes tgl-el-fwd {
+  0% { transform: translateX(var(--_tx0)) scale(1, 1); }
+  30% { transform: translateX(calc(var(--_tx0) + var(--_d) * 0.55)) scale(1.55, 0.78); }
+  60% { transform: translateX(calc(var(--_tx0) + var(--_d) * 1.12)) scale(0.82, 1.14); }
+  80% { transform: translateX(calc(var(--_tx0) + var(--_d) * 0.97)) scale(1.06, 0.96); }
+  100% { transform: translateX(var(--_tx1)) scale(1, 1); }
+}
+@keyframes tgl-el-back {
+  0% { transform: translateX(var(--_tx1)) scale(1, 1); }
+  30% { transform: translateX(calc(var(--_tx1) - var(--_d) * 0.55)) scale(1.55, 0.78); }
+  60% { transform: translateX(calc(var(--_tx1) - var(--_d) * 1.12)) scale(0.82, 1.14); }
+  80% { transform: translateX(calc(var(--_tx1) - var(--_d) * 0.97)) scale(1.06, 0.96); }
+  100% { transform: translateX(var(--_tx0)) scale(1, 1); }
+}
+@keyframes tgl-el-track { 0%, 100% { transform: translateY(-50%) scaleX(1); } 35% { transform: translateY(-50%) scaleX(1.06) scaleY(0.92); } 65% { transform: translateY(-50%) scaleX(0.97) scaleY(1.05); } }
+.tgl[data-type='elastic'] .tgl-fill { transition: opacity 0.2s linear; }
+
+/* ===== 13 flip: 3D card thumb ===== */
+.tgl[data-type='flip'] { perspective: 140px; --_thumb: var(--tg-thumb, calc(var(--_h) - 6px)); --_base: 0.5s; }
+.tgl[data-type='flip'] .tgl-thumb { background: none; box-shadow: none; transform-style: preserve-3d; display: block; transform: translateX(var(--_tx0)) rotateY(0deg); }
+.tgl[data-type='flip'][data-state='on'] .tgl-thumb { transform: translateX(var(--_tx1)) rotateY(180deg); }
+.tgl[data-type='flip'] .tgl-face {
+  position: absolute; inset: 0; border-radius: 22%;
+  display: grid; place-items: center;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, calc(0.5 * var(--_sh)));
+}
+.tgl[data-type='flip'] .tgl-face-f { background: var(--_tc); }
+.tgl[data-type='flip'] .tgl-face-f .tgl-ic { color: color-mix(in srgb, var(--_ink) 55%, transparent); }
+.tgl[data-type='flip'] .tgl-face-b { background: var(--tg-thumbc, #fff); transform: rotateY(180deg); }
+.tgl[data-type='flip'] .tgl-face-b .tgl-ic { color: var(--_on); }
+
+/* ===== 14 liquid: blob pours colour from the thumb ===== */
+.tgl[data-type='liquid'] { --_base: 0.55s; --_ease: var(--tg-ease, cubic-bezier(0.5, 0, 0.2, 1)); --_thumb: var(--tg-thumb, calc(var(--_h) - 6px)); }
+.tgl[data-type='liquid'] .tgl-fill { opacity: 1; clip-path: circle(0px at var(--_cx0) 50%); }
+.tgl[data-type='liquid'][data-state='on'] .tgl-fill { clip-path: circle(calc(var(--_w) * 1.15) at var(--_cx1) 50%); }
+.tgl[data-type='liquid'] .tgl-fill::after {
+  content: ''; position: absolute; left: 0; right: 0; top: 0; height: 200%;
+  background: radial-gradient(circle at 18% 70%, rgba(255, 255, 255, 0.45) 0 2px, transparent 3px), radial-gradient(circle at 55% 40%, rgba(255, 255, 255, 0.35) 0 1.5px, transparent 2.5px), radial-gradient(circle at 82% 80%, rgba(255, 255, 255, 0.4) 0 2px, transparent 3px);
+  animation: tgl-bubbles 2.4s linear infinite;
+}
+.tgl[data-type='liquid'] .tgl-thumb { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; background: var(--tg-thumbc, #fff); }
+.tgl[data-type='liquid'][data-state='on'] .tgl-thumb { animation: tgl-blob 2.2s ease-in-out infinite; }
+@keyframes tgl-blob {
+  0%, 100% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; }
+  33% { border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%; }
+  66% { border-radius: 44% 56% 46% 54% / 56% 44% 56% 44%; }
+}
+@keyframes tgl-bubbles { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+
+/* ===== 15 glow: orb lights the track from within ===== */
+.tgl[data-type='glow'] {
+  --_off: var(--tg-bg, color-mix(in srgb, var(--_ink) 14%, transparent));
+  --_base: 0.4s;
+}
+.tgl[data-type='glow'] .tgl-fill { opacity: 0; background: radial-gradient(circle at var(--_cx1) 50%, color-mix(in srgb, var(--_on) 85%, transparent) 0, color-mix(in srgb, var(--_on) 35%, transparent) 45%, transparent 85%); }
+.tgl[data-type='glow'][data-dir='reverse'] .tgl-fill { background: radial-gradient(circle at var(--_cx1) 50%, color-mix(in srgb, var(--_on) 85%, transparent) 0, color-mix(in srgb, var(--_on) 35%, transparent) 45%, transparent 85%); }
+.tgl[data-type='glow'] .tgl-thumb {
+  background: radial-gradient(circle at 35% 30%, #fff 0, #cfcbd8 55%, #8e8aa0 100%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.tgl[data-type='glow'][data-state='on'] .tgl-thumb {
+  background: radial-gradient(circle at 35% 30%, #fff 0, color-mix(in srgb, var(--_on) 60%, #fff) 45%, var(--_on) 100%);
+  box-shadow: 0 0 calc(var(--_gl) * 16px) calc(var(--_gl) * 4px) color-mix(in srgb, var(--_on) 70%, transparent);
+}
+.tgl[data-type='glow'] .tgl-thumb::after { content: ''; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 0 var(--_on); opacity: 0; }
+.tgl[data-type='glow'][data-touched='true'][data-state='on'] .tgl-thumb::after { animation: tgl-ring calc(0.7s / var(--tg-speed, 1)) ease-out; }
+@keyframes tgl-ring { 0% { opacity: 0.8; box-shadow: 0 0 0 0 var(--_on); } 100% { opacity: 0; box-shadow: 0 0 0 calc(var(--_h) * 0.55) var(--_on); } }
+
+/* ===== 16 icon: sky, sun turns into moon ===== */
+.tgl[data-type='icon'] {
+  --_off: var(--tg-off, #8dd0fb);
+  --_on: var(--tg-on, #1f1b4d);
+  --_tc: var(--tg-thumbc, #fbbf24);
+  --_base: 0.5s;
+  --_thumb: var(--tg-thumb, calc(var(--_h) - 6px));
+}
+.tgl[data-type='icon'] .tgl-fill { background: var(--_on); }
+.tgl[data-type='icon'] .tgl-fill::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 22% 30%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 40% 68%, #fff 0 0.8px, transparent 1.4px), radial-gradient(circle at 62% 24%, #fff 0 1px, transparent 1.6px), radial-gradient(circle at 78% 62%, #fff 0 0.8px, transparent 1.4px);
+}
+.tgl[data-type='icon'] .tgl-track::after {
+  content: ''; position: absolute; right: 8%; bottom: 14%; width: 34%; height: 34%; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  transition: opacity var(--_dur) var(--_ease), transform var(--_dur) var(--_ease);
+}
+.tgl[data-type='icon'][data-state='on'] .tgl-track::after { opacity: 0; transform: translateY(60%); }
+.tgl[data-type='icon'][data-state='on'] .tgl-thumb { background: var(--tg-thumbc, #e5e7eb); }
+.tgl[data-type='icon'] .tgl-ic { position: absolute; width: 74%; height: 74%; }
+.tgl[data-type='icon'] .tgl-ic-a { color: #b45309; opacity: 1; transform: rotate(0); }
+.tgl[data-type='icon'] .tgl-ic-b { color: #4b5563; opacity: 0; transform: rotate(-90deg) scale(0.5); }
+.tgl[data-type='icon'][data-state='on'] .tgl-ic-a { opacity: 0; transform: rotate(90deg) scale(0.5); }
+.tgl[data-type='icon'][data-state='on'] .tgl-ic-b { opacity: 1; transform: rotate(0) scale(1); }
+
+/* ===== 17 label: ON / OFF text revealed beside the thumb ===== */
+.tgl[data-type='label'] { --_base: 0.25s; }
+.tgl-txts { position: absolute; inset: 0; z-index: 2; pointer-events: none; font-size: calc(var(--_h) * 0.38); font-weight: 700; letter-spacing: 0.05em; line-height: 1; }
+.tgl-t { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; transition: opacity var(--_dur) var(--_ease), color var(--_dur) var(--_ease); white-space: nowrap; }
+.tgl[data-type='label'] .tgl-t-on { left: 0; padding-left: calc(var(--_h) * 0.3); color: #fff; opacity: 0; }
+.tgl[data-type='label'] .tgl-t-off { right: 0; padding-right: calc(var(--_h) * 0.3); color: color-mix(in srgb, var(--_ink) 65%, transparent); opacity: 1; }
+.tgl[data-type='label'][data-dir='reverse'] .tgl-t-on { left: auto; right: 0; padding-left: 0; padding-right: calc(var(--_h) * 0.3); }
+.tgl[data-type='label'][data-dir='reverse'] .tgl-t-off { right: auto; left: 0; padding-right: 0; padding-left: calc(var(--_h) * 0.3); }
+.tgl[data-type='label'][data-state='on'] .tgl-t-on { opacity: 1; }
+.tgl[data-type='label'][data-state='on'] .tgl-t-off { opacity: 0; }
+
+/* ===== 18 segmented: two labelled options, sliding highlight ===== */
+.tgl[data-type='segmented'] {
+  --_r: var(--tg-r, calc(var(--_h) * 0.3));
+  --_pad: 3px;
+  --_thumb: var(--tg-thumb, calc(var(--_h) - 6px));
+  --_tw: calc(var(--_w) / 2 - 3px);
+  --_tr: max(calc(var(--_r) - 3px), 0px);
+  --_base: 0.28s;
+}
+.tgl[data-type='segmented'] .tgl-fill { display: none; }
+.tgl[data-type='segmented'] .tgl-thumb { background: var(--tg-thumbc, var(--_card)); }
+.tgl[data-type='segmented'][data-state='on'] .tgl-thumb { background: var(--tg-thumbc, var(--_on)); }
+.tgl[data-type='segmented'] .tgl-t { width: 50%; justify-content: center; font-size: calc(var(--_h) * 0.4); letter-spacing: 0; color: color-mix(in srgb, var(--_ink) 60%, transparent); }
+.tgl[data-type='segmented'] .tgl-t-off { left: 0; }
+.tgl[data-type='segmented'] .tgl-t-on { right: 0; }
+.tgl[data-type='segmented'][data-dir='reverse'] .tgl-t-off { left: auto; right: 0; }
+.tgl[data-type='segmented'][data-dir='reverse'] .tgl-t-on { right: auto; left: 0; }
+.tgl[data-type='segmented'][data-state='off'] .tgl-t-off { color: var(--_ink); }
+.tgl[data-type='segmented'][data-state='on'] .tgl-t-on { color: #fff; }
+
+/* ===== 19 square: hard edges, offset shadow ===== */
+.tgl[data-type='square'] {
+  --_r: var(--tg-r, 4px);
+  --_pad: 4px;
+  --_thumb: var(--tg-thumb, calc(var(--_h) - 8px));
+  --_tr: max(calc(var(--_r) - 2px), 0px);
+  --_edge: var(--tg-border, var(--_ink));
+  --_off: var(--tg-off, var(--_card));
+  --_tc: var(--tg-thumbc, var(--_edge));
+  --_base: 0.15s;
+  --_ease: var(--tg-ease, steps(4, end));
+}
+.tgl[data-type='square'] .tgl-track { box-shadow: inset 0 0 0 2px var(--_edge), calc(var(--_h) * 0.14) calc(var(--_h) * 0.14) 0 0 var(--_edge); }
+.tgl[data-type='square'] .tgl-thumb { box-shadow: none; }
+.tgl[data-type='square'][data-state='on'] .tgl-thumb { background: var(--tg-thumbc, #fff); box-shadow: 0 0 0 2px var(--_edge); }
+.tgl[data-type='square'] .tgl-ic { color: var(--_edge); opacity: 0; transform: scale(0.4); }
+.tgl[data-type='square'][data-state='on'] .tgl-ic { opacity: 1; transform: scale(1); }
+.tgl[data-type='square']:not(:disabled):not([data-readonly='true']):active .tgl-thumb { scale: 0.88; }
+
+/* ===== 20 plourx-signature: brand gradient, glossy thumb, orbiting ring, shimmer ===== */
+.tgl[data-type='plourx-signature'] { --_base: 0.4s; --_ease: var(--tg-ease, cubic-bezier(0.34, 1.3, 0.64, 1)); --_thumb: var(--tg-thumb, calc(var(--_h) - 8px)); }
+.tgl[data-type='plourx-signature'] .tgl-fill { background: var(--tg-grad); opacity: 0; }
+.tgl[data-type='plourx-signature'] .tgl-track::after {
+  content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(-120%); opacity: 0;
+}
+.tgl[data-type='plourx-signature'][data-touched='true'] .tgl-track::after { animation: tgl-shimmer calc(0.7s / var(--tg-speed, 1)) ease-out; }
+.tgl[data-type='plourx-signature'] .tgl-thumb {
+  background: radial-gradient(circle at 30% 25%, #fff 0, #fff 40%, #ece7f5 100%);
+  box-shadow: 0 2px 6px rgba(124, 58, 237, calc(0.55 * var(--_sh))), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+}
+.tgl[data-type='plourx-signature'] .tgl-thumb::before {
+  content: ''; position: absolute; inset: -3px; border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 55%, var(--_on) 85%, var(--tg-accent, #7c3aed) 100%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
+  opacity: 0; transition: opacity var(--_dur) var(--_ease);
+  filter: drop-shadow(0 0 calc(var(--_gl) * 4px) var(--_on));
+}
+.tgl[data-type='plourx-signature'][data-state='on'] .tgl-thumb::before { opacity: 1; animation: tgl-spin 2.4s linear infinite; }
+.tgl[data-type='plourx-signature'] .tgl-ic { color: var(--_on); transform: rotate(-90deg) scale(0.7); }
+.tgl[data-type='plourx-signature'][data-state='on'] .tgl-ic { transform: rotate(0) scale(1); }
+@keyframes tgl-spin { to { transform: rotate(360deg); } }
+@keyframes tgl-shimmer { 0% { transform: translateX(-120%); opacity: 1; } 100% { transform: translateX(320%); opacity: 1; } }
+
+/* ===== animation option (slide | fade | bounce); only emitted on designs that declare 'animation' ===== */
+.tgl[data-anim='bounce'] { --_ease: var(--tg-ease, cubic-bezier(0.34, 1.9, 0.5, 1)); }
+.tgl[data-anim='fade'] .tgl-thumb { transition-property: background-color, box-shadow, border-radius; }
+.tgl[data-anim='fade'][data-touched='true'][data-state='on'] .tgl-thumb { animation: tgl-fade-a calc(var(--_base) / var(--tg-speed, 1) * 1.6) ease both; }
+.tgl[data-anim='fade'][data-touched='true'][data-state='off'] .tgl-thumb { animation: tgl-fade-b calc(var(--_base) / var(--tg-speed, 1) * 1.6) ease both; }
+@keyframes tgl-fade-a { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tgl-fade-b { from { opacity: 0; } to { opacity: 1; } }
+
+/* ===== reduced motion: state changes are instant, ambient loops stop ===== */
+@media (prefers-reduced-motion: reduce) {
+  .tgl, .tgl *, .tgl *::before, .tgl *::after { transition-duration: 0.01ms !important; transition-delay: 0s !important; animation: none !important; }
+}

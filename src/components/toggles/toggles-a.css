@@ -1,0 +1,268 @@
+/* Set A: physical-hardware designs (scoped by .tgl[data-type='...']).
+   Every design keeps the fixed w x h box; moving parts are absolutely positioned inside it. --_k is -1 at the start side, +1 at the end side
+   (data-end already folds in direction=reverse); data-state decides what is lit. Reduced motion is handled by the global block in toggles.css. */
+
+.tgl:is([data-type='rocker'], [data-type='lever'], [data-type='push-button'], [data-type='led'], [data-type='power'], [data-type='knob'], [data-type='padlock'], [data-type='piano'], [data-type='mechanical'], [data-type='gauge']) {
+  --_k: -1;
+  --_rr: var(--tg-r, calc(var(--_h) * 0.24));
+  --_plate: var(--tg-off, color-mix(in srgb, var(--_ink) 16%, var(--_card)));
+  --_lit: color-mix(in srgb, var(--_on) 80%, #fff);
+  --_glow: 0 0 calc(var(--_gl) * 9px) color-mix(in srgb, var(--_on) calc(var(--_gl) * 85%), transparent);
+}
+.tgl:is([data-type='rocker'], [data-type='lever'], [data-type='push-button'], [data-type='led'], [data-type='power'], [data-type='knob'], [data-type='padlock'], [data-type='piano'], [data-type='mechanical'], [data-type='gauge'])[data-end='true'] { --_k: 1; }
+.tgl:is([data-type='rocker'], [data-type='lever'], [data-type='push-button'], [data-type='led'], [data-type='knob'], [data-type='piano'], [data-type='mechanical'], [data-type='gauge']) .tgl-track {
+  border-radius: var(--_rr);
+  background: var(--_plate);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16), inset 0 2px 4px rgba(0, 0, 0, calc(0.38 * var(--_sh))), 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* ===== rocker: two-way wall-switch plate that tilts about its centre ===== */
+.tgl[data-type='rocker'] { perspective: 90px; --_thumb: calc(var(--_h) - 6px); --_base: 0.18s; --_cap: var(--tg-thumbc, #ece9f1); }
+.tgl[data-type='rocker'] .tgl-fill { display: none; }
+.tgl[data-type='rocker'] .tgl-thumb {
+  left: 3px; width: calc(var(--_w) - 6px); border-radius: calc(var(--_rr) * 0.8);
+  background: none; box-shadow: 0 2px 3px rgba(0, 0, 0, calc(0.45 * var(--_sh)));
+  display: flex; align-items: stretch; overflow: hidden;
+  transform: rotateY(calc(var(--_k) * 15deg));
+}
+.tgl[data-type='rocker'] .a-half {
+  flex: 1; position: relative;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--_cap) 100%, #fff), var(--_cap));
+  transition: background var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease);
+}
+.tgl[data-type='rocker'] .a-half-e { box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.16); }
+.tgl[data-type='rocker'][data-end='true'] .a-half-e,
+.tgl[data-type='rocker'][data-end='false'] .a-half-s {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--_cap) 72%, #000), color-mix(in srgb, var(--_cap) 84%, #000));
+}
+.tgl[data-type='rocker'] .a-mark { position: absolute; top: 50%; transform: translate(-50%, -50%); color: rgba(30, 24, 40, 0.55); transition: color var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease); }
+.tgl[data-type='rocker'] .a-mark-on { left: 75%; width: 2px; height: 42%; border-radius: 1px; background: currentColor; }
+.tgl[data-type='rocker'] .a-mark-off { left: 25%; width: calc(var(--_h) * 0.3); height: calc(var(--_h) * 0.3); border-radius: 50%; box-shadow: inset 0 0 0 2px currentColor; }
+.tgl[data-type='rocker'][data-dir='reverse'] .a-mark-on { left: 25%; }
+.tgl[data-type='rocker'][data-dir='reverse'] .a-mark-off { left: 75%; }
+.tgl[data-type='rocker'][data-state='on'] .a-mark-on { color: var(--_on); box-shadow: var(--_glow); }
+
+/* ===== lever: hinged arm throws from one side to the other ===== */
+.tgl[data-type='lever'] { --_base: 0.28s; --_ease: var(--tg-ease, cubic-bezier(0.3, 1.25, 0.5, 1)); }
+.tgl[data-type='lever'] .tgl-fill {
+  inset: auto; top: calc(var(--_h) * 0.16); height: calc(var(--_h) * 0.12); width: calc(var(--_w) * 0.24); right: calc(var(--_w) * 0.1);
+  border-radius: 99px; box-shadow: var(--_glow);
+}
+.tgl[data-type='lever'][data-dir='reverse'] .tgl-fill { right: auto; left: calc(var(--_w) * 0.1); }
+.tgl[data-type='lever'] .tgl-thumb { left: 0; top: 0; margin: 0; width: 100%; height: 100%; background: none; box-shadow: none; border-radius: 0; display: block; transform: none; }
+.tgl[data-type='lever'] .a-pivot {
+  position: absolute; left: 50%; bottom: calc(var(--_h) * 0.08); width: calc(var(--_h) * 0.36); height: calc(var(--_h) * 0.36); margin-left: calc(var(--_h) * -0.18);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, color-mix(in srgb, var(--_tc) 60%, #777) 70%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, calc(0.5 * var(--_sh))), inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+.tgl[data-type='lever'] .a-arm {
+  position: absolute; left: 50%; bottom: calc(var(--_h) * 0.26); width: max(2.5px, calc(var(--_h) * 0.11)); height: calc(var(--_h) * 0.5); margin-left: calc(max(2.5px, var(--_h) * 0.11) / -2);
+  border-radius: 2px; background: linear-gradient(90deg, #c9c6d0, #8b8794 60%, #6f6b7a);
+  transform-origin: 50% 100%; transform: rotate(calc(var(--_k) * 38deg));
+  transition: transform var(--_dur) var(--_ease);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, calc(0.4 * var(--_sh)));
+}
+.tgl[data-type='lever'] .a-ball {
+  position: absolute; left: 50%; top: calc(var(--_h) * -0.15); width: calc(var(--_h) * 0.3); height: calc(var(--_h) * 0.3); margin-left: calc(var(--_h) * -0.15);
+  border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--_tc) 40%, color-mix(in srgb, var(--_tc) 65%, #555));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, calc(0.5 * var(--_sh)));
+  transition: background-color var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease);
+}
+.tgl[data-type='lever'][data-state='on'] .a-ball { background: radial-gradient(circle at 35% 30%, #fff, var(--_lit) 35%, var(--_on)); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), var(--_glow); }
+
+/* ===== push-button: latching cap that sinks in and lights up ===== */
+.tgl[data-type='push-button'] { --_thumb: calc(var(--_h) - 6px); --_base: 0.14s; --_y: -1px; --_capc: var(--tg-thumbc, color-mix(in srgb, var(--_ink) 12%, var(--_card))); }
+.tgl[data-type='push-button'][data-state='on'] { --_y: 1px; }
+.tgl[data-type='push-button'] .tgl-fill { display: none; }
+.tgl[data-type='push-button'] .tgl-thumb {
+  left: 3px; width: calc(var(--_w) - 6px); border-radius: calc(var(--_rr) * 0.8);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--_capc) 70%, #fff), var(--_capc));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 2px 0 rgba(0, 0, 0, calc(0.4 * var(--_sh) + 0.1)), 0 3px 5px rgba(0, 0, 0, calc(0.3 * var(--_sh)));
+  transform: translateY(var(--_y));
+}
+.tgl[data-type='push-button'][data-state='on'] .tgl-thumb {
+  background: linear-gradient(180deg, var(--_on), var(--_lit));
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 0 rgba(0, 0, 0, 0), var(--_glow);
+}
+.tgl[data-type='push-button']:not(:disabled):not([data-readonly='true']):active .tgl-thumb { transform: translateY(1.5px); }
+.tgl[data-type='push-button'] .a-cap-mark {
+  position: absolute; left: 50%; top: 50%; width: 36%; height: 2px; margin: -1px 0 0 -18%; border-radius: 2px;
+  background: color-mix(in srgb, var(--_ink) 40%, transparent); transition: background-color var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease);
+}
+.tgl[data-type='push-button'][data-state='on'] .a-cap-mark { background: #fff; box-shadow: 0 0 5px rgba(255, 255, 255, 0.9); }
+
+/* ===== led: panel slide switch plus an LED lens ===== */
+.tgl[data-type='led'] {
+  --_led: calc(var(--_h) * 0.4);
+  --_slotw: calc(var(--_w) - var(--_led) - 11px);
+  --_thumb: calc(var(--_h) - 8px);
+  --_pad: 3px;
+  --_tw: calc(var(--_slotw) * 0.56);
+  --_travel: calc(var(--_slotw) - var(--_tw));
+  --_base: 0.18s;
+}
+.tgl[data-type='led'] .tgl-fill { display: none; }
+.tgl[data-type='led'] .a-slot {
+  position: absolute; left: 3px; top: 50%; width: var(--_slotw); height: calc(var(--_h) * 0.36); margin-top: calc(var(--_h) * -0.18);
+  border-radius: 3px; background: rgba(0, 0, 0, 0.55); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.tgl[data-type='led'] .tgl-thumb {
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 2px, rgba(0, 0, 0, 0.16) 2px 3px),
+    linear-gradient(180deg, #fff, color-mix(in srgb, var(--_tc) 78%, #888));
+  box-shadow: 0 2px 3px rgba(0, 0, 0, calc(0.5 * var(--_sh))), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+.tgl[data-type='led'] .a-lens {
+  position: absolute; right: 4px; top: 50%; width: var(--_led); height: var(--_led); margin-top: calc(var(--_led) / -2); border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.55) 0 14%, transparent 30%), color-mix(in srgb, var(--_on) 22%, #1a1520);
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.35), inset 0 1px 2px rgba(0, 0, 0, 0.6), 0 0 0 0 transparent;
+  transition: background-color var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease);
+}
+.tgl[data-type='led'][data-state='on'] .a-lens {
+  background: radial-gradient(circle at 35% 30%, #fff 0 16%, transparent 38%), var(--_on);
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), inset 0 -1px 2px rgba(0, 0, 0, 0.25), var(--_glow), 0 0 calc(var(--_gl) * 14px) color-mix(in srgb, var(--_on) calc(var(--_gl) * 55%), transparent);
+}
+
+/* ===== power: round power-button thumb with a glowing ring ===== */
+.tgl[data-type='power'] { --_thumb: var(--tg-thumb, calc(var(--_h) - 2px)); --_th: var(--tg-th, calc(var(--_h) * 0.58)); --_base: 0.26s; }
+.tgl[data-type='power'] .tgl-track { background: var(--_off); box-shadow: inset 0 2px 4px rgba(0, 0, 0, calc(0.4 * var(--_sh))), inset 0 0 0 1px rgba(0, 0, 0, 0.1); }
+.tgl[data-type='power'] .tgl-fill { background: color-mix(in srgb, var(--_on) 85%, transparent); }
+.tgl[data-type='power'] .tgl-thumb {
+  background: radial-gradient(circle at 35% 28%, #fff, var(--_tc) 45%, color-mix(in srgb, var(--_tc) 75%, #777));
+  box-shadow: 0 2px 5px rgba(0, 0, 0, calc(0.45 * var(--_sh))), inset 0 -2px 3px rgba(0, 0, 0, 0.12);
+}
+.tgl[data-type='power'] .tgl-thumb::before {
+  content: ''; position: absolute; inset: 0; border-radius: 50%; opacity: 0; pointer-events: none;
+  box-shadow: inset 0 0 0 2px var(--_on), var(--_glow);
+  transition: opacity var(--_dur) var(--_ease);
+}
+.tgl[data-type='power'][data-state='on'] .tgl-thumb::before { opacity: 1; }
+.tgl[data-type='power'] .a-power { width: 52%; height: 52%; color: color-mix(in srgb, #2a2133 55%, transparent); transition: color var(--_dur) var(--_ease), filter var(--_dur) var(--_ease); }
+.tgl[data-type='power'][data-state='on'] .a-power { color: var(--_on); filter: drop-shadow(0 0 calc(var(--_gl) * 3px) var(--_on)); }
+
+/* ===== knob: rotary knob turns between the OFF and ON marks ===== */
+.tgl[data-type='knob'] { --_thumb: var(--tg-thumb, calc(var(--_h) - 4px)); --_base: 0.32s; --_dot: max(4px, calc(var(--_h) * 0.18)); }
+.tgl[data-type='knob'] .tgl-fill { display: none; }
+.tgl[data-type='knob'] .tgl-thumb {
+  left: 50%; margin-left: calc(var(--_tw) / -2); border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 30%, color-mix(in srgb, var(--_tc) 100%, #fff) 0 50%, transparent 52%),
+    repeating-conic-gradient(rgba(0, 0, 0, 0.3) 0 7.5deg, rgba(255, 255, 255, 0.22) 7.5deg 15deg),
+    color-mix(in srgb, var(--_tc) 60%, #666);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, calc(0.5 * var(--_sh))), inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+  transform: rotate(calc(var(--_k) * 52deg));
+}
+.tgl[data-type='knob'] .a-pointer {
+  position: absolute; left: 50%; top: 9%; width: max(2px, calc(var(--_h) * 0.1)); height: 30%; margin-left: calc(max(2px, var(--_h) * 0.1) / -2); border-radius: 2px;
+  background: #4a4255; transition: background-color var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease);
+}
+.tgl[data-type='knob'][data-state='on'] .a-pointer { background: var(--_on); box-shadow: var(--_glow); }
+.tgl[data-type='knob'] .a-dot {
+  position: absolute; top: 50%; width: var(--_dot); height: var(--_dot); margin-top: calc(var(--_dot) / -2); border-radius: 50%;
+  background: color-mix(in srgb, var(--_ink) 22%, transparent); transition: background-color var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease);
+}
+.tgl[data-type='knob'] .a-dot-s { left: calc(var(--_w) * 0.14 - var(--_dot) / 2); }
+.tgl[data-type='knob'] .a-dot-e { right: calc(var(--_w) * 0.14 - var(--_dot) / 2); }
+.tgl[data-type='knob'][data-end='true'] .a-dot-e,
+.tgl[data-type='knob'][data-end='false'] .a-dot-s { background: color-mix(in srgb, var(--_ink) 70%, transparent); }
+.tgl[data-type='knob'][data-state='on'][data-end='true'] .a-dot-e,
+.tgl[data-type='knob'][data-state='on'][data-end='false'] .a-dot-s { background: var(--_on); box-shadow: var(--_glow); }
+
+/* ===== padlock: the thumb is a padlock whose shackle seats when locked (on) ===== */
+.tgl[data-type='padlock'] { --_thumb: var(--tg-thumb, calc(var(--_h) - 4px)); --_tw: calc(var(--_thumb) * 0.92); --_base: 0.3s; }
+.tgl[data-type='padlock'] .tgl-track {
+  top: calc(var(--_pad) + var(--_thumb) * 0.71); height: calc(var(--_thumb) * 0.58); border-radius: calc(var(--_thumb) * 0.2);
+  background: var(--_off); box-shadow: inset 0 2px 3px rgba(0, 0, 0, calc(0.35 * var(--_sh)));
+}
+.tgl[data-type='padlock'] .tgl-fill { background: color-mix(in srgb, var(--_on) 70%, transparent); }
+.tgl[data-type='padlock'] .tgl-thumb { background: none; box-shadow: none; display: block; border-radius: 0; }
+.tgl[data-type='padlock'] .a-shackle {
+  position: absolute; left: 22%; top: 0; width: 56%; height: auto; aspect-ratio: 12 / 10;
+  color: color-mix(in srgb, var(--_ink) 55%, #aab); transform-origin: 82% 100%;
+  transform: translateY(calc(var(--_thumb) * -0.1)) rotate(-22deg);
+  transition: transform var(--_dur) var(--_ease), color var(--_dur) var(--_ease);
+}
+.tgl[data-type='padlock'][data-state='on'] .a-shackle { transform: translateY(calc(var(--_thumb) * 0.04)) rotate(0deg); }
+.tgl[data-type='padlock'] .a-body {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 58%; border-radius: 3px;
+  background: linear-gradient(180deg, #fff, color-mix(in srgb, var(--_tc) 78%, #8a8595));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, calc(0.45 * var(--_sh))), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: background var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease);
+}
+.tgl[data-type='padlock'][data-state='on'] .a-body {
+  background: linear-gradient(180deg, var(--_lit), var(--_on));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, calc(0.45 * var(--_sh))), inset 0 1px 0 rgba(255, 255, 255, 0.5), var(--_glow);
+}
+.tgl[data-type='padlock'] .a-keyhole { position: absolute; left: 50%; top: 24%; width: 22%; aspect-ratio: 1; margin-left: -11%; border-radius: 50%; background: rgba(30, 22, 40, 0.7); }
+.tgl[data-type='padlock'] .a-keyhole::after { content: ''; position: absolute; left: 50%; top: 70%; width: 36%; height: 120%; margin-left: -18%; border-radius: 0 0 1px 1px; background: inherit; }
+
+/* ===== piano: two keys, the pressed one sinks and glows ===== */
+.tgl[data-type='piano'] { --_kc: var(--tg-thumbc, #fff); --_base: 0.12s; --_gap: 2px; --_p: 2px; }
+.tgl[data-type='piano'] .tgl-track { background: var(--tg-off, #17121f); }
+.tgl[data-type='piano'] .tgl-fill { display: none; }
+.tgl[data-type='piano'] .a-key {
+  position: absolute; top: var(--_p); width: calc((var(--_w) - 2 * var(--_p) - var(--_gap)) / 2); height: calc(var(--_h) - 2 * var(--_p) - 2px);
+  border-radius: 1px 1px calc(var(--_rr) * 0.7) calc(var(--_rr) * 0.7);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--_kc) 88%, #aaa), var(--_kc) 35%, color-mix(in srgb, var(--_kc) 88%, #bbb));
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.55), inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+  transition: transform var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease), background var(--_dur) var(--_ease);
+}
+.tgl[data-type='piano'] .a-key-s { left: var(--_p); }
+.tgl[data-type='piano'] .a-key-e { right: var(--_p); }
+.tgl[data-type='piano'][data-end='true'] .a-key-e,
+.tgl[data-type='piano'][data-end='false'] .a-key-s {
+  transform: translateY(2px);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--_kc) 70%, #777), color-mix(in srgb, var(--_kc) 86%, #aaa));
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0), inset 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+.tgl[data-type='piano'][data-state='on'][data-end='true'] .a-key-e,
+.tgl[data-type='piano'][data-state='on'][data-end='false'] .a-key-s {
+  background: linear-gradient(180deg, var(--_on), var(--_lit));
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), var(--_glow);
+}
+.tgl[data-type='piano'] .a-sharp {
+  position: absolute; left: 50%; top: var(--_p); width: calc(var(--_w) * 0.2); height: calc(var(--_h) * 0.5); margin-left: calc(var(--_w) * -0.1);
+  border-radius: 0 0 2px 2px; background: linear-gradient(180deg, #2a2433, #0b0910);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5), inset 0 -2px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ===== mechanical: keycap sliding on a switch housing with an underglow and a click dip ===== */
+.tgl[data-type='mechanical'] { --_thumb: calc(var(--_h) - 6px); --_tw: calc(var(--_thumb) * 1.15); --_tr: calc(var(--_h) * 0.18); --_base: 0.2s; --_ease: var(--tg-ease, cubic-bezier(0.25, 1.4, 0.45, 1)); }
+.tgl[data-type='mechanical'] .tgl-track { background: var(--tg-off, #221d2b); }
+.tgl[data-type='mechanical'] .tgl-fill { inset: auto 0 0 0; height: 55%; background: linear-gradient(0deg, var(--_on), transparent); }
+.tgl[data-type='mechanical'][data-state='on'] .tgl-fill { opacity: calc(0.35 + 0.6 * var(--_gl)); }
+.tgl[data-type='mechanical'] .tgl-thumb { background: none; box-shadow: none; display: block; }
+.tgl[data-type='mechanical'] .a-keycap {
+  position: absolute; inset: 0; border-radius: var(--_tr);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--_tc) 100%, #fff), color-mix(in srgb, var(--_tc) 80%, #777));
+  box-shadow: 0 2px 0 rgba(0, 0, 0, calc(0.35 + 0.3 * var(--_sh))), 0 3px 4px rgba(0, 0, 0, calc(0.4 * var(--_sh))), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+.tgl[data-type='mechanical'] .a-keycap::before {
+  content: ''; position: absolute; inset: 3px; border-radius: calc(var(--_tr) * 0.7);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.25)); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.22);
+}
+.tgl[data-type='mechanical'] .a-keycap::after {
+  content: ''; position: absolute; left: 50%; top: 50%; width: max(4px, calc(var(--_h) * 0.2)); aspect-ratio: 1; margin: calc(max(4px, var(--_h) * 0.2) / -2) 0 0 calc(max(4px, var(--_h) * 0.2) / -2);
+  border-radius: 50%; background: rgba(60, 50, 75, 0.45); transition: background-color var(--_dur) var(--_ease), box-shadow var(--_dur) var(--_ease);
+}
+.tgl[data-type='mechanical'][data-state='on'] .a-keycap::after { background: var(--_on); box-shadow: var(--_glow); }
+.tgl[data-type='mechanical'][data-touched='true'][data-state='on'] .a-keycap { animation: tgl-a-click-a calc(var(--_dur) * 1.5) ease-out; }
+.tgl[data-type='mechanical'][data-touched='true'][data-state='off'] .a-keycap { animation: tgl-a-click-b calc(var(--_dur) * 1.5) ease-out; }
+@keyframes tgl-a-click-a { 0% { translate: 0 0; } 35% { translate: 0 2px; } 100% { translate: 0 0; } }
+@keyframes tgl-a-click-b { 0% { translate: 0 0; } 35% { translate: 0 2px; } 100% { translate: 0 0; } }
+
+/* ===== gauge: meter face, the needle swings between the OFF and ON zones ===== */
+.tgl[data-type='gauge'] { --_base: 0.4s; --_ease: var(--tg-ease, cubic-bezier(0.34, 1.45, 0.64, 1)); --_idle: color-mix(in srgb, var(--_ink) 22%, transparent); }
+.tgl[data-type='gauge'] .tgl-track { background: var(--tg-off, var(--_card)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--_ink) 25%, transparent), inset 0 2px 4px rgba(0, 0, 0, calc(0.25 * var(--_sh))); }
+.tgl[data-type='gauge'] .tgl-fill { display: none; }
+.tgl[data-type='gauge'] .a-face { position: absolute; left: 50%; top: 0; height: 100%; aspect-ratio: 48 / 26; transform: translateX(-50%); overflow: visible; pointer-events: none; }
+.tgl[data-type='gauge'] .a-arc { fill: none; stroke: var(--_idle); stroke-width: 2.6; stroke-linecap: round; transition: stroke var(--_dur) var(--_ease), filter var(--_dur) var(--_ease); }
+.tgl[data-type='gauge'][data-end='true'] .a-arc-e,
+.tgl[data-type='gauge'][data-end='false'] .a-arc-s { stroke: color-mix(in srgb, var(--_ink) 55%, transparent); }
+.tgl[data-type='gauge'][data-state='on'][data-end='true'] .a-arc-e,
+.tgl[data-type='gauge'][data-state='on'][data-end='false'] .a-arc-s { stroke: var(--_on); filter: drop-shadow(0 0 calc(var(--_gl) * 2.5px) var(--_on)); }
+.tgl[data-type='gauge'] .a-needle { transform-origin: 24px 22px; transform: rotate(calc(var(--_k) * 55deg)); transition: transform var(--_dur) var(--_ease); }
+.tgl[data-type='gauge'] .a-needle path { fill: none; stroke: var(--_ink); stroke-width: 2; stroke-linecap: round; }
+.tgl[data-type='gauge'] .a-hub { fill: var(--_ink); }

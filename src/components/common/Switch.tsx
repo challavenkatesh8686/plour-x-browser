@@ -1,3 +1,4 @@
+import { AppSwitch } from '../toggles/AppSwitch';
 import styles from './Switch.module.css';
 
 interface SwitchProps {
@@ -6,7 +7,7 @@ interface SwitchProps {
   label: string;
 }
 
-export function Switch({ checked, onChange, label }: SwitchProps) {
+function BuiltInSwitch({ checked, onChange, label }: SwitchProps) {
   return (
     <button
       type="button"
@@ -19,4 +20,9 @@ export function Switch({ checked, onChange, label }: SwitchProps) {
       <span className={styles.thumb} />
     </button>
   );
+}
+
+/** The admin-chosen toggle design (Design System > Toggles) when one is set, otherwise the app's built-in switch. */
+export function Switch({ checked, onChange, label }: SwitchProps) {
+  return <AppSwitch checked={checked} onChange={onChange} label={label} fallback={<BuiltInSwitch checked={checked} onChange={onChange} label={label} />} />;
 }
